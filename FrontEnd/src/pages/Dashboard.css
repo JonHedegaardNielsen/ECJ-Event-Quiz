@@ -1,0 +1,282 @@
+.page-dash {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* --------- Sidebar --------- */
+.sidebar {
+  width: 232px;
+  flex: none;
+  background: #081831;
+  border-right: 1px solid var(--line-dark-soft);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 14px;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  padding: 2px 10px 20px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: #a9bcd8;
+  background: transparent;
+  border: 0;
+  font-size: 14.5px;
+  font-weight: 500;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-item:hover:not([disabled]) {
+  background: rgba(148, 178, 255, 0.08);
+  color: #eaf1fb;
+}
+
+.sidebar-item.active {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sidebar-item[disabled] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+/* --------- Hovedområde --------- */
+.dash-main {
+  flex: 1;
+  min-width: 0;
+  background: #0e2749;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 30px;
+  color: #dbe7fa;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dash-body {
+  padding: 4px 30px 44px;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.dash-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 2px 0 20px;
+}
+
+.dash-head h1 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.dash-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px dashed var(--line-dark);
+  border-radius: 16px;
+  padding: 48px 20px;
+  color: #9fb2cc;
+}
+
+.dash-empty p {
+  margin: 0;
+}
+
+/* --------- Quiz-række --------- */
+.quiz-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #102b4f;
+  border: 1px solid var(--line-dark-soft);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.quiz-row:hover {
+  border-color: rgba(148, 178, 255, 0.28);
+}
+
+.quiz-ico {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex: none;
+}
+
+.quiz-info {
+  min-width: 0;
+}
+
+.quiz-title {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.quiz-meta {
+  margin: 4px 0 0;
+  color: #8fa7c9;
+  font-size: 13px;
+}
+
+.quiz-row .quiz-start {
+  height: 38px;
+  padding: 0 20px;
+  border-radius: 9px;
+  font-size: 14px;
+  margin-left: auto;
+  flex: none;
+}
+
+.quiz-kebab {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: #8fa7c9;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+}
+
+.quiz-kebab:hover {
+  color: #fff;
+  background: rgba(148, 178, 255, 0.12);
+}
+
+.quiz-menu {
+  position: absolute;
+  right: 44px;
+  top: 58px;
+  background: #0b1f3c;
+  border: 1px solid var(--line-dark);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 150px;
+  box-shadow: 0 18px 40px rgba(2, 8, 20, 0.5);
+  z-index: 5;
+}
+
+.quiz-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  color: #dbe7fa;
+  font-size: 14px;
+  text-align: left;
+}
+
+.quiz-menu button:hover {
+  background: rgba(148, 178, 255, 0.1);
+}
+
+.quiz-menu button.danger {
+  color: #ff8197;
+}
+
+.dash-hint {
+  margin: 22px 2px 0;
+  color: #7288a8;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dash-hint b {
+  color: #a9bcd8;
+}
+
+/* --------- Mobil --------- */
+@media (max-width: 760px) {
+  .page-dash {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-dark-soft);
+  }
+
+  .sidebar-logo {
+    padding: 0 14px 0 0;
+  }
+
+  .sidebar-item {
+    width: auto;
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+
+  .sidebar-bottom {
+    margin-left: auto;
+    margin-top: 0;
+  }
+
+  .dash-body,
+  .dash-top {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .dash-head {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,189 @@
+.page-lobby {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 18px 44px;
+}
+
+.lobby-wrap {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lobby-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #9fb2cc;
+  font-size: 14px;
+  background: transparent;
+  border: 0;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.link-ghost:hover {
+  color: #fff;
+  background: rgba(148, 178, 255, 0.08);
+}
+
+.lobby-head h1 {
+  margin: 4px 0 0;
+  font-size: 22px;
+}
+
+.lobby-head p {
+  margin: 4px 0 0;
+  color: #9fb2cc;
+  font-size: 14px;
+}
+
+.lobby-card {
+  background: rgba(13, 36, 68, 0.85);
+  border: 1px solid var(--line-dark);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+/* --------- Room ID + QR --------- */
+.room-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.room-label {
+  display: block;
+  text-align: center;
+  color: #9fb2cc;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.room-digits {
+  display: block;
+  margin-top: 10px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 14px;
+  color: #fff;
+  padding-left: 4px;
+}
+
+.lobby-qr {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.qr-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px;
+  display: inline-block;
+  line-height: 0;
+}
+
+.lobby-qr > span:last-child {
+  color: #9fb2cc;
+  font-size: 12.5px;
+}
+
+/* --------- Deltagerliste --------- */
+.p-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dot-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 1.7s infinite;
+}
+
+.p-list {
+  margin-top: 6px;
+  max-height: 248px;
+  overflow: auto;
+}
+
+.p-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 4px;
+  color: #e6eefb;
+  font-size: 14.5px;
+  border-top: 1px solid var(--line-dark-soft);
+}
+
+.p-row .avatar {
+  flex: none;
+}
+
+.p-row span:nth-child(2) {
+  font-weight: 600;
+}
+
+.p-x {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  color: #7f95b8;
+}
+
+.p-x:hover {
+  color: #ff8197;
+  background: rgba(226, 54, 76, 0.1);
+}
+
+.p-empty {
+  color: #7288a8;
+  font-size: 13.5px;
+  padding: 10px 4px;
+  margin: 0;
+}
+
+/* --------- André details --------- */
+.lobby-start {
+  margin-top: 4px;
+}
+
+.lobby-hint {
+  text-align: center;
+  color: #7288a8;
+  font-size: 12.5px;
+  margin: 10px 0 0;
+}
+
+@media (max-width: 520px) {
+  .room-digits {
+    font-size: 30px;
+    letter-spacing: 9px;
+  }
+}

@@ -1,111 +1,365 @@
+/* ---------- Design-tokens ---------- */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  color-scheme: dark;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --navy-950: #050e1f;
+  --navy-900: #08182f;
+  --navy-850: #0b2140;
+  --card-dark: #102b4f;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --line-dark: rgba(148, 178, 255, 0.14);
+  --line-dark-soft: rgba(148, 178, 255, 0.08);
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --blue: #1e6bf1;
+  --blue-hover: #1656c9;
+  --green: #21b463;
+  --green-hover: #1b9d55;
+
+  --ans-red: #e2364c;
+  --ans-blue: #1368ce;
+  --ans-green: #2e9e44;
+  --ans-yellow: #e3b53b;
+
+  --danger: #e2364c;
+
+  --light-bg: #eef2f8;
+  --ink: #0c1d38;
+  --ink-2: #3c526d;
+  --ink-3: #647894;
+  --line-light: #e2e8f2;
+
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* ---------- Basis ---------- */
+* {
+  box-sizing: border-box;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
+  font-family: var(--font);
+  background: var(--navy-950);
+  color: #eaf1fb;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+button {
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Logo ---------- */
+.logo {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  line-height: 1;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.logo .logo-event {
+  font-weight: 500;
+}
+
+.logo-lg {
+  font-size: 30px;
+}
+
+.logo-md {
+  font-size: 22px;
+}
+
+.logo-sm {
+  font-size: 17px;
+}
+
+.logo-dark {
+  color: #fff;
+}
+
+.logo-dark .logo-event,
+.logo-dark .logo-quiz {
+  color: #3d8bff;
+}
+
+.logo-light {
+  color: var(--ink);
+}
+
+.logo-light .logo-event,
+.logo-light .logo-quiz {
+  color: var(--blue);
+}
+
+/* ---------- Knapper ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--blue);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 0 20px;
+  height: 44px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.15s, transform 0.05s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--blue-hover);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-green {
+  background: var(--green);
+}
+
+.btn-green:hover:not(:disabled) {
+  background: var(--green-hover);
+}
+
+.btn-lg {
+  height: 50px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---------- Inputfelt (mørkt tema) ---------- */
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 46px;
+  background: rgba(8, 24, 47, 0.6);
+  border: 1px solid var(--line-dark);
+  border-radius: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.field > svg {
+  margin-left: 13px;
+  color: #7f9ac4;
+  flex: none;
+}
+
+.field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: #f0f5ff;
+  padding: 0 12px;
+  font-size: 15px;
+}
+
+.field input::placeholder {
+  color: #7f95b8;
+}
+
+.field:focus-within {
+  border-color: var(--blue);
+  background: rgba(8, 24, 47, 0.85);
+}
+
+.field-eye {
+  background: transparent;
+  border: 0;
+  color: #7f9ac4;
+  padding: 0 13px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.field-eye:hover {
+  color: #c8d8f2;
+}
+
+/* ---------- Avatar ---------- */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(148, 178, 255, 0.14);
+  color: #cfe0ff;
+  flex: none;
+}
+
+/* ---------- "Du deltager nu"-blok (fuldt delt mellem skærme) ---------- */
+.joined {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
+  gap: 12px;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+.joined-sub {
+  color: #9fb2cc;
+  font-size: 13px;
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.joined-title {
+  color: #fff;
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0;
 }
 
-code {
+/* ---------- Live-spørgsmål ---------- */
+.qcard {
+  background: #fff;
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 15px 20px;
+}
+
+.qcard h1 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.qmedia {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  aspect-ratio: 16 / 6;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.qmedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qmedia-emoji {
+  font-size: 46px;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.35));
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.answer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  min-height: 64px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16.5px;
+  background: var(--ans);
+  text-align: left;
+  transition: filter 0.15s, transform 0.06s, outline-color 0.15s;
+  outline: 3px solid transparent;
+}
+
+.answer:not(.is-clickable) {
+  cursor: default;
+}
+
+.answer.is-clickable:hover {
+  filter: brightness(1.12);
+}
+
+.answer.is-clickable:active {
+  transform: scale(0.985);
+}
+
+.answer.is-picked {
+  outline-color: rgba(255, 255, 255, 0.9);
+}
+
+.answer.is-correct {
+  outline-color: #fff !important;
+  filter: brightness(1.16);
+}
+
+.answer.is-wrong {
+  filter: grayscale(0.35) brightness(0.72);
+}
+
+.answer-letter {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.answer-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.answer-count {
+  flex: none;
+  margin-left: auto;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 999px;
+  padding: 3px 13px;
   font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  font-weight: 700;
 }

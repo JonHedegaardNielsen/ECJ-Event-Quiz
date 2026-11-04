@@ -1,0 +1,417 @@
+.page-create {
+  min-height: 100vh;
+  background: var(--light-bg);
+  color: var(--ink);
+  padding: 24px 16px 60px;
+}
+
+.create-top {
+  max-width: 760px;
+  margin: 0 auto 14px;
+}
+
+.create-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-3);
+  font-size: 14px;
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  margin-bottom: 8px;
+}
+
+.create-back:hover {
+  color: var(--ink);
+}
+
+.create-card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e6ebf3;
+  border-radius: 16px;
+  padding: 24px 30px 30px;
+  box-shadow: 0 10px 40px rgba(15, 44, 80, 0.08);
+}
+
+.create-title {
+  margin: 0 0 20px;
+  font-size: 22px;
+}
+
+/* --------- Stepper --------- */
+.stepper {
+  display: flex;
+  gap: 34px;
+  list-style: none;
+  margin: 0 0 26px;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.step-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.6px solid #cfd9e6;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13.5px;
+  background: #fff;
+}
+
+.step.active .step-dot {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.step.done .step-dot {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.step-label {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.step.active .step-label {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.step.done .step-label {
+  color: var(--blue);
+}
+
+/* --------- Formularfelt (lyst tema) --------- */
+.u-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.u-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.u-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.u-input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #fff;
+  color: var(--ink);
+  outline: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.u-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.14);
+}
+
+.u-textarea {
+  height: auto;
+  min-height: 104px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.u-select {
+  width: auto;
+  padding: 0 8px;
+}
+
+.u-error {
+  color: var(--danger);
+  font-size: 13.5px;
+  margin: 14px 0 0;
+}
+
+/* --------- Pakt-kort --------- */
+.pkg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.pkg-card {
+  position: relative;
+  text-align: left;
+  background: #fff;
+  border: 1.6px solid var(--line-light);
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.pkg-card b {
+  font-size: 14.5px;
+}
+
+.pkg-card span {
+  color: var(--ink-3);
+  font-size: 13px;
+}
+
+.pkg-card:hover {
+  border-color: #b9cbe8;
+}
+
+.pkg-card.selected {
+  border-color: var(--blue);
+  background: #f5f9ff;
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.12);
+}
+
+.pkg-check {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------- Spørgsmåls-editor --------- */
+.q-item {
+  border: 1.4px solid var(--line-light);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.q-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  background: #fff;
+  border: 0;
+  text-align: left;
+}
+
+.q-item-head:hover {
+  background: #f7f9fc;
+}
+
+.q-num {
+  font-weight: 700;
+  color: var(--ink-3);
+}
+
+.q-preview {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.q-time {
+  flex: none;
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+
+.q-delete {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: var(--ink-3);
+}
+
+.q-delete:hover {
+  color: var(--danger);
+  background: rgba(226, 54, 76, 0.08);
+}
+
+.q-edit {
+  padding: 6px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f7f9fc;
+  border-top: 1px solid var(--line-light);
+}
+
+.opt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opt-letter {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 8px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  background: var(--ans);
+}
+
+.q-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.corr-group {
+  display: flex;
+  gap: 6px;
+}
+
+.corr-btn {
+  width: 32px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid #d4dde9;
+  background: #fff;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.corr-btn:hover {
+  border-color: #aebfd6;
+}
+
+.corr-btn.selected {
+  background: var(--ans);
+  border-color: var(--ans);
+}
+
+/* --------- Gennemgang --------- */
+.summary {
+  margin: 0;
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line-light);
+  font-size: 14.5px;
+}
+
+.summary-row:last-child {
+  border-bottom: 0;
+}
+
+.summary-row dt {
+  color: var(--ink-3);
+}
+
+.summary-row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.summary-note {
+  color: var(--ink-2);
+  font-size: 13.5px;
+  margin: 14px 0 0;
+}
+
+.add-q {
+  width: 100%;
+  border: 1.6px dashed #c8d4e2;
+  border-radius: 12px;
+  background: transparent;
+  padding: 13px;
+  color: var(--ink-2);
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.add-q:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.create-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* --------- Mobil --------- */
+@media (max-width: 620px) {
+  .create-card {
+    padding: 20px 18px 22px;
+  }
+
+  .opt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stepper {
+    gap: 18px;
+  }
+
+  .step-label {
+    display: none;
+  }
+}

@@ -1,16 +1,47 @@
-# React + Vite
+# ECJ EventQuiz – FrontEnd
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Kahoot-inspireret quiz-app bygget fra mockuperne (Quiz-Mockups.png).
 
-Currently, two official plugins are available:
+## Teknologi
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 + Vite 8 (ingen ekstra dependencies)
+- Hash-routing (`src/lib/router.js`) – ingen serverkonfiguration nødvendig
+- Global spilstyring i `src/game/GameContext.jsx` – ét sted at koble API'et på senere
+- Mock-data i `src/data/` (quizzer + deltagere simuleres lokalt)
 
-## React Compiler
+## Screens (svarende til mockuperne)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| # | Screen | Route |
+|---|--------|-------|
+| 1 | Login (arrangør) | `#/login` |
+| 2 | Dashboard / Mine quizzer | `#/dashboard` |
+| 3 | Opret quiz (3 trin) | `#/opret` |
+| 4 | Lobby med Room-ID + QR | `#/lobby` |
+| 5 | Deltagelse (Room-ID / QR) | `#/deltag` |
+| 5b | Indtast navn + "du deltager nu i" | `#/deltag/navn` |
+| 6 | Live spørgsmål (værtsvisning) | `#/live` |
+| 7 | Resultatliste med konfetti | `#/resultat` |
+| 7b | Deltagerens live-spil (mobil/PC) | `#/spil` |
 
-## Expanding the ESLint configuration
+## Demo-flow
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Vært:** Log ind → Start en quiz fra Dashboardet → Lobbyen, hvor testdeltagerne tilslutter sig → **Start quiz** → værten ser spørgsmålene og antallet af svar pr. mulighed, og når alle har svaret, går den videre automatisk → slutresultat med rangliste.
+
+**Deltager:** Tryk "Skal du deltage i en quiz?" på login-siden (eller gå til `#/deltag`) → indtast et Room-ID (fx `4729` eller koden fra lobbyen) → skriv dit navn → svar på spørgsmålene mod mockdeltagere → se sin placering på ranglisten.
+
+Quizzer oprettet i "Opret quiz" gemmes i browseren (localStorage) sammen med den loggede bruger.
+
+## Scripts
+
+```bash
+npm run dev      # udviklingsserver
+npm run build    # produktionsbuild
+npm run lint     # ESLint
+npm run preview  # serve dist/
+```
+
+## Når API'et er klar
+
+- `src/game/GameContext.jsx` er det eneste sted, der skal skiftes: indlæs quizzer fra API, opret rum, send svar over WebSocket osv.
+- Mockdeltagere i Lobby/Spil udskiftes med rigtige websocket-events.
+- Login-skærmen sender nu kun `name`/`password` videre til `login()` i contexten.

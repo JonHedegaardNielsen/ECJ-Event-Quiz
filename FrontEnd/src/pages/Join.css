@@ -1,0 +1,212 @@
+.page-join {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 6vh 16px 48px;
+  background:
+    radial-gradient(1000px 520px at 82% -10%, rgba(64, 120, 220, 0.24), transparent 56%),
+    radial-gradient(760px 460px at 8% 112%, rgba(112, 84, 200, 0.16), transparent 56%),
+    linear-gradient(160deg, #0a2140 0%, #071a34 55%, #081d3a 100%);
+}
+
+.join-card {
+  width: min(430px, 100%);
+  background: rgba(11, 31, 60, 0.8);
+  border: 1px solid var(--line-dark);
+  border-radius: 18px;
+  padding: 26px 22px 24px;
+  box-shadow: 0 26px 70px rgba(2, 8, 20, 0.5);
+}
+
+.join-form,
+.join-qr-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.join-title {
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+}
+
+.join-sub {
+  text-align: center;
+  color: #9fb2cc;
+  font-size: 13.5px;
+  margin: -7px 0 3px;
+}
+
+/* --------- Tabs --------- */
+.join-tabs {
+  display: flex;
+  background: rgba(148, 178, 255, 0.08);
+  border: 1px solid var(--line-dark-soft);
+  border-radius: 11px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.join-tab {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  border: 0;
+  color: #9fb2cc;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.join-tab.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* --------- Digit-inputs --------- */
+.code-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.code-row.has-error {
+  animation: shake 0.4s ease;
+}
+
+.code-box {
+  width: 54px;
+  height: 58px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-dark);
+  background: rgba(8, 24, 47, 0.7);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.code-box:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.22);
+}
+
+.code-row.has-error .code-box {
+  border-color: var(--ans-red);
+}
+
+.code-error {
+  text-align: center;
+  color: #ff8197;
+  font-size: 13px;
+  margin: -6px 0 0;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+/* --------- "eller"-divider + scan-knap --------- */
+.join-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #7288a8;
+  font-size: 12.5px;
+  margin: 2px 0;
+}
+
+.join-or::before,
+.join-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line-dark);
+}
+
+.btn-scan {
+  background: rgba(148, 178, 255, 0.08);
+  border: 1px solid var(--line-dark);
+  transition: background 0.15s;
+}
+
+.btn-scan:hover {
+  background: rgba(148, 178, 255, 0.15);
+}
+
+/* --------- Navne-input (hvidt felt som i mockup) --------- */
+.name-input {
+  background: #fff;
+  border: 0;
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 14px;
+  color: var(--ink);
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+  transition: box-shadow 0.15s;
+}
+
+.name-input:focus {
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.25);
+}
+
+.name-input::placeholder {
+  color: #93a3ba;
+}
+
+/* --------- QR-pane --------- */.qr-panel {
+  border: 1.6px dashed rgba(148, 178, 255, 0.3);
+  border-radius: 14px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  color: #9fb2cc;
+  background: rgba(8, 24, 47, 0.4);
+}
+
+.qr-panel p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.qr-panel em {
+  color: #7288a8;
+  font-size: 12px;
+}
+
+.qr-panel-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(148, 178, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cfe0ff;
+}

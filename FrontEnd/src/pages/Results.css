@@ -1,0 +1,156 @@
+.page-results {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 46px 18px 44px;
+  background:
+    radial-gradient(900px 460px at 50% -8%, rgba(64, 120, 220, 0.2), transparent 60%),
+    #071a34;
+}
+
+.trophy {
+  font-size: 58px;
+  line-height: 1;
+  filter: drop-shadow(0 10px 26px rgba(245, 197, 24, 0.35));
+}
+
+.results-title {
+  font-size: 26px;
+  margin: 10px 0 4px;
+}
+
+.results-sub {
+  color: #9fb2cc;
+  margin: 0;
+  font-size: 14.5px;
+}
+
+.results-quiz {
+  color: #6c84a8;
+  font-size: 12.5px;
+  margin: 6px 0 20px;
+}
+
+.board {
+  width: min(520px, 100%);
+  background: rgba(13, 36, 68, 0.85);
+  border: 1px solid var(--line-dark);
+  border-radius: 16px;
+  padding: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.board-cols {
+  display: grid;
+  grid-template-columns: 46px 1fr 84px;
+  padding: 2px 12px 9px;
+  color: #8fa7c9;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.board-cols span:last-child {
+  text-align: right;
+}
+
+.b-row {
+  display: grid;
+  grid-template-columns: 46px 1fr 84px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0f2b52;
+  margin-bottom: 8px;
+  border-left: 4px solid transparent;
+}
+
+.b-row.me {
+  background: #153b73;
+  box-shadow: inset 0 0 0 1px rgba(61, 139, 255, 0.5);
+}
+
+.b-rank {
+  color: #dbe7fa;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.b-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.b-name em {
+  font-style: normal;
+  color: #9dbaff;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.b-points {
+  text-align: right;
+  font-weight: 700;
+  color: #fff;
+}
+
+.board-empty {
+  color: #7288a8;
+  text-align: center;
+  font-size: 13.5px;
+  padding: 12px;
+  margin: 0;
+}
+
+.board-restart {
+  width: min(520px, 100%);
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.results-back {
+  margin-top: 16px;
+  color: #6f89b5;
+  font-size: 13.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.results-back:hover {
+  color: #9dbaff;
+}
+
+/* --------- Konfetti --------- */
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.confetti i {
+  position: absolute;
+  top: -5%;
+  display: block;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-4vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(560deg);
+    opacity: 0.85;
+  }
+}
