@@ -1,7 +1,7 @@
 .page-create {
   min-height: 100vh;
-  background: var(--light-bg);
-  color: var(--ink);
+  background: var(--page-bg);
+  color: var(--text);
   padding: 24px 16px 60px;
 }
 
@@ -14,7 +14,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--ink-3);
+  color: var(--text-muted);
   font-size: 14px;
   background: transparent;
   border: 0;
@@ -23,17 +23,17 @@
 }
 
 .create-back:hover {
-  color: var(--ink);
+  color: var(--text);
 }
 
 .create-card {
   max-width: 760px;
   margin: 0 auto;
-  background: #fff;
-  border: 1px solid #e6ebf3;
+  background: var(--panel);
+  border: 1px solid var(--line-dark);
   border-radius: 16px;
   padding: 24px 30px 30px;
-  box-shadow: 0 10px 40px rgba(15, 44, 80, 0.08);
+  box-shadow: var(--panel-shadow);
 }
 
 .create-title {
@@ -61,14 +61,14 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 1.6px solid #cfd9e6;
-  color: var(--ink-3);
+  border: 1.6px solid var(--line-dark);
+  color: var(--text-dim);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 13.5px;
-  background: #fff;
+  background: rgba(148, 178, 255, 0.06);
 }
 
 .step.active .step-dot {
@@ -79,25 +79,25 @@
 
 .step.done .step-dot {
   border-color: var(--blue);
-  color: var(--blue);
+  color: var(--accent);
 }
 
 .step-label {
   font-size: 13.5px;
-  color: var(--ink-3);
+  color: var(--text-dim);
   font-weight: 500;
 }
 
 .step.active .step-label {
-  color: var(--ink);
+  color: var(--text);
   font-weight: 700;
 }
 
 .step.done .step-label {
-  color: var(--blue);
+  color: var(--accent);
 }
 
-/* --------- Formularfelt (lyst tema) --------- */
+/* --------- Formularfelt (dunkelt tema som resten af appen) --------- */
 .u-fields {
   display: flex;
   flex-direction: column;
@@ -113,24 +113,28 @@
 .u-label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text-muted);
 }
 
 .u-input {
   width: 100%;
   height: 44px;
-  border: 1px solid var(--line-light);
+  border: 1px solid var(--line-dark);
   border-radius: 10px;
   padding: 0 12px;
-  background: #fff;
-  color: var(--ink);
+  background: rgba(8, 24, 47, 0.6);
+  color: #f0f5ff;
   outline: 0;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .u-input:focus {
   border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.14);
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.22);
+}
+
+.u-input::placeholder {
+  color: var(--text-dim);
 }
 
 .u-textarea {
@@ -146,7 +150,7 @@
 }
 
 .u-error {
-  color: var(--danger);
+  color: var(--danger-soft);
   font-size: 13.5px;
   margin: 14px 0 0;
 }
@@ -161,8 +165,8 @@
 .pkg-card {
   position: relative;
   text-align: left;
-  background: #fff;
-  border: 1.6px solid var(--line-light);
+  background: rgba(8, 24, 47, 0.6);
+  border: 1.6px solid var(--line-dark);
   border-radius: 12px;
   padding: 14px 14px 12px;
   display: flex;
@@ -176,18 +180,18 @@
 }
 
 .pkg-card span {
-  color: var(--ink-3);
+  color: var(--text-dim);
   font-size: 13px;
 }
 
 .pkg-card:hover {
-  border-color: #b9cbe8;
+  border-color: rgba(148, 178, 255, 0.35);
 }
 
 .pkg-card.selected {
   border-color: var(--blue);
-  background: #f5f9ff;
-  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.12);
+  background: rgba(30, 107, 241, 0.14);
+  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.18);
 }
 
 .pkg-check {
@@ -206,11 +210,11 @@
 
 /* --------- Spørgsmåls-editor --------- */
 .q-item {
-  border: 1.4px solid var(--line-light);
+  border: 1.4px solid var(--line-dark);
   border-radius: 12px;
   margin-bottom: 10px;
   overflow: hidden;
-  background: #fff;
+  background: rgba(8, 24, 47, 0.6);
 }
 
 .q-item-head {
@@ -219,18 +223,18 @@
   gap: 10px;
   width: 100%;
   padding: 11px 14px;
-  background: #fff;
+  background: transparent;
   border: 0;
   text-align: left;
 }
 
 .q-item-head:hover {
-  background: #f7f9fc;
+  background: rgba(148, 178, 255, 0.07);
 }
 
 .q-num {
   font-weight: 700;
-  color: var(--ink-3);
+  color: var(--text-dim);
 }
 
 .q-preview {
@@ -245,7 +249,7 @@
 
 .q-time {
   flex: none;
-  color: var(--ink-3);
+  color: var(--text-dim);
   font-size: 12.5px;
 }
 
@@ -257,12 +261,12 @@
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  color: var(--ink-3);
+  color: var(--text-dim);
 }
 
 .q-delete:hover {
-  color: var(--danger);
-  background: rgba(226, 54, 76, 0.08);
+  color: var(--danger-soft);
+  background: rgba(226, 54, 76, 0.12);
 }
 
 .q-edit {
@@ -270,8 +274,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: #f7f9fc;
-  border-top: 1px solid var(--line-light);
+  background: rgba(5, 14, 31, 0.45);
+  border-top: 1px solid var(--line-dark-soft);
 }
 
 .opt-grid {
@@ -316,27 +320,29 @@
   width: 32px;
   height: 30px;
   border-radius: 8px;
-  border: 1.5px solid #d4dde9;
-  background: #fff;
-  color: #fff;
+  border: 1.5px solid var(--line-dark);
+  background: rgba(8, 24, 47, 0.6);
+  color: var(--text-dim);
   font-weight: 800;
   font-size: 13px;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
 
 .corr-btn:hover {
-  border-color: #aebfd6;
+  border-color: rgba(148, 178, 255, 0.4);
+  color: var(--text);
 }
 
 .corr-btn.selected {
   background: var(--ans);
   border-color: var(--ans);
+  color: #fff;
 }
 
 /* --------- Gennemgang --------- */
 .summary {
   margin: 0;
-  border: 1px solid var(--line-light);
+  border: 1px solid var(--line-dark);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -346,7 +352,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 13px 16px;
-  border-bottom: 1px solid var(--line-light);
+  border-bottom: 1px solid var(--line-dark-soft);
   font-size: 14.5px;
 }
 
@@ -355,7 +361,7 @@
 }
 
 .summary-row dt {
-  color: var(--ink-3);
+  color: var(--text-dim);
 }
 
 .summary-row dd {
@@ -365,18 +371,18 @@
 }
 
 .summary-note {
-  color: var(--ink-2);
+  color: var(--text-muted);
   font-size: 13.5px;
   margin: 14px 0 0;
 }
 
 .add-q {
   width: 100%;
-  border: 1.6px dashed #c8d4e2;
+  border: 1.6px dashed rgba(148, 178, 255, 0.3);
   border-radius: 12px;
   background: transparent;
   padding: 13px;
-  color: var(--ink-2);
+  color: var(--text-muted);
   font-weight: 600;
   display: flex;
   gap: 8px;
@@ -387,7 +393,7 @@
 
 .add-q:hover {
   border-color: var(--blue);
-  color: var(--blue);
+  color: var(--accent);
 }
 
 .create-foot {

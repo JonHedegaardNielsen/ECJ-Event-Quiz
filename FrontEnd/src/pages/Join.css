@@ -6,19 +6,16 @@
   justify-content: center;
   gap: 26px;
   padding: 6vh 16px 48px;
-  background:
-    radial-gradient(1000px 520px at 82% -10%, rgba(64, 120, 220, 0.24), transparent 56%),
-    radial-gradient(760px 460px at 8% 112%, rgba(112, 84, 200, 0.16), transparent 56%),
-    linear-gradient(160deg, #0a2140 0%, #071a34 55%, #081d3a 100%);
+  background: var(--page-bg);
 }
 
 .join-card {
   width: min(430px, 100%);
-  background: rgba(11, 31, 60, 0.8);
+  background: var(--panel);
   border: 1px solid var(--line-dark);
   border-radius: 18px;
   padding: 26px 22px 24px;
-  box-shadow: 0 26px 70px rgba(2, 8, 20, 0.5);
+  box-shadow: var(--panel-shadow);
 }
 
 .join-form,
@@ -36,7 +33,7 @@
 
 .join-sub {
   text-align: center;
-  color: #9fb2cc;
+  color: var(--text-muted);
   font-size: 13.5px;
   margin: -7px 0 3px;
 }
@@ -57,7 +54,7 @@
   border-radius: 8px;
   background: transparent;
   border: 0;
-  color: #9fb2cc;
+  color: var(--text-muted);
   font-weight: 600;
   font-size: 14px;
   transition: background 0.15s, color 0.15s;
@@ -105,7 +102,7 @@
 
 .code-error {
   text-align: center;
-  color: #ff8197;
+  color: var(--danger-soft);
   font-size: 13px;
   margin: -6px 0 0;
 }
@@ -131,7 +128,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #7288a8;
+  color: var(--text-dim);
   font-size: 12.5px;
   margin: 2px 0;
 }
@@ -173,10 +170,11 @@
 }
 
 .name-input::placeholder {
-  color: #93a3ba;
+  color: var(--text-dim);
 }
 
-/* --------- QR-pane --------- */.qr-panel {
+/* --------- QR-pane --------- */
+.qr-panel {
   border: 1.6px dashed rgba(148, 178, 255, 0.3);
   border-radius: 14px;
   padding: 24px 20px;
@@ -185,7 +183,7 @@
   align-items: center;
   gap: 12px;
   text-align: center;
-  color: #9fb2cc;
+  color: var(--text-muted);
   background: rgba(8, 24, 47, 0.4);
 }
 
@@ -196,7 +194,7 @@
 }
 
 .qr-panel em {
-  color: #7288a8;
+  color: var(--text-dim);
   font-size: 12px;
 }
 
@@ -209,4 +207,14 @@
   align-items: center;
   justify-content: center;
   color: #cfe0ff;
+}
+
+/* "Gå til admin"-link, matcher login-sidens dæmpede link-stil */
+.join-admin-link {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.join-admin-link:hover {
+  color: var(--accent);
 }

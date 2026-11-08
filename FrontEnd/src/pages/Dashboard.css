@@ -1,13 +1,15 @@
+/* --------- Hovedområde --------- */
 .page-dash {
   display: flex;
   min-height: 100vh;
+  background: var(--page-bg);
 }
 
 /* --------- Sidebar --------- */
 .sidebar {
   width: 232px;
   flex: none;
-  background: #081831;
+  background: var(--navy-900);
   border-right: 1px solid var(--line-dark-soft);
   display: flex;
   flex-direction: column;
@@ -28,7 +30,7 @@
   gap: 11px;
   padding: 11px 12px;
   border-radius: 10px;
-  color: #a9bcd8;
+  color: var(--text-muted);
   background: transparent;
   border: 0;
   font-size: 14.5px;
@@ -40,7 +42,7 @@
 
 .sidebar-item:hover:not([disabled]) {
   background: rgba(148, 178, 255, 0.08);
-  color: #eaf1fb;
+  color: var(--text);
 }
 
 .sidebar-item.active {
@@ -62,7 +64,7 @@
 .dash-main {
   flex: 1;
   min-width: 0;
-  background: #0e2749;
+  background: none;
   display: flex;
   flex-direction: column;
 }
@@ -73,7 +75,7 @@
   align-items: center;
   gap: 10px;
   padding: 18px 30px;
-  color: #dbe7fa;
+  color: var(--text);
   font-size: 14px;
   font-weight: 600;
 }
@@ -106,7 +108,7 @@
   border: 1.5px dashed var(--line-dark);
   border-radius: 16px;
   padding: 48px 20px;
-  color: #9fb2cc;
+  color: var(--text-muted);
 }
 
 .dash-empty p {
@@ -119,7 +121,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #102b4f;
+  background: var(--card-dark);
   border: 1px solid var(--line-dark-soft);
   border-radius: 14px;
   padding: 14px 16px;
@@ -158,7 +160,7 @@
 
 .quiz-meta {
   margin: 4px 0 0;
-  color: #8fa7c9;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
@@ -178,14 +180,14 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  color: #8fa7c9;
+  color: var(--text-muted);
   background: transparent;
   border: 0;
   border-radius: 8px;
 }
 
 .quiz-kebab:hover {
-  color: #fff;
+  color: var(--text);
   background: rgba(148, 178, 255, 0.12);
 }
 
@@ -193,7 +195,7 @@
   position: absolute;
   right: 44px;
   top: 58px;
-  background: #0b1f3c;
+  background: var(--navy-850);
   border: 1px solid var(--line-dark);
   border-radius: 12px;
   padding: 6px;
@@ -211,7 +213,7 @@
   border-radius: 8px;
   background: transparent;
   border: 0;
-  color: #dbe7fa;
+  color: var(--text);
   font-size: 14px;
   text-align: left;
 }
@@ -221,12 +223,12 @@
 }
 
 .quiz-menu button.danger {
-  color: #ff8197;
+  color: var(--danger-soft);
 }
 
 .dash-hint {
   margin: 22px 2px 0;
-  color: #7288a8;
+  color: var(--text-dim);
   font-size: 13px;
   display: flex;
   align-items: center;
@@ -234,7 +236,7 @@
 }
 
 .dash-hint b {
-  color: #a9bcd8;
+  color: var(--text-muted);
 }
 
 /* --------- Mobil --------- */

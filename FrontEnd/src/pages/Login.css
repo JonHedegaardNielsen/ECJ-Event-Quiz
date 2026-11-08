@@ -7,37 +7,14 @@
   justify-content: center;
   gap: 22px;
   padding: 40px 16px;
-  overflow: hidden;
-  background:
-    radial-gradient(900px 520px at 12% -12%, rgba(43, 105, 214, 0.22), transparent 62%),
-    radial-gradient(760px 480px at 112% 118%, rgba(30, 90, 190, 0.16), transparent 60%),
-    linear-gradient(118deg, #0a1f3d 0%, #071a34 46%, #0a2148 100%);
-}
-
-/* bløde diagonale flader, som i mockupen */
-.page-login::before,
-.page-login::after {
-  content: '';
-  position: absolute;
-  inset: -30%;
-  pointer-events: none;
-}
-
-.page-login::before {
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.05) 0%, transparent 42%);
-  transform: rotate(-18deg);
-}
-
-.page-login::after {
-  background: linear-gradient(300deg, rgba(61, 139, 255, 0.09) 0%, transparent 46%);
-  transform: rotate(14deg);
+  background: var(--page-bg);
 }
 
 .login-card {
   position: relative;
   z-index: 1;
   width: min(430px, 100%);
-  background: rgba(9, 28, 56, 0.78);
+  background: var(--panel);
   border: 1px solid var(--line-dark);
   border-radius: 18px;
   padding: 36px 30px 26px;
@@ -45,7 +22,7 @@
   flex-direction: column;
   align-items: center;
   gap: 26px;
-  box-shadow: 0 30px 80px rgba(2, 8, 20, 0.55);
+  box-shadow: var(--panel-shadow);
   backdrop-filter: blur(6px);
 }
 
@@ -64,28 +41,28 @@
 
 .login-form > p:nth-of-type(1) {
   margin: -10px 0 6px;
-  color: #9fb2cc;
+  color: var(--text-muted);
   font-size: 13.5px;
 }
 
 .login-noaccount {
   margin: 4px 0 0;
-  color: #93a7c3;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
 .login-noaccount a {
-  color: #5f9bff;
+  color: var(--accent);
   font-weight: 600;
 }
 
 .login-player-link {
   position: relative;
   z-index: 1;
-  color: #6f89b5;
+  color: var(--text-dim);
   font-size: 13px;
 }
 
 .login-player-link:hover {
-  color: #9dbaff;
+  color: var(--accent);
 }

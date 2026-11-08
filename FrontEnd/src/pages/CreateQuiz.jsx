@@ -71,7 +71,7 @@ export default function CreateQuiz() {
   return (
     <div className="page-create">
       <div className="create-top">
-        <Logo size="sm" tone="light" />
+        <Logo size="sm" tone="dark" />
       </div>
       <div className="create-card">
         <button type="button" className="create-back" onClick={goBack}>

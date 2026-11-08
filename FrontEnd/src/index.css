@@ -22,11 +22,23 @@
 
   --danger: #e2364c;
 
-  --light-bg: #eef2f8;
+  /* Mørk blæk farve til hvide flader (spørgsmålskort, navnefelt m.m.) */
   --ink: #0c1d38;
-  --ink-2: #3c526d;
-  --ink-3: #647894;
-  --line-light: #e2e8f2;
+
+  /* Delte tekst- og flade-tokens, som alle sider bygger på */
+  --text: #eaf1fb;
+  --text-muted: #9fb2cc;
+  --text-dim: #7288a8;
+  --accent: #9dbaff;
+  --danger-soft: #ff8197;
+
+  --panel: rgba(11, 31, 60, 0.8);
+  --panel-shadow: 0 26px 70px rgba(2, 8, 20, 0.5);
+
+  --page-bg:
+    radial-gradient(1000px 520px at 15% -10%, rgba(64, 120, 220, 0.18), transparent 58%),
+    radial-gradient(820px 480px at 110% 115%, rgba(61, 139, 255, 0.12), transparent 58%),
+    linear-gradient(160deg, #0a2140 0%, #071a34 52%, #081d3a 100%);
 
   --font: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
@@ -46,7 +58,7 @@ body {
   margin: 0;
   font-family: var(--font);
   background: var(--navy-950);
-  color: #eaf1fb;
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -105,7 +117,7 @@ a:hover {
 
 .logo-dark .logo-event,
 .logo-dark .logo-quiz {
-  color: #3d8bff;
+  color: var(--accent);
 }
 
 .logo-light {
@@ -179,7 +191,7 @@ a:hover {
 
 .field > svg {
   margin-left: 13px;
-  color: #7f9ac4;
+  color: var(--text-dim);
   flex: none;
 }
 
@@ -196,7 +208,7 @@ a:hover {
 }
 
 .field input::placeholder {
-  color: #7f95b8;
+  color: var(--text-dim);
 }
 
 .field:focus-within {
@@ -207,7 +219,7 @@ a:hover {
 .field-eye {
   background: transparent;
   border: 0;
-  color: #7f9ac4;
+  color: var(--text-dim);
   padding: 0 13px;
   height: 100%;
   display: flex;
@@ -215,7 +227,7 @@ a:hover {
 }
 
 .field-eye:hover {
-  color: #c8d8f2;
+  color: var(--text-muted);
 }
 
 /* ---------- Avatar ---------- */
@@ -238,7 +250,7 @@ a:hover {
 }
 
 .joined-sub {
-  color: #9fb2cc;
+  color: var(--text-muted);
   font-size: 13px;
   margin: 0;
 }
