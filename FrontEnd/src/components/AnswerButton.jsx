@@ -3,7 +3,17 @@
 import { LETTERS } from '../data/mock'
 
 export default function AnswerButton({ option, index, color, count = null, state = null, clickable = false, onClick }) {
-  const cls = ['answer', state ? `is-${state}` : '', clickable ? 'is-clickable' : ''].filter(Boolean).join(' ')
+  const classes = ['answer']
+
+  if (state) {
+    classes.push(`is-${state}`)
+  }
+
+  if (clickable) {
+    classes.push('is-clickable')
+  }
+
+  const cls = classes.join(' ')
   return (
     <button
       type="button"

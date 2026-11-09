@@ -1,8 +1,9 @@
 // 1. Login (arrangør)
 import { useState } from 'react'
-import Logo from '../components/Logo'
-import { IconUser, IconLock, IconEye, IconEyeOff } from '../components/icons'
-import { useGame } from '../game/useGame'
+import Logo from '../../components/Logo'
+import { IconUser, IconLock, IconEye, IconEyeOff } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { Link } from 'react-router-dom'
 import './Login.css'
 
 export default function Login() {
@@ -61,9 +62,9 @@ export default function Login() {
           </p>
         </form>
       </div>
-      <a className="login-player-link" href="#/deltag">
+      <Link className="login-player-link" to="/deltag">
         Skal du deltage i en quiz? Gå til deltagersiden
-      </a>
+      </Link>
     </main>
   )
 }

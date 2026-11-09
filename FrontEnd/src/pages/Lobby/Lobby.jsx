@@ -1,12 +1,12 @@
 // 4. Lobby (arrangør): Room ID, QR-kode og deltagere, der tilslutter sig (simuleret).
 import { useEffect } from 'react'
-import Logo from '../components/Logo'
-import QrCode from '../components/QrCode'
-import Avatar from '../components/Avatar'
-import { IconArrowLeft, IconX } from '../components/icons'
-import { useGame } from '../game/useGame'
-import { packageInfo, getQuiz } from '../data/mock'
-import { pickBots } from '../lib/utils'
+import Logo from '../../components/Logo'
+import QrCode from '../../components/QrCode'
+import Avatar from '../../components/Avatar'
+import { IconArrowLeft, IconX } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { packageInfo, getQuiz } from '../../data/mock'
+import { pickBots } from '../../lib/utils'
 import './Lobby.css'
 
 export default function Lobby() {

@@ -1,19 +1,20 @@
 // 6. Live spørgsmål for værten – deltagerne svarer (simuleret), værten ser antal svar pr. mulighed.
 // Deler layout + CSS med deltagerens spil-skærm (PlayerLive).
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Logo from '../components/Logo'
-import Countdown from '../components/Countdown'
-import QuestionMedia from '../components/QuestionMedia'
-import AnswerButton from '../components/AnswerButton'
-import { IconClock } from '../components/icons'
-import { useGame } from '../game/useGame'
-import { ANSWER_COLORS, getQuiz } from '../data/mock'
-import { otherIndex, pointsFor } from '../lib/utils'
-import { navigate } from '../lib/router'
+import Logo from '../../components/Logo'
+import Countdown from '../../components/Countdown'
+import QuestionMedia from '../../components/QuestionMedia'
+import AnswerButton from '../../components/AnswerButton'
+import { IconClock } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { ANSWER_COLORS, getQuiz } from '../../data/mock'
+import { otherIndex, pointsFor } from '../../lib/utils'
+import { useNavigate } from 'react-router-dom'
 import './Live.css'
 
 export default function HostLive() {
   const { room, quizzes, setRoom } = useGame()
+  const navigate = useNavigate()
   const quiz = room && getQuiz(quizzes ?? [], room.quizId)
   const total = quiz?.questions?.length ?? 0
 
@@ -46,7 +47,7 @@ export default function HostLive() {
       }
     }, 2400)
     return () => clearTimeout(t)
-  }, [roomStatus, total, setRoom])
+  }, [roomStatus, total, setRoom, navigate])
 
   if (!room || !quiz || total === 0) return null
   if (room.status === 'results') return null

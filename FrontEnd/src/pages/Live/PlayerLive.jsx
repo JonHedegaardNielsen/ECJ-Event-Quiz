@@ -1,15 +1,15 @@
 // Deltagerens live-spil: 3-2-1 → spørgsmål → afsløring → næste → resultater.
 // Layoutet spejler mockup 6/7 (og 8 på mobil).
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Logo from '../components/Logo'
-import Countdown from '../components/Countdown'
-import Avatar from '../components/Avatar'
-import QuestionMedia from '../components/QuestionMedia'
-import AnswerButton from '../components/AnswerButton'
-import { IconClock } from '../components/icons'
-import { useGame } from '../game/useGame'
-import { ANSWER_COLORS, getQuiz } from '../data/mock'
-import { pointsFor } from '../lib/utils'
+import Logo from '../../components/Logo'
+import Countdown from '../../components/Countdown'
+import Avatar from '../../components/Avatar'
+import QuestionMedia from '../../components/QuestionMedia'
+import AnswerButton from '../../components/AnswerButton'
+import { IconClock } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { ANSWER_COLORS, getQuiz } from '../../data/mock'
+import { pointsFor } from '../../lib/utils'
 import './Live.css'
 
 export default function PlayerLive() {

@@ -2,13 +2,13 @@
 import Logo from './Logo'
 import { IconHome, IconList, IconPlusCircle, IconGear, IconLogout } from './icons'
 import { useGame } from '../game/useGame'
-import { useRoute, navigate } from '../lib/router'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export default function Sidebar() {
   const { logout } = useGame()
-  const path = useRoute()
-  const isDash = path === '/dashboard'
-  const isOpret = path === '/opret'
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const isDash = pathname === '/dashboard'
 
   return (
     <aside className="sidebar">

@@ -2,26 +2,26 @@
 import { useEffect, useState } from 'react'
 
 export default function Countdown({ top, hint, onDone }) {
-  const [n, setN] = useState(3)
+  const [count, setCount] = useState(3)
 
   useEffect(() => {
     let cur = 3
-    const iv = setInterval(() => {
+    const interval = setInterval(() => {
       cur -= 1
-      setN(Math.max(cur, 0))
+      setCount(Math.max(cur, 0))
       if (cur <= 0) {
-        clearInterval(iv)
+        clearInterval(interval)
         onDone?.()
       }
     }, 800)
-    return () => clearInterval(iv)
+    return () => clearInterval(interval)
   }, [onDone])
 
   return (
     <main className="live-count">
       {top}
-      <span key={n} className="big-num">
-        {Math.max(n, 1)}
+      <span key={count} className="big-num">
+        {Math.max(count, 1)}
       </span>
       {hint && <p className="count-sub">{hint}</p>}
     </main>

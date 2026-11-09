@@ -1,15 +1,16 @@
 // 3. Opret quiz (arrangør): 3 trin – grundlæggende, spørgsmål, gennemgang.
 import { useEffect, useState } from 'react'
-import Stepper from '../components/Stepper'
-import Logo from '../components/Logo'
-import { IconArrowLeft, IconArrowRight, IconCheck, IconX, IconPlusCircle } from '../components/icons'
-import { useGame } from '../game/useGame'
-import { ANSWER_COLORS, LETTERS, PACKAGES, emptyQuestion } from '../data/mock'
-import { clone } from '../lib/utils'
-import { navigate } from '../lib/router'
+import Stepper from '../../components/Stepper'
+import Logo from '../../components/Logo'
+import { IconArrowLeft, IconArrowRight, IconCheck, IconX, IconPlusCircle } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { ANSWER_COLORS, LETTERS, PACKAGES, emptyQuestion } from '../../data/mock'
+import { clone } from '../../lib/utils'
+import { useNavigate } from 'react-router-dom'
 import './CreateQuiz.css'
 
 export default function CreateQuiz() {
+  const navigate = useNavigate()
   const { quizzes, draft, clearDraft, saveQuiz } = useGame()
   const [step, setStep] = useState(0)
   const [err, setErr] = useState('')
