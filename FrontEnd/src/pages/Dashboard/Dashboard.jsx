@@ -1,10 +1,10 @@
 // 2. Dashboard (arrangør): quizliste med start/menupunkter.
 import { useEffect, useState } from 'react'
-import Sidebar from '../components/Sidebar'
-import Avatar from '../components/Avatar'
-import { IconDots, IconArrowRight, IconPlusCircle, IconX } from '../components/icons'
-import { useGame } from '../game/useGame'
-import { packageInfo } from '../data/mock'
+import Sidebar from '../../components/Sidebar'
+import Avatar from '../../components/Avatar'
+import { IconDots, IconArrowRight, IconPlusCircle, IconX } from '../../components/icons'
+import { useGame } from '../../game/useGame'
+import { packageInfo } from '../../data/mock'
 import './Dashboard.css'
 
 export default function Dashboard() {

@@ -1,8 +1,8 @@
 // 5. Deltagelse (mobil/PC): indtast Room-ID eller scan QR-kode.
 import { useRef, useState } from 'react'
-import Logo from '../components/Logo'
-import { IconCamera, IconQr } from '../components/icons'
-import { useGame } from '../game/useGame'
+import Logo from '../../components/Logo'
+import { IconCamera, IconQr } from '../../components/icons'
+import { useGame } from '../../game/useGame'
 import './Join.css'
 
 export default function Join() {

@@ -1,9 +1,9 @@
 // 5b. Navn + "du deltager nu"-bekræftelse (svarer til andet panel i mockup 5).
 import { useState } from 'react'
-import Logo from '../components/Logo'
-import Avatar from '../components/Avatar'
-import { useGame } from '../game/useGame'
-import { getQuiz } from '../data/mock'
+import Logo from '../../components/Logo'
+import Avatar from '../../components/Avatar'
+import { useGame } from '../../game/useGame'
+import { getQuiz } from '../../data/mock'
 import './Join.css'
 
 export default function JoinName() {

@@ -1,6 +1,6 @@
 // 7. Resultatliste (efter quiz) – bruges af både værten og deltageren.
-import { useGame } from '../game/useGame'
-import { getQuiz } from '../data/mock'
+import { useGame } from '../../game/useGame'
+import { getQuiz } from '../../data/mock'
 import './Results.css'
 
 const MEDALS = ['🥇', '🥈', '🥉']

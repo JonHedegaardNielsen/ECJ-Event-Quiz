@@ -1,8 +1,8 @@
 // 1. Login (arrangør)
 import { useState } from 'react'
-import Logo from '../components/Logo'
-import { IconUser, IconLock, IconEye, IconEyeOff } from '../components/icons'
-import { useGame } from '../game/useGame'
+import Logo from '../../components/Logo'
+import { IconUser, IconLock, IconEye, IconEyeOff } from '../../components/icons'
+import { useGame } from '../../game/useGame'
 import './Login.css'
 
 export default function Login() {
