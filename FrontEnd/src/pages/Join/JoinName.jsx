@@ -8,7 +8,7 @@ import './Join.css'
 
 export default function JoinName() {
   const { player, quizzes, setPlayerName } = useGame()
-  const quiz = getQuiz(quizzes ?? [], player?.quizId)
+  const quiz = player?.live ? null : getQuiz(quizzes ?? [], player?.quizId)
   const [name, setName] = useState('')
 
   if (!player) return null
@@ -35,12 +35,13 @@ export default function JoinName() {
         <button type="submit" className="btn btn-block btn-lg" disabled={!name.trim()}>
           Deltag
         </button>
+        {player.live && player.joinError && <p className="board-empty">{player.joinError}</p>}
 
         <div className="joined">
           <Avatar size={76} />
           <div>
             <p className="joined-sub">Du deltager nu i</p>
-            <p className="joined-title">{quiz?.title ?? 'Quizzen'}</p>
+            <p className="joined-title">{player.live ? `Room ${player.roomId}` : (quiz?.title ?? 'Quizzen')}</p>
           </div>
         </div>
       </form>

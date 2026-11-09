@@ -14,6 +14,7 @@ export default function CreateQuiz() {
   const { quizzes, draft, clearDraft, saveQuiz } = useGame()
   const [step, setStep] = useState(0)
   const [err, setErr] = useState('')
+  const [busy, setBusy] = useState(false)
   const [expanded, setExpanded] = useState(null)
   const [quiz, setQuiz] = useState(() => {
     const src = draft && quizzes ? quizzes.find((q) => q.id === draft) : null
@@ -46,7 +47,7 @@ export default function CreateQuiz() {
     setQuiz((q) => ({ ...q, questions: q.questions.filter((_, j) => j !== i) }))
   }
 
-  const publish = () => {
+  const publish = async () => {
     setErr('')
     if (!quiz.title.trim()) {
       setErr('Giv din quiz et navn.')
@@ -58,7 +59,19 @@ export default function CreateQuiz() {
       setStep(1)
       return
     }
-    saveQuiz(quiz)
+    setBusy(true)
+    try {
+      // saveQuiz gemmer via POST /api/Quiz og viser fejlbeskeder her via kast
+      await saveQuiz(quiz)
+    } catch (ex) {
+      if (ex.status === 400 && /creatorid/i.test(ex.message ?? '')) {
+        setErr('Log ud og ind igen (kontoen mangler et gyldigt id).')
+      } else {
+        setErr(ex.message || 'Kunne ikke udgive quizzen.')
+      }
+    } finally {
+      setBusy(false)
+    }
   }
 
   const goBack = () => {
@@ -263,8 +276,8 @@ export default function CreateQuiz() {
               <IconArrowRight size={17} />
             </button>
           ) : (
-            <button type="button" className="btn" onClick={publish}>
-              Udgiv quiz
+            <button type="button" className="btn" onClick={publish} disabled={busy}>
+              {busy ? 'Udgiver…' : 'Udgiv quiz'}
             </button>
           )}
         </div>

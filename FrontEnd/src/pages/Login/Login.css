@@ -45,6 +45,18 @@
   font-size: 13.5px;
 }
 
+.login-error {
+  margin: -6px 0 0;
+  color: var(--danger, #e2364c);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.login-switch {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
 .login-noaccount {
   margin: 4px 0 0;
   color: var(--text-muted);

@@ -1,4 +1,5 @@
-// 4. Lobby (arrangør): Room ID, QR-kode og deltagere, der tilslutter sig (simuleret).
+// 4. Lobby (arrangør): Room ID, QR-kode og deltagere, der tilslutter sig.
+// LIVE: deltagere kommer fra serveren via LobbyUpdated. MOCK: simulerede deltagere.
 import { useEffect } from 'react'
 import Logo from '../../components/Logo'
 import QrCode from '../../components/QrCode'
@@ -12,13 +13,15 @@ import './Lobby.css'
 export default function Lobby() {
   const { room, quizzes, addParticipant, removeParticipant, launchQuiz } = useGame()
   const quiz = getQuiz(quizzes ?? [], room?.quizId)
+  const isLive = Boolean(room?.live)
 
-  // Demo: mock-deltagere tilslutter sig automatisk. Rigtige deltagere via WebSocket senere.
+  // Demo: mock-deltagere tilslutter sig automatisk. I LIVE-mode kommer de via SignalR.
   useEffect(() => {
+    if (!room || isLive) return undefined
     const names = pickBots(6)
     const timers = names.map((name, i) => setTimeout(() => addParticipant(name), i * 950 + 500))
     return () => timers.forEach(clearTimeout)
-  }, [addParticipant])
+  }, [addParticipant, isLive, room])
 
   if (!room || !quiz) return null
 
@@ -64,14 +67,16 @@ export default function Lobby() {
               <div className="p-row" key={name}>
                 <Avatar size={28} />
                 <span>{name}</span>
-                <button
-                  type="button"
-                  className="p-x"
-                  aria-label={`Fjern ${name}`}
-                  onClick={() => removeParticipant(name)}
-                >
-                  <IconX size={14} />
-                </button>
+                {!isLive && (
+                  <button
+                    type="button"
+                    className="p-x"
+                    aria-label={`Fjern ${name}`}
+                    onClick={() => removeParticipant(name)}
+                  >
+                    <IconX size={14} />
+                  </button>
+                )}
               </div>
             ))}
             {room.participants.length === 0 && <p className="p-empty">Venter på deltagere…</p>}
@@ -81,7 +86,7 @@ export default function Lobby() {
         <button type="button" className="btn btn-green btn-lg btn-block" onClick={launchQuiz} disabled={!canStart}>
           Start quiz
         </button>
-        {!canStart && <p className="lobby-hint">Demo: der tilsluttes testdeltagere automatisk.</p>}
+        {!canStart && <p className="lobby-hint">Deltagerne kan tilslutte via QR-koden eller Room ID.</p>}
       </div>
     </main>
   )

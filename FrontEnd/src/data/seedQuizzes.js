@@ -6,6 +6,7 @@ const q = (text, options, correct, time, art = null) => ({ ...emptyQuestion(), t
 export const SEED_QUIZZES = [
   {
     id: 'firmafest-2026',
+    serverId: 1,
     title: 'Firmafest 2026',
     description: 'En sjov quiz til firmafesten.',
     packageId: 'stor',
@@ -36,6 +37,7 @@ export const SEED_QUIZZES = [
   },
   {
     id: 'teambuilding',
+    serverId: 2,
     title: 'Teambuilding',
     description: 'Sjove facts til teambuilding-dagen.',
     packageId: 'mellem',
@@ -62,6 +64,7 @@ export const SEED_QUIZZES = [
   },
   {
     id: 'sommerfest',
+    serverId: 3,
     title: 'Sommerfest',
     description: 'Klassisk sommerquiz – kun tekst.',
     packageId: 'lille',

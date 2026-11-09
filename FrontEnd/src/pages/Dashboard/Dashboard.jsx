@@ -8,7 +8,7 @@ import { packageInfo } from '../../data/mock'
 import './Dashboard.css'
 
 export default function Dashboard() {
-  const { user, quizzes, startSession, openEditor, startQuizDraft, duplicateQuiz, deleteQuiz } = useGame()
+  const { user, quizzes, quizzesLoading, quizzesError, refreshQuizzes, startSession, openEditor, startQuizDraft, duplicateQuiz, deleteQuiz } = useGame()
   const [menuFor, setMenuFor] = useState(null)
 
   useEffect(() => {
@@ -40,7 +40,18 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {list.length === 0 && (
+          {quizzesError && (
+            <div className="dash-error">
+              <p>{quizzesError}</p>
+              <button type="button" className="btn" onClick={refreshQuizzes}>
+                Prøv igen
+              </button>
+            </div>
+          )}
+
+          {quizzesLoading && list.length === 0 && <p className="dash-loading">Henter dine quizzer…</p>}
+
+          {!quizzesError && !quizzesLoading && list.length === 0 && (
             <div className="dash-empty">
               <p>Ingen quizzer endnu.</p>
               <button type="button" className="btn" onClick={startQuizDraft}>

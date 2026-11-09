@@ -115,6 +115,33 @@
   margin: 0;
 }
 
+.dash-loading {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.dash-error {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: space-between;
+  border: 1.5px solid var(--danger, #e2364c);
+  border-radius: 16px;
+  padding: 16px 20px;
+  color: var(--danger, #e2364c);
+}
+
+.dash-error p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.dash-error .btn {
+  flex: none;
+}
+
 /* --------- Quiz-række --------- */
 .quiz-row {
   position: relative;

@@ -10,16 +10,27 @@
  */
 import * as signalR from '@microsoft/signalr'
 
-export const DEFAULT_HUB_URL = 'http://localhost:5188/hubs/quiz'
+// Hub-URL: overrives via localStorage ('ecj-hub-url') eller VITE_HUB_URL –
+// nyttigt når deltagere skal bruge hostens LAN-IP i stedet for localhost.
+function defaultHubUrl() {
+  try {
+    const stored = window.localStorage.getItem('ecj-hub-url')
+    if (stored) return stored
+  } catch {
+    // privado mode m.m. – ignorér
+  }
+  return import.meta.env?.VITE_HUB_URL ?? 'http://localhost:5188/hubs/quiz'
+}
 
-export function createQuizHub(hubUrl = DEFAULT_HUB_URL) {
+export function createQuizHub(hubUrl) {
+  const url = hubUrl ?? defaultHubUrl()
   let connection = null
 
   async function connect() {
     if (connection?.state === signalR.HubConnectionState.Connected) return connection
 
     connection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl)
+      .withUrl(url)
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
       .build()
