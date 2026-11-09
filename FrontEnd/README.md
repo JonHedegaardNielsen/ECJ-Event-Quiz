@@ -40,8 +40,10 @@ npm run lint     # ESLint
 npm run preview  # serve dist/
 ```
 
-## Når API'et er klar
+## Når API'et / SignalR er klar
 
-- `src/game/GameContext.jsx` er det eneste sted, der skal skiftes: indlæs quizzer fra API, opret rum, send svar over WebSocket osv.
-- Mockdeltagere i Lobby/Spil udskiftes med rigtige websocket-events.
+- Sæt `USE_SIGNALR = true` i `src/game/GameContext.jsx` (kræver at ServerUI kører).
+- Klient-hjælper: `src/lib/signalrClient.js` (`@microsoft/signalr`).
+- Default hub: `http://localhost:5188/hubs/quiz`
+- Mockdeltagere i Lobby/Spil udskiftes med hub-events (`LobbyUpdated`, `QuestionChanged`, …).
 - Login-skærmen sender nu kun `name`/`password` videre til `login()` i contexten.
