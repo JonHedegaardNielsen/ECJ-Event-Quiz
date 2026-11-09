@@ -16,9 +16,9 @@ namespace EventQuiz.Api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.14");
 
-            modelBuilder.Entity("EventQuiz.Api.Models.AnswerOption", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.AnswerOption", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -33,16 +33,16 @@ namespace EventQuiz.Api.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
                     b.ToTable("AnswerOptions");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Participant", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Participant", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -51,12 +51,12 @@ namespace EventQuiz.Api.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Participants");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.ParticipantAnswer", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.ParticipantAnswer", b =>
                 {
                     b.Property<int>("ParticipantId")
                         .HasColumnType("INTEGER");
@@ -67,8 +67,17 @@ namespace EventQuiz.Api.Migrations
                     b.Property<int>("AnswerOptionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("AnsweredAfterSeconds")
+                        .HasColumnType("REAL");
+
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RoomId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ParticipantId", "QuestionId");
 
@@ -76,12 +85,14 @@ namespace EventQuiz.Api.Migrations
 
                     b.HasIndex("QuestionId");
 
+                    b.HasIndex("RoomId");
+
                     b.ToTable("ParticipantAnswers");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Question", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Question", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -94,16 +105,19 @@ namespace EventQuiz.Api.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Question");
 
-                    b.HasKey("ID");
+                    b.Property<int>("TimeLimitSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("QuizId");
 
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Quiz", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Quiz", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -115,14 +129,14 @@ namespace EventQuiz.Api.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Quizzes");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.QuizSession", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.QuizSession", b =>
                 {
                     b.Property<string>("RoomId")
                         .HasMaxLength(255)
@@ -148,9 +162,9 @@ namespace EventQuiz.Api.Migrations
                     b.ToTable("QuizSessions");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.User", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.User", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -164,7 +178,7 @@ namespace EventQuiz.Api.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -187,9 +201,9 @@ namespace EventQuiz.Api.Migrations
                     b.ToTable("QuizSessionParticipants");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.AnswerOption", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.AnswerOption", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.Question", "Question")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Question", "Question")
                         .WithMany("AnswerOptions")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -198,36 +212,35 @@ namespace EventQuiz.Api.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.ParticipantAnswer", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.ParticipantAnswer", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.AnswerOption", "AnswerOption")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.AnswerOption", null)
                         .WithMany()
                         .HasForeignKey("AnswerOptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventQuiz.Api.Models.Participant", "Participant")
-                        .WithMany("Answers")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Participant", null)
+                        .WithMany()
                         .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventQuiz.Api.Models.Question", "Question")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Question", null)
                         .WithMany()
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AnswerOption");
-
-                    b.Navigation("Participant");
-
-                    b.Navigation("Question");
+                    b.HasOne("ECJ.EventQuiz.Core.Models.QuizSession", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Question", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Question", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.Quiz", "Quiz")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -236,9 +249,9 @@ namespace EventQuiz.Api.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Quiz", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Quiz", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.User", "Creator")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.User", "Creator")
                         .WithMany("Quizzes")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,55 +260,53 @@ namespace EventQuiz.Api.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.QuizSession", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.QuizSession", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.Question", "CurrentQuestion")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Question", null)
                         .WithMany()
                         .HasForeignKey("CurrentQuestionId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("EventQuiz.Api.Models.Quiz", "Quiz")
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Quiz", "Quiz")
                         .WithMany()
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CurrentQuestion");
 
                     b.Navigation("Quiz");
                 });
 
             modelBuilder.Entity("QuizSessionParticipants", b =>
                 {
-                    b.HasOne("EventQuiz.Api.Models.Participant", null)
+                    b.HasOne("ECJ.EventQuiz.Core.Models.Participant", null)
                         .WithMany()
                         .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EventQuiz.Api.Models.QuizSession", null)
+                    b.HasOne("ECJ.EventQuiz.Core.Models.QuizSession", null)
                         .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Participant", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("EventQuiz.Api.Models.Question", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Question", b =>
                 {
                     b.Navigation("AnswerOptions");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.Quiz", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("EventQuiz.Api.Models.User", b =>
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.QuizSession", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("ECJ.EventQuiz.Core.Models.User", b =>
                 {
                     b.Navigation("Quizzes");
                 });

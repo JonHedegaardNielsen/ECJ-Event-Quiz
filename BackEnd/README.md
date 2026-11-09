@@ -2,6 +2,8 @@
 
 Backend til ECJ Event Quiz. Lavet i ASP.NET Core (.NET 10) med Entity Framework Core og en SQLite-database.
 
+Projektet ligger i den fælles solution `ECJ.EventQuiz.sln` i roden af repoet (under mappen `BackEnd`).
+
 ## Kør projektet
 
 **Krav:** [.NET 10 SDK](https://dotnet.microsoft.com/download)
@@ -25,10 +27,10 @@ Databasen (`eventquiz.db`) bliver oprettet automatisk første gang API'et starte
 
 ## Mapper
 
-- `Models/` – klasserne fra UML-diagrammet
+- Modellerne (`User`, `Quiz`, `Question` …) kommer fra `ECJ.EventQuiz.Core/Models`, så API og SignalR bruger de samme klasser
 - `Data/AppDbContext.cs` – databasen (tabeller og relationer fra ER-diagrammet)
 - `Controllers/` – API-endpoints
-- `Services/` – udregning af point og leaderboard
+- `Services/` – point (Kahoot-system) og leaderboard
 - `DTOs/` – de objekter API'et modtager og sender
 - `Migrations/` – genereres af Entity Framework
 
@@ -50,9 +52,19 @@ Databasen (`eventquiz.db`) bliver oprettet automatisk første gang API'et starte
 
 Eksempler på requests står i `EventQuiz.Api/EventQuiz.Api.http`. Du kan køre dem direkte i VS Code med REST Client.
 
+## Point (Kahoot)
+
+`ScoreCalculator` giver op til 1000 point for et rigtigt svar:
+
+- Svar under 0,5 sekund giver altid 1000 point.
+- Ellers: `1000 × (1 − (svartid ÷ tidsgrænse) ÷ 2)`, rundet til nærmeste hele tal. Fx 2 sek. på et 30-sek. spørgsmål giver 967 point.
+- Forkert svar giver 0 point.
+
+Hvert spørgsmål har en tidsgrænse (`timeLimitSeconds`, 5–240 sek., standard 20).
+
 ## Ændrer du i en model?
 
-Lav en ny migration bagefter:
+Modellerne ligger i `ECJ.EventQuiz.Core/Models`. Lav en ny migration bagefter:
 
 ```bash
 dotnet tool install --global dotnet-ef   # kun første gang

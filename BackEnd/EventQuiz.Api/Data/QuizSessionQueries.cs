@@ -1,5 +1,5 @@
 using EventQuiz.Api.DTOs;
-using EventQuiz.Api.Models;
+using ECJ.EventQuiz.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventQuiz.Api.Data;
@@ -16,7 +16,7 @@ public static class QuizSessionQueries
         db.Questions
             .Include(q => q.AnswerOptions)
             .Where(q => q.QuizId == quizId)
-            .OrderBy(q => q.ID)
+            .OrderBy(q => q.Id)
             .ToListAsync();
 
     public static async Task<PlayerQuestionDto?> GetCurrentPlayerQuestionAsync(this AppDbContext db, QuizSession session)
@@ -24,7 +24,7 @@ public static class QuizSessionQueries
         if (session.CurrentQuestionId is null) return null;
 
         var questions = await db.GetOrderedQuestionsAsync(session.QuizId);
-        var index = questions.FindIndex(q => q.ID == session.CurrentQuestionId);
+        var index = questions.FindIndex(q => q.Id == session.CurrentQuestionId);
         return index < 0 ? null : questions[index].ToPlayerDto(index + 1, questions.Count);
     }
 
