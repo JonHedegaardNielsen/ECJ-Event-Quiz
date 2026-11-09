@@ -6,10 +6,11 @@ import { IconArrowLeft, IconArrowRight, IconCheck, IconX, IconPlusCircle } from 
 import { useGame } from '../../game/useGame'
 import { ANSWER_COLORS, LETTERS, PACKAGES, emptyQuestion } from '../../data/mock'
 import { clone } from '../../lib/utils'
-import { navigate } from '../../lib/router'
+import { useNavigate } from 'react-router-dom'
 import './CreateQuiz.css'
 
 export default function CreateQuiz() {
+  const navigate = useNavigate()
   const { quizzes, draft, clearDraft, saveQuiz } = useGame()
   const [step, setStep] = useState(0)
   const [err, setErr] = useState('')

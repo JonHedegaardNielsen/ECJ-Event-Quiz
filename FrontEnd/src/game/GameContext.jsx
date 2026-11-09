@@ -7,12 +7,13 @@ import { GameContext } from './gameContext'
 import { getQuiz, packageInfo, QUIZ_ICONS, TILE_STYLES } from '../data/mock'
 import { SEED_QUIZZES } from '../data/seedQuizzes'
 import { loadLS, pickBots, randRoomId, saveLS } from '../lib/utils'
-import { navigate } from '../lib/router'
+import { useNavigate } from 'react-router-dom'
 
 const LS_USER = 'ecj-user'
 const LS_QUIZZES = 'ecj-quizzes-v1'
 
 export function GameProvider({ children }) {
+  const navigate = useNavigate()
   const [user, setUser] = useState(() => loadLS(LS_USER, null))
   const [quizzes, setQuizzes] = useState(() => {
     const stored = loadLS(LS_QUIZZES, null)
@@ -36,13 +37,13 @@ export function GameProvider({ children }) {
   const login = useCallback((name) => {
     setUser({ name: name || 'Arrangør' })
     navigate('/dashboard')
-  }, [])
+  }, [navigate])
 
   const logout = useCallback(() => {
     setUser(null)
     setRoom(null)
     navigate('/login')
-  }, [])
+  }, [navigate])
 
   const startSession = useCallback((quiz) => {
     if (!quiz || !quiz.questions?.length) return
@@ -60,7 +61,7 @@ export function GameProvider({ children }) {
     roomsRef.current[id] = r
     setRoom(r)
     navigate('/lobby')
-  }, [])
+  }, [navigate])
 
   const addParticipant = useCallback((name) => {
     setRoom((r) => {
@@ -76,17 +77,17 @@ export function GameProvider({ children }) {
   const launchQuiz = useCallback(() => {
     setRoom((r) => (r ? { ...r, status: 'countdown', index: 0, answerCounts: [0, 0, 0, 0], scores: {} } : r))
     navigate('/live')
-  }, [])
+  }, [navigate])
 
   const startQuizDraft = useCallback(() => {
     setDraft(null)
     navigate('/opret')
-  }, [])
+  }, [navigate])
 
   const openEditor = useCallback((quizId) => {
     setDraft(quizId)
     navigate('/opret')
-  }, [])
+  }, [navigate])
 
   const clearDraft = useCallback(() => setDraft(null), [])
 
@@ -102,7 +103,7 @@ export function GameProvider({ children }) {
     })
     setDraft(null)
     navigate('/dashboard')
-  }, [])
+  }, [navigate])
 
   const duplicateQuiz = useCallback((quizId) => {
     setQuizzes((list) => {
@@ -156,19 +157,19 @@ export function GameProvider({ children }) {
       })
       navigate('/deltag/navn')
     },
-    [quizzes],
+    [quizzes, navigate],
   )
 
   const setPlayerName = useCallback((name) => {
     const clean = name.trim() || 'Gæst'
     setPlayer((p) => (p ? { ...p, name: clean, scores: { ...p.scores, [clean]: 0 }, phase: 'countdown' } : p))
     navigate('/spil')
-  }, [])
+  }, [navigate])
 
   const resetPlayer = useCallback(() => {
     setPlayer(null)
     navigate('/deltag')
-  }, [])
+  }, [navigate])
 
   const value = useMemo(
     () => ({

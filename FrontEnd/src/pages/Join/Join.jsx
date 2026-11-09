@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import Logo from '../../components/Logo'
 import { IconCamera, IconQr } from '../../components/icons'
 import { useGame } from '../../game/useGame'
+import { Link } from 'react-router-dom'
 import './Join.css'
 
 export default function Join() {
@@ -101,9 +102,9 @@ export default function Join() {
           </div>
         )}
       </div>
-      <a className="join-admin-link" href="#/login">
+      <Link className="join-admin-link" to="/login">
         Gå til admin
-      </a>
+      </Link>
     </main>
   )
 }

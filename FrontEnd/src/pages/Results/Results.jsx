@@ -1,6 +1,7 @@
 // 7. Resultatliste (efter quiz) – bruges af både værten og deltageren.
 import { useGame } from '../../game/useGame'
 import { getQuiz } from '../../data/mock'
+import { Link } from 'react-router-dom'
 import './Results.css'
 
 const MEDALS = ['🥇', '🥈', '🥉']
@@ -62,9 +63,9 @@ export default function Results() {
         Spil igen
       </button>
       {isHost && (
-        <a className="results-back" href="#/dashboard">
+        <Link className="results-back" to="/dashboard">
           Tilbage til dashboard
-        </a>
+        </Link>
       )}
     </main>
   )
