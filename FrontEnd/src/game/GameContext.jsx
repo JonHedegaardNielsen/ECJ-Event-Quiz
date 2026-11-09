@@ -9,7 +9,7 @@ import { getQuiz, packageInfo, QUIZ_ICONS, TILE_STYLES } from '../data/mock'
 import { SEED_QUIZZES } from '../data/seedQuizzes'
 import { createQuizHub } from '../lib/signalrClient'
 import { loadLS, pickBots, randRoomId, saveLS } from '../lib/utils'
-import { createQuizOnApi, getQuizFromApi, listQuizzesFromApi, loginUser } from '../lib/api'
+import { createQuizOnApi, deleteQuizOnApi, getQuizFromApi, listQuizzesFromApi, loginUser } from '../lib/api'
 import { useNavigate } from 'react-router-dom'
 
 const LS_USER = 'ecj-user'
@@ -434,24 +434,59 @@ export function GameProvider({ children }) {
     [navigate, user, quizzes],
   )
 
-  const duplicateQuiz = useCallback((quizId) => {
-    setQuizzes((list) => {
-      if (!list) return list
-      const idx = list.findIndex((it) => it.id === quizId)
-      if (idx < 0) return list
-      const src = list[idx]
-      const copy = { ...src, id: `quiz-${Date.now()}`, title: `${src.title} (kopi)` }
-      copy.icon = QUIZ_ICONS[(list.length + 1) % QUIZ_ICONS.length]
-      copy.tile = TILE_STYLES[(list.length + 1) % TILE_STYLES.length]
-      const next = [...list]
-      next.splice(idx + 1, 0, copy)
-      return next
-    })
-  }, [])
+  const duplicateQuiz = useCallback(
+    async (quizId) => {
+      const src = (quizzes ?? []).find((it) => it.id === quizId)
+      if (!src) return
 
-  const deleteQuiz = useCallback((quizId) => {
-    setQuizzes((list) => (list ? list.filter((it) => it.id !== quizId) : list))
-  }, [])
+      // API-oprettede quizzer (id 'api-N'): gem kopien på serveren via saveQuiz
+      // (uden id → gemmer som ny quiz; validering/fejl håndteres dér)
+      if (String(quizId).startsWith(API_PREFIX)) {
+        try {
+          await saveQuiz({ ...src, id: null, title: `${src.title} (kopi)` })
+        } catch (err) {
+          setQuizzesError(err?.message || 'Kunne ikke duplikere quizzen.')
+        }
+        return
+      }
+
+      // Lokal quiz (mock/seed): lokal kopi uden serveroprettelse
+      setQuizzes((list) => {
+        if (!list) return list
+        const idx = list.findIndex((it) => it.id === quizId)
+        if (idx < 0) return list
+        const s = list[idx]
+        const copy = { ...s, id: `quiz-${Date.now()}`, title: `${s.title} (kopi)` }
+        copy.icon = QUIZ_ICONS[(list.length + 1) % QUIZ_ICONS.length]
+        copy.tile = TILE_STYLES[(list.length + 1) % TILE_STYLES.length]
+        const next = [...list]
+        next.splice(idx + 1, 0, copy)
+        return next
+      })
+    },
+    [quizzes, saveQuiz],
+  )
+
+  const deleteQuiz = useCallback(
+    async (quizId) => {
+      // API-oprettede quizzer (id 'api-N') slettes server-side først
+      if (String(quizId).startsWith(API_PREFIX)) {
+        const serverId = Number(String(quizId).slice(API_PREFIX.length))
+        try {
+          await deleteQuizOnApi(serverId)
+        } catch (err) {
+          if (err.status !== 404) {
+            // 404 = allerede væk på serveren → slet den stadig lokalt
+            setQuizzesError('Kunne ikke slette quizzen på serveren.')
+            console.warn('Sletning af quiz fejlede:', err)
+            return
+          }
+        }
+      }
+      setQuizzes((list) => (list ? list.filter((it) => it.id !== quizId) : list))
+    },
+    [],
+  )
 
   /* ---------------- Deltager (spiller) ---------------- */
 
