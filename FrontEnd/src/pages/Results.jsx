@@ -26,7 +26,6 @@ export default function Results() {
 
   return (
     <main className="page-results">
-      <Confetti />
       <span className="trophy" aria-hidden="true">
         🏆
       </span>
