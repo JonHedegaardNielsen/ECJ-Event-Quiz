@@ -21,7 +21,10 @@ export default function Login() {
   const onSubmit = async (e) => {
     e.preventDefault()
     const username = name.trim()
-    if (!username || !password) return
+    if (!username || !password) {
+      setErr('Udfyld både brugernavn og adgangskode.')
+      return
+    }
     setErr('')
 
     // Client-side validation matching the API rules

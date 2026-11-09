@@ -24,7 +24,12 @@ async function request(path, options) {
     throw new Error(`Kan ikke nå serveren (${apiBase()}) – er API'et startet?`)
   }
 
-  if (res.ok) return res.json()
+  if (res.ok) {
+    // 204 (No Content) og andre kropsløse svar må ikke parses som JSON
+    if (res.status === 204) return null
+    const text = await res.text()
+    return text ? JSON.parse(text) : null
+  }
 
   // Fejlbeskeder fra API'et kan være JSON-string eller ProblemDetails.
   let msg = ''
