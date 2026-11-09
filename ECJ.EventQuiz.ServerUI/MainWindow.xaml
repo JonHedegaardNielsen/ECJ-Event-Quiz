@@ -1,0 +1,64 @@
+﻿<Window x:Class="ECJ.EventQuiz.ServerUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="ECJ EventQuiz Server"
+        WindowStyle="None"
+        ResizeMode="CanMinimize"
+        Width="420"
+        Height="460"
+        MinWidth="420"
+        MinHeight="460"
+        MaxWidth="420"
+        MaxHeight="460"
+        Background="#152033"
+        WindowStartupLocation="CenterScreen">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="48"
+                        ResizeBorderThickness="0"
+                        CornerRadius="0"
+                        GlassFrameThickness="0"
+                        UseAeroCaptionButtons="False" />
+  </shell:WindowChrome.WindowChrome>
+
+  <Border BorderBrush="#2A3D5C" BorderThickness="1" Background="#152033" CornerRadius="0">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="48" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <Grid x:Name="TitleBar"
+            Grid.Row="0"
+            Background="#152033"
+            MouseLeftButtonDown="OnTitleBarMouseLeftButtonDown">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="ECJ EventQuiz Server"
+                   Margin="16,0,0,0"
+                   VerticalAlignment="Center"
+                   Foreground="#E8EEF8"
+                   FontSize="13"
+                   FontWeight="SemiBold"
+                   IsHitTestVisible="False" />
+
+        <Button x:Name="SettingsButton"
+                Grid.Column="1"
+                Content="Indstillinger"
+                Click="OnSettingsClick"
+                Style="{StaticResource TitleBarTextButton}" />
+
+        <StackPanel x:Name="CaptionButtons"
+                    Grid.Column="2"
+                    Orientation="Horizontal" />
+      </Grid>
+
+      <wv2:WebView2 x:Name="WebView" Grid.Row="1" />
+    </Grid>
+  </Border>
+</Window>
