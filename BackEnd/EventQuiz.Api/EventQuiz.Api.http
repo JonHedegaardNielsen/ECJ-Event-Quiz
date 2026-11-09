@@ -1,0 +1,60 @@
+@host = http://localhost:5218
+
+### Opret bruger
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{ "username": "arrangoer", "password": "hemmelig123" }
+
+### Login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "arrangoer", "password": "hemmelig123" }
+
+### Opret quiz
+POST {{host}}/api/quiz
+Content-Type: application/json
+
+{
+  "name": "Firmafest 2026",
+  "creatorId": 1,
+  "questions": [
+    {
+      "question": "Hvilken farve har Danmarks flag?",
+      "answerOptions": [
+        { "answer": "Rød", "isCorrect": true },
+        { "answer": "Blå", "isCorrect": false },
+        { "answer": "Grøn", "isCorrect": false },
+        { "answer": "Gul", "isCorrect": false }
+      ]
+    }
+  ]
+}
+
+### Hent quizzer for en bruger
+GET {{host}}/api/quiz?creatorId=1
+
+### Hent én quiz
+GET {{host}}/api/quiz/1
+
+### Slet quiz
+DELETE {{host}}/api/quiz/1
+
+### Start session (opretter rum i lobby)
+POST {{host}}/api/quizsession
+Content-Type: application/json
+
+{ "quizId": 1 }
+
+### Hent session
+GET {{host}}/api/quizsession/123456
+
+### Aktuelt spørgsmål
+GET {{host}}/api/quizsession/123456/current-question
+
+### Leaderboard
+GET {{host}}/api/quizsession/123456/leaderboard
+
+### Afslut session
+POST {{host}}/api/quizsession/123456/end
