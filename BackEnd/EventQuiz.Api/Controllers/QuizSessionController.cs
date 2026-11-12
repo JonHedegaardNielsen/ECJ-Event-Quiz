@@ -1,6 +1,6 @@
 using EventQuiz.Api.Data;
 using EventQuiz.Api.DTOs;
-using EventQuiz.Api.Models;
+using ECJ.EventQuiz.Core.Models;
 using EventQuiz.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +16,14 @@ public class QuizSessionController(
     [HttpPost]
     public async Task<ActionResult<QuizSessionDto>> StartSession(StartSessionRequest request)
     {
-        var quiz = await db.Quizzes.Include(q => q.Questions).FirstOrDefaultAsync(q => q.ID == request.QuizId);
+        var quiz = await db.Quizzes.Include(q => q.Questions).FirstOrDefaultAsync(q => q.Id == request.QuizId);
         if (quiz is null) return NotFound($"Quizzen med id {request.QuizId} findes ikke.");
         if (quiz.Questions.Count == 0) return BadRequest("Quizzen har ingen spørgsmål.");
 
         var session = new QuizSession
         {
             RoomId = await db.GenerateRoomIdAsync(),
-            QuizId = quiz.ID,
+            QuizId = quiz.Id,
             Quiz = quiz,
             Status = SessionStatus.Lobby
         };

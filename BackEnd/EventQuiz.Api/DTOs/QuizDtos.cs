@@ -8,17 +8,18 @@ public record CreateAnswerOptionRequest(
 
 public record CreateQuestionRequest(
     [Required, StringLength(255)] string Question,
-    [Required, MinLength(2)] List<CreateAnswerOptionRequest> AnswerOptions);
+    [Required, MinLength(2)] List<CreateAnswerOptionRequest> AnswerOptions,
+    [Range(5, 240)] int TimeLimitSeconds = 20);
 
 public record CreateQuizRequest(
     [Required, StringLength(255)] string Name,
     int CreatorId,
     [Required, MinLength(1)] List<CreateQuestionRequest> Questions);
 
-public record AnswerOptionDto(int ID, string Answer, bool IsCorrect);
+public record AnswerOptionDto(int Id, string Answer, bool IsCorrect);
 
-public record QuestionDto(int ID, string Question, List<AnswerOptionDto> AnswerOptions);
+public record QuestionDto(int Id, string Question, int TimeLimitSeconds, List<AnswerOptionDto> AnswerOptions);
 
-public record QuizDto(int ID, string Name, int CreatorId, List<QuestionDto> Questions);
+public record QuizDto(int Id, string Name, int CreatorId, List<QuestionDto> Questions);
 
-public record QuizSummaryDto(int ID, string Name, int CreatorId, int QuestionCount);
+public record QuizSummaryDto(int Id, string Name, int CreatorId, int QuestionCount);

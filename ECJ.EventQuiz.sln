@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{A1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECJ.EventQuiz.Tests", "ECJ.EventQuiz.Tests\ECJ.EventQuiz.Tests.csproj", "{9D4361FA-C245-416F-B7C7-0006D77F02EC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventQuiz.Api", "BackEnd\EventQuiz.Api\EventQuiz.Api.csproj", "{A42740C8-0A74-4E89-8E23-8CACB19A3071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,8 +67,23 @@ Global
 		{9D4361FA-C245-416F-B7C7-0006D77F02EC}.Release|x64.Build.0 = Release|Any CPU
 		{9D4361FA-C245-416F-B7C7-0006D77F02EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{9D4361FA-C245-416F-B7C7-0006D77F02EC}.Release|x86.Build.0 = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|x64.Build.0 = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Debug|x86.Build.0 = Debug|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|x64.ActiveCfg = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|x64.Build.0 = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|x86.ActiveCfg = Release|Any CPU
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A42740C8-0A74-4E89-8E23-8CACB19A3071} = {1AE8ACA6-933B-BF2A-3671-3E2EAC007D16}
 	EndGlobalSection
 EndGlobal

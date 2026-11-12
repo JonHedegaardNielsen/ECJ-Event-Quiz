@@ -22,6 +22,7 @@ Content-Type: application/json
   "questions": [
     {
       "question": "Hvilken farve har Danmarks flag?",
+      "timeLimitSeconds": 20,
       "answerOptions": [
         { "answer": "Rød", "isCorrect": true },
         { "answer": "Blå", "isCorrect": false },

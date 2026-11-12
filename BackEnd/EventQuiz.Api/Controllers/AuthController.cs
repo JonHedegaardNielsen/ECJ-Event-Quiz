@@ -1,6 +1,6 @@
 using EventQuiz.Api.Data;
 using EventQuiz.Api.DTOs;
-using EventQuiz.Api.Models;
+using ECJ.EventQuiz.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +42,6 @@ public class AuthController(AppDbContext db, IPasswordHasher<User> passwordHashe
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
-        return Created($"/api/auth/users/{user.ID}", user.ToDto());
+        return Created($"/api/auth/users/{user.Id}", user.ToDto());
     }
 }

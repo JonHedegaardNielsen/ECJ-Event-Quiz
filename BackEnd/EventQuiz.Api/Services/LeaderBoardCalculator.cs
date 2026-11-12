@@ -4,28 +4,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventQuiz.Api.Services;
 
-public class LeaderBoardCalculator(AppDbContext db, ScoreCalculator scoreCalculator)
+public class LeaderBoardCalculator(AppDbContext db)
 {
     public async Task<List<LeaderboardEntryDto>> Calculate(string roomId)
     {
         var session = await db.QuizSessions
             .Include(s => s.Participants)
+            .Include(s => s.Answers)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(s => s.RoomId == roomId);
         if (session is null) return new();
-
-        var participantIds = session.Participants.Select(p => p.ID).ToList();
-        var answers = await db.ParticipantAnswers
-            .Where(a => participantIds.Contains(a.ParticipantId) && a.Question.QuizId == session.QuizId)
-            .ToListAsync();
 
         var ranked = session.Participants
             .Select(p =>
             {
-                var own = answers.Where(a => a.ParticipantId == p.ID).ToList();
-                return new { Participant = p, Score = scoreCalculator.Calculate(own), Correct = own.Count(a => a.IsCorrect) };
+                var own = session.Answers.Where(a => a.ParticipantId == p.Id).ToList();
+                return new { Participant = p, Score = own.Sum(a => a.Points), Correct = own.Count(a => a.IsCorrect) };
             })
             .OrderByDescending(x => x.Score)
-            .ThenBy(x => x.Participant.Name)
+            .ThenBy(x => x.Participant.Name, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         var result = new List<LeaderboardEntryDto>();
@@ -33,7 +30,7 @@ public class LeaderBoardCalculator(AppDbContext db, ScoreCalculator scoreCalcula
         {
             // Participants with equal score share the same rank.
             var rank = i > 0 && ranked[i].Score == ranked[i - 1].Score ? result[i - 1].Rank : i + 1;
-            result.Add(new LeaderboardEntryDto(rank, ranked[i].Participant.ID, ranked[i].Participant.Name, ranked[i].Score, ranked[i].Correct));
+            result.Add(new LeaderboardEntryDto(rank, ranked[i].Participant.Id, ranked[i].Participant.Name, ranked[i].Score, ranked[i].Correct));
         }
         return result;
     }
