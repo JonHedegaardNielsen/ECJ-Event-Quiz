@@ -1,9 +1,12 @@
+using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Hubs;
 using ECJ.EventQuiz.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ECJ.EventQuiz.ServerUI.Hosting;
 
@@ -11,8 +14,9 @@ namespace ECJ.EventQuiz.ServerUI.Hosting;
 /// Starts/stops Kestrel + SignalR inside the WPF process.
 /// Default bind is 0.0.0.0 so localhost, 127.0.0.1, and LAN IP all work.
 /// The WPF UI calls <see cref="StartAsync"/> / <see cref="StopAsync"/>.
+/// Uses the same SQLite database as the API (<see cref="EventQuizDatabase"/>).
 /// </summary>
-public sealed class QuizServerHost : IAsyncDisposable
+public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisposable
 {
     public const int DefaultPort = 5188;
     public const string HubPath = "/hubs/quiz";
@@ -44,6 +48,9 @@ public sealed class QuizServerHost : IAsyncDisposable
         });
 
         builder.WebHost.UseUrls(BindUrl);
+        builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+        builder.Services.AddDbContextFactory<AppDbContext>(options =>
+            options.UseSqlite(connectionString ?? EventQuizDatabase.DefaultConnectionString));
         builder.Services.AddSingleton<QuizSessionService>();
         builder.Services.AddSignalR();
         builder.Services.AddCors(options =>
@@ -56,6 +63,10 @@ public sealed class QuizServerHost : IAsyncDisposable
         });
 
         _app = builder.Build();
+
+        using (var db = _app.Services.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext())
+            EventQuizDatabase.Initialize(db);
+
         _app.UseCors();
         _app.MapGet("/", () => Results.Ok(new
         {

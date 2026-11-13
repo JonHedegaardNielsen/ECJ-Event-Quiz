@@ -31,7 +31,9 @@ export default function Results() {
       </span>
       <h1 className="results-title">Quizzen er slut!</h1>
       <p className="results-sub">Her er den endelige rangliste</p>
-      {quiz && <p className="results-quiz">{quiz.title}</p>}
+      {(player?.live && !isHost ? player.quizTitle : quiz?.title) && (
+        <p className="results-quiz">{player?.live && !isHost ? player.quizTitle : quiz.title}</p>
+      )}
 
       <section className="board" aria-label="Rangliste">
         <div className="board-cols">

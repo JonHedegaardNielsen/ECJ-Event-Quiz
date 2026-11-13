@@ -79,3 +79,8 @@ _smoke/
 # --- Local docs (keep off git unless we choose otherwise) ---
 *.local.md
 *_Dokumentation.html
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal

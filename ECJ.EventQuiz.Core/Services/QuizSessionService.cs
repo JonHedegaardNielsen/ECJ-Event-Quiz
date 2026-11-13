@@ -2,30 +2,35 @@ using System.Collections.Concurrent;
 using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Dtos;
 using ECJ.EventQuiz.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECJ.EventQuiz.Core.Services;
 
 /// <summary>
-/// In-memory store for live quiz rooms.
+/// Live quiz rooms. Quizzes are loaded from the SQLite database, and sessions,
+/// participants and answers are saved there too. Live-only state (phase, connection ids,
+/// timer) is kept in memory.
 /// The SignalR hub calls this service; React clients never talk to it directly.
-/// Replace seed lookups with EF later without changing the hub method names.
 /// </summary>
-public class QuizSessionService
+public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
 {
     private readonly ConcurrentDictionary<string, QuizSession> _sessions = new(StringComparer.OrdinalIgnoreCase);
-    private int _nextParticipantId = 1;
     private readonly Random _random = new();
 
     public SessionCreatedDto CreateSession(int quizId, string? hostConnectionId)
     {
-        var quiz = SeedData.GetQuiz(quizId)
+        using var db = dbFactory.CreateDbContext();
+        var quiz = LoadQuiz(db, quizId)
             ?? throw new InvalidOperationException($"Quiz {quizId} was not found.");
 
         string roomId;
         do
         {
             roomId = _random.Next(1000, 10000).ToString();
-        } while (_sessions.ContainsKey(roomId));
+        } while (_sessions.ContainsKey(roomId) || db.QuizSessions.Any(s => s.RoomId == roomId));
+
+        db.QuizSessions.Add(new QuizSession { RoomId = roomId, QuizId = quiz.Id, Status = SessionStatus.Lobby });
+        db.SaveChanges();
 
         var session = new QuizSession
         {
@@ -45,9 +50,12 @@ public class QuizSessionService
 
     public QuizSession GetRequired(string roomId)
     {
-        if (!_sessions.TryGetValue(roomId, out var session))
-            throw new InvalidOperationException($"Room {roomId} was not found.");
-        return session;
+        if (_sessions.TryGetValue(roomId, out var session))
+            return session;
+
+        // Rooms created via the API (POST /api/quizsession) are loaded from the database.
+        return LoadLobbyFromDatabase(roomId)
+            ?? throw new InvalidOperationException($"Room {roomId} was not found.");
     }
 
     public void SetHostConnection(string roomId, string connectionId)
@@ -65,12 +73,15 @@ public class QuizSessionService
         if (session.Participants.Any(p => p.Name.Equals(clean, StringComparison.OrdinalIgnoreCase)))
             throw new InvalidOperationException("That name is already used in this lobby.");
 
-        var participant = new Participant
+        var participant = new Participant { Name = clean };
+        using (var db = dbFactory.CreateDbContext())
         {
-            Id = Interlocked.Increment(ref _nextParticipantId),
-            Name = clean,
-            ConnectionId = connectionId
-        };
+            db.Participants.Add(participant);
+            db.QuizSessions.Attach(new QuizSession { RoomId = session.RoomId, QuizId = session.QuizId }).Entity.Participants.Add(participant);
+            db.SaveChanges();
+        }
+
+        participant.ConnectionId = connectionId;
         session.Participants.Add(participant);
         session.Scores[participant.Id] = 0;
 
@@ -89,6 +100,8 @@ public class QuizSessionService
             {
                 session.Participants.Remove(participant);
                 session.Scores.Remove(participant.Id);
+                using (var db = dbFactory.CreateDbContext())
+                    db.Participants.Where(p => p.Id == participant.Id).ExecuteDelete();
                 return ToLobbyUpdated(session);
             }
 
@@ -114,6 +127,12 @@ public class QuizSessionService
         session.Answers.Clear();
         foreach (var id in session.Scores.Keys.ToList())
             session.Scores[id] = 0;
+
+        using (var db = dbFactory.CreateDbContext())
+        {
+            db.ParticipantAnswers.Where(a => EF.Property<string>(a, "RoomId") == session.RoomId).ExecuteDelete();
+            SaveSessionState(db, session);
+        }
 
         return ToQuestionChanged(session);
     }
@@ -166,6 +185,13 @@ public class QuizSessionService
             AnsweredAfterSeconds = elapsed
         };
 
+        using (var db = dbFactory.CreateDbContext())
+        {
+            db.ParticipantAnswers.Add(answer);
+            db.Entry(answer).Property("RoomId").CurrentValue = session.RoomId;
+            db.SaveChanges();
+        }
+
         session.Answers.Add(answer);
         session.Scores[participant.Id] = session.Scores.GetValueOrDefault(participant.Id) + points;
 
@@ -185,7 +211,8 @@ public class QuizSessionService
             session.RoomId,
             question.Id,
             correct.Id,
-            CountAnswers(session, question));
+            CountAnswers(session, question),
+            LeaderBoardCalculator.Calculate(session));
     }
 
     public object NextQuestionOrEnd(string roomId)
@@ -202,6 +229,9 @@ public class QuizSessionService
         session.Phase = LivePhase.Countdown;
         session.QuestionStartedAtUtc = null;
 
+        using (var db = dbFactory.CreateDbContext())
+            SaveSessionState(db, session);
+
         return ToQuestionChanged(session);
     }
 
@@ -210,13 +240,65 @@ public class QuizSessionService
         var session = GetRequired(roomId);
         session.Status = SessionStatus.Finished;
         session.Phase = LivePhase.Results;
-        return new QuizEndedDto(session.RoomId, LeaderBoardCalculator.Calculate(session));
+
+        using (var db = dbFactory.CreateDbContext())
+            SaveSessionState(db, session);
+
+        return new QuizEndedDto(session.RoomId, session.Quiz?.Name ?? string.Empty, LeaderBoardCalculator.Calculate(session));
     }
 
     public AnswerCountsUpdatedDto GetAnswerCounts(string roomId)
     {
         var session = GetRequired(roomId);
         return ToAnswerCounts(session, CurrentQuestion(session));
+    }
+
+    private static Quiz? LoadQuiz(AppDbContext db, int quizId)
+    {
+        var quiz = db.Quizzes
+            .AsNoTracking()
+            .Include(q => q.Questions).ThenInclude(q => q.AnswerOptions)
+            .AsSplitQuery()
+            .FirstOrDefault(q => q.Id == quizId);
+        if (quiz is null)
+            return null;
+
+        quiz.Questions = quiz.Questions.OrderBy(q => q.Id).ToList();
+        foreach (var question in quiz.Questions)
+            question.AnswerOptions = question.AnswerOptions.OrderBy(o => o.Id).ToList();
+        return quiz;
+    }
+
+    private QuizSession? LoadLobbyFromDatabase(string roomId)
+    {
+        using var db = dbFactory.CreateDbContext();
+        var stored = db.QuizSessions
+            .AsNoTracking()
+            .Include(s => s.Participants)
+            .FirstOrDefault(s => s.RoomId == roomId && s.Status == SessionStatus.Lobby);
+        if (stored is null)
+            return null;
+
+        var session = new QuizSession
+        {
+            RoomId = stored.RoomId,
+            QuizId = stored.QuizId,
+            Quiz = LoadQuiz(db, stored.QuizId),
+            Status = SessionStatus.Lobby,
+            Phase = LivePhase.Lobby,
+            Participants = stored.Participants,
+            Scores = stored.Participants.ToDictionary(p => p.Id, _ => 0)
+        };
+        return _sessions.GetOrAdd(session.RoomId, session);
+    }
+
+    private static void SaveSessionState(AppDbContext db, QuizSession session)
+    {
+        db.QuizSessions
+            .Where(s => s.RoomId == session.RoomId)
+            .ExecuteUpdate(s => s
+                .SetProperty(x => x.Status, session.Status)
+                .SetProperty(x => x.CurrentQuestionId, session.CurrentQuestionId));
     }
 
     private static void EnsureRunning(QuizSession session)

@@ -52,7 +52,8 @@ public class LiveQuizAcceptanceTests
 
             var closedWait = WaitFor<RevealDto>(player, "QuestionClosed");
             await host.InvokeAsync("CloseQuestion", created.RoomId);
-            await closedWait.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            var closed = await closedWait.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.Contains(closed.Leaderboard, e => e.Name == "Anna");
 
             if (i < totalQuestions - 1)
             {
@@ -71,6 +72,7 @@ public class LiveQuizAcceptanceTests
 
         var ended = await playerEnded.Task.WaitAsync(TimeSpan.FromSeconds(5));
         Assert.Equal(created.RoomId, ended.RoomId);
+        Assert.Equal("Firmafest 2026", ended.QuizName);
         Assert.Contains(ended.Leaderboard, e => e.Name == "Anna");
     }
 

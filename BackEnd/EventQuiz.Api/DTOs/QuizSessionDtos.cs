@@ -24,5 +24,3 @@ public record PlayerQuestionDto(
     int QuestionNumber,
     int TotalQuestions,
     List<PlayerAnswerOptionDto> AnswerOptions);
-
-public record LeaderboardEntryDto(int Rank, int ParticipantId, string Name, int Score, int CorrectAnswers);

@@ -1,67 +1,61 @@
 using ECJ.EventQuiz.Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ECJ.EventQuiz.Core.Data;
 
 /// <summary>
-/// Temporary in-memory quizzes used until Entity Framework/SQLite is ready.
-/// Call <see cref="GetQuiz"/> with id 1, 2, or 3 from hub/session code.
+/// Demo user and test quizzes that are added to the database on startup.
+/// Login: <see cref="DemoUsername"/> / <see cref="DemoPassword"/>.
 /// </summary>
 public static class SeedData
 {
-    public static IReadOnlyList<Quiz> Quizzes { get; } = BuildQuizzes();
+    public const string DemoUsername = "demo";
+    public const string DemoPassword = "demo123";
 
-    public static Quiz? GetQuiz(int quizId) =>
-        Quizzes.FirstOrDefault(q => q.Id == quizId);
-
-    private static List<Quiz> BuildQuizzes()
+    /// <summary>
+    /// Adds the demo user with the test quizzes if the demo user does not exist yet.
+    /// </summary>
+    public static void EnsureSeeded(AppDbContext db)
     {
-        var creator = new User { Id = 1, Username = "arrangor", PasswordHash = "demo" };
-        var nextQuestionId = 1;
-        var nextOptionId = 1;
+        if (db.Users.Any(u => u.Username == DemoUsername))
+            return;
 
-        Quiz MakeQuiz(int id, string name, params (string text, string[] options, int correct, int time)[] questions)
+        var demo = new User { Username = DemoUsername };
+        demo.PasswordHash = new PasswordHasher<User>().HashPassword(demo, DemoPassword);
+        demo.Quizzes.AddRange(CreateQuizzes());
+
+        db.Users.Add(demo);
+        db.SaveChanges();
+    }
+
+    public static List<Quiz> CreateQuizzes()
+    {
+        static Quiz MakeQuiz(string name, params (string text, string[] options, int correct, int time)[] questions) => new()
         {
-            var quiz = new Quiz { Id = id, Name = name, CreatorId = creator.Id, Creator = creator };
-            foreach (var (text, options, correct, time) in questions)
+            Name = name,
+            Questions = questions.Select(q => new Question
             {
-                var question = new Question
+                Text = q.text,
+                TimeLimitSeconds = q.time,
+                AnswerOptions = q.options.Select((answer, i) => new AnswerOption
                 {
-                    Id = nextQuestionId++,
-                    Text = text,
-                    TimeLimitSeconds = time,
-                    QuizId = quiz.Id,
-                    Quiz = quiz
-                };
-
-                for (var i = 0; i < options.Length; i++)
-                {
-                    question.AnswerOptions.Add(new AnswerOption
-                    {
-                        Id = nextOptionId++,
-                        Answer = options[i],
-                        IsCorrect = i == correct,
-                        QuestionId = question.Id,
-                        Question = question
-                    });
-                }
-
-                quiz.Questions.Add(question);
-            }
-
-            return quiz;
-        }
+                    Answer = answer,
+                    IsCorrect = i == q.correct
+                }).ToList()
+            }).ToList()
+        };
 
         return
         [
-            MakeQuiz(1, "Firmafest 2026",
+            MakeQuiz("Firmafest 2026",
                 ("Hvad hedder Danmarks højeste punkt?", ["Møllehøj", "Yding Skovhøj", "Himmelbjerget", "Storebælt"], 0, 20),
                 ("Hvilken farve har Danmarks flag?", ["Rød", "Blå", "Grøn", "Gul"], 0, 15),
                 ("Hvad er Danmarks nationalfugl?", ["Sangsvane", "Stær", "Ravn", "Mejse"], 0, 20)),
-            MakeQuiz(2, "Teambuilding",
+            MakeQuiz("Teambuilding",
                 ("Hvor mange ben har en edderkop?", ["8", "6", "10", "4"], 0, 15),
                 ("Hvad er den kemiske forkortelse for natrium?", ["K", "Na", "Fe", "N"], 1, 15),
                 ("Hvilket organ pumper blodet rundt i kroppen?", ["Leveren", "Hjertet", "Milten", "Nyren"], 1, 15)),
-            MakeQuiz(3, "Sommerfest",
+            MakeQuiz("Sommerfest",
                 ("Hvad er Danmarks nationalblomst?", ["Marguerit", "Anemone", "Røllike", "Hortensia"], 0, 15),
                 ("Hvor mange spillere er på banen pr. fodboldhold?", ["11", "9", "10", "12"], 0, 15),
                 ("Hvad hedder Grønlands hovedstad?", ["Nuuk", "Ilulissat", "Qaqortoq", "Tasiilaq"], 0, 15))

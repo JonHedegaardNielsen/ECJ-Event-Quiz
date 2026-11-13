@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using EventQuiz.Api.Data;
+using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Models;
-using EventQuiz.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +9,9 @@ const string FrontEndCorsPolicy = "FrontEnd";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? EventQuizDatabase.DefaultConnectionString));
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-builder.Services.AddScoped<LeaderBoardCalculator>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -31,7 +29,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+    EventQuizDatabase.Initialize(scope.ServiceProvider.GetRequiredService<AppDbContext>());
 }
 
 if (app.Environment.IsDevelopment())

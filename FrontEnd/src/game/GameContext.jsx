@@ -145,6 +145,7 @@ export function GameProvider({ children }) {
 
   const wireHostHandlers = useCallback(
     (hub) => {
+      hub.on('QuizStarted', () => {})
       hub.on('LobbyUpdated', (dto) => {
         setRoom((r) => (r && r.id === dto.roomId ? { ...r, participants: dto.participants.map((p) => p.name) } : r))
       })
@@ -192,6 +193,8 @@ export function GameProvider({ children }) {
 
   const wirePlayerHandlers = useCallback(
     (hub, roomId) => {
+      hub.on('QuizStarted', () => {})
+      hub.on('AnswerCountsUpdated', () => {})
       hub.on('LobbyUpdated', (dto) => {
         setPlayer((p) => (p && p.roomId === roomId ? { ...p, others: dto.participants.map((x) => x.name) } : p))
       })
@@ -215,21 +218,20 @@ export function GameProvider({ children }) {
         )
       })
       hub.on('QuestionClosed', (dto) => {
-        // Reveal: korrekt svarmulighed afsløres; point beregnes i frontend med serverens formel
-        // (ScoreCalculator: korrekt = 100 + 900 * resterende-tids-andel, forkert = 0).
+        // Reveal: korrekt svarmulighed afsløres. Pointene kommer fra serveren
+        // (ScoreCalculator, Kahoot-systemet) via leaderboardet i RevealDto.
         setPlayer((p) => {
           if (!p || p.roomId !== roomId || p.revealedForQuestion === dto.questionId) return p
-          const time = p.question?.time ?? 0
-          const ratio = time > 0 ? Math.max(0, Math.min(1, (p.answeredSecondsLeft ?? 0) / time)) : 0
           const correct = p.chosenOptionId == null ? null : p.chosenOptionId === dto.correctAnswerOptionId
-          const points = correct ? Math.round(100 + ratio * 900) : 0
+          const mine = (dto.leaderboard ?? []).find((e) => e.name === p.name)
+          const score = mine?.score ?? p.score ?? 0
           return {
             ...p,
             phase: 'reveal',
             correctOptionId: dto.correctAnswerOptionId,
             correct,
-            lastPoints: points,
-            score: (p.score ?? 0) + points,
+            lastPoints: Math.max(0, score - (p.score ?? 0)),
+            score,
             revealedForQuestion: dto.questionId,
           }
         })
@@ -240,7 +242,7 @@ export function GameProvider({ children }) {
           const scores = {}
           for (const entry of dto.leaderboard ?? []) scores[entry.name] = entry.score
           const mine = scores[p.name] ?? p.score ?? 0
-          return { ...p, phase: 'results', scores, score: mine }
+          return { ...p, phase: 'results', scores, score: mine, quizTitle: dto.quizName || p.quizTitle }
         })
         navigate('/resultat')
       })
@@ -408,6 +410,7 @@ export function GameProvider({ children }) {
         creatorId: user?.id ?? 0,
         questions: quiz.questions.map((q) => ({
           question: q.text.trim(),
+          timeLimitSeconds: q.time ?? 20,
           // isCorrect er på den OPRINDELIGE indeksposition, så tomme muligheder ikke skifter index
           answerOptions: q.options
             .map((opt, i) => ({ answer: opt.trim(), isCorrect: q.correct === i }))
@@ -596,7 +599,7 @@ export function GameProvider({ children }) {
     [navigate, player],
   )
 
-  // LIVE-only: send svar til serveren (serveren registrerer svaret; point beregnes i UI'et).
+  // LIVE-only: send svar til serveren (serveren registrerer svaret og beregner pointene).
   const submitPlayerAnswer = useCallback(
     async (i, secondsLeft = 0) => {
       const p = player
@@ -604,7 +607,7 @@ export function GameProvider({ children }) {
       if (!(USE_SIGNALR && hub && p?.live && p.question)) return null
       const optionId = p.question.optionIds[i]
 
-      // Spørgsmålet deadline: gem hvor epidet var tilbage (bruges til hastighedsbonus ved reveal).
+      // Gem det valgte svar, så det kan markeres ved reveal.
       setPlayer((cur) =>
         cur && cur.roomId === p.roomId && cur.question?.id === p.question.id
           ? { ...cur, chosenOptionId: optionId, answeredSecondsLeft: Math.max(0, secondsLeft ?? 0) }

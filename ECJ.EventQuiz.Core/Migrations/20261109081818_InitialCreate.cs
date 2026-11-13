@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace EventQuiz.Api.Migrations
+namespace ECJ.EventQuiz.Core.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

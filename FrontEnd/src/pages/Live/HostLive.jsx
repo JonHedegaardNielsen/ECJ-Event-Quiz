@@ -93,6 +93,15 @@ function LiveHostQuestion({ room, onClose, onNext }) {
 
   const answered = (room.answerCounts ?? []).reduce((a, b) => a + b, 0)
 
+  // Alle har svaret: luk spørgsmålet med det samme i stedet for at vente på uret.
+  useEffect(() => {
+    if (isReveal || closedRef.current) return
+    if (room.participants.length > 0 && answered >= room.participants.length) {
+      closedRef.current = true
+      onClose(room.id)
+    }
+  }, [answered, room.participants.length, isReveal, room.id, onClose])
+
   return (
     <main className="live">
       <header className="live-head">

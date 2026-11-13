@@ -1,7 +1,7 @@
 using ECJ.EventQuiz.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventQuiz.Api.Data;
+namespace ECJ.EventQuiz.Core.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {

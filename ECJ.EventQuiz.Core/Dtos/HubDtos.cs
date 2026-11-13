@@ -44,12 +44,14 @@ public record AnswerCountsUpdatedDto(string RoomId, int QuestionId, IReadOnlyLis
 
 /// <summary>
 /// Sent when a question is closed and the correct option is revealed.
+/// Leaderboard holds the scores after this question (players read their own points from it).
 /// </summary>
 public record RevealDto(
     string RoomId,
     int QuestionId,
     int CorrectAnswerOptionId,
-    IReadOnlyList<int> Counts);
+    IReadOnlyList<int> Counts,
+    IReadOnlyList<LeaderboardEntryDto> Leaderboard);
 
 /// <summary>
 /// One row on the final leaderboard.
@@ -59,4 +61,4 @@ public record LeaderboardEntryDto(int ParticipantId, string Name, int Score);
 /// <summary>
 /// Final quiz result pushed to all clients.
 /// </summary>
-public record QuizEndedDto(string RoomId, IReadOnlyList<LeaderboardEntryDto> Leaderboard);
+public record QuizEndedDto(string RoomId, string QuizName, IReadOnlyList<LeaderboardEntryDto> Leaderboard);

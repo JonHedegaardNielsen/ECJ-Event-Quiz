@@ -1,7 +1,9 @@
+using ECJ.EventQuiz.Core.Data;
 using EventQuiz.Api.Data;
 using EventQuiz.Api.DTOs;
 using ECJ.EventQuiz.Core.Models;
-using EventQuiz.Api.Services;
+using ECJ.EventQuiz.Core.Dtos;
+using ECJ.EventQuiz.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +12,7 @@ namespace EventQuiz.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class QuizSessionController(
-    AppDbContext db,
-    LeaderBoardCalculator leaderBoardCalculator) : ControllerBase
+    AppDbContext db) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<QuizSessionDto>> StartSession(StartSessionRequest request)
@@ -55,8 +56,8 @@ public class QuizSessionController(
     [HttpGet("{roomId}/leaderboard")]
     public async Task<ActionResult<List<LeaderboardEntryDto>>> GetLeaderboard(string roomId)
     {
-        if (!await db.QuizSessions.AnyAsync(s => s.RoomId == roomId)) return NotFound();
-        return await leaderBoardCalculator.Calculate(roomId);
+        var session = await db.LoadSessionWithScoresAsync(roomId);
+        return session is null ? NotFound() : LeaderBoardCalculator.Calculate(session).ToList();
     }
 
     [HttpPost("{roomId}/end")]
@@ -69,6 +70,6 @@ public class QuizSessionController(
         session.CurrentQuestionId = null;
         await db.SaveChangesAsync();
 
-        return await leaderBoardCalculator.Calculate(roomId);
+        return LeaderBoardCalculator.Calculate((await db.LoadSessionWithScoresAsync(roomId))!).ToList();
     }
 }

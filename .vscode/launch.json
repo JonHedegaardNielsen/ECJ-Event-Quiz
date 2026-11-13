@@ -17,6 +17,62 @@
         "pattern": "Now listening on:\\s+(https?://\\S+)",
         "uriFormat": "%s/swagger"
       }
+    },
+    {
+      "name": "SignalR (ServerUI)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build serverui",
+      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.dll",
+      "cwd": "${workspaceFolder}/ECJ.EventQuiz.ServerUI"
+    },
+    {
+      "name": "Frontend",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/FrontEnd",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s"
+      }
+    },
+    {
+      "name": "API (hele systemet)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/BackEnd/EventQuiz.Api/bin/Debug/net10.0/EventQuiz.Api.dll",
+      "cwd": "${workspaceFolder}/BackEnd/EventQuiz.Api",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5218"
+      },
+      "presentation": {
+        "hidden": true
+      }
+    },
+    {
+      "name": "SignalR (hele systemet)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.dll",
+      "cwd": "${workspaceFolder}/ECJ.EventQuiz.ServerUI",
+      "presentation": {
+        "hidden": true
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Hele systemet (API + SignalR + Frontend)",
+      "preLaunchTask": "build all",
+      "configurations": [
+        "API (hele systemet)",
+        "SignalR (hele systemet)",
+        "Frontend"
+      ],
+      "stopAll": true
     }
   ]
 }

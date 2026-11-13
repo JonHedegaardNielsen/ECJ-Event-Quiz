@@ -1,3 +1,4 @@
+using ECJ.EventQuiz.Core.Data;
 using EventQuiz.Api.Data;
 using EventQuiz.Api.DTOs;
 using ECJ.EventQuiz.Core.Models;

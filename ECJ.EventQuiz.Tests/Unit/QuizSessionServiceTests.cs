@@ -1,7 +1,7 @@
-using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Dtos;
 using ECJ.EventQuiz.Core.Models;
 using ECJ.EventQuiz.Core.Services;
+using ECJ.EventQuiz.Tests.Infrastructure;
 
 namespace ECJ.EventQuiz.Tests.Unit;
 
@@ -10,7 +10,7 @@ namespace ECJ.EventQuiz.Tests.Unit;
 /// </summary>
 public class QuizSessionServiceTests
 {
-    private readonly QuizSessionService _sut = new();
+    private readonly QuizSessionService _sut = new(TestDatabase.CreateFactory());
 
     [Fact]
     public void CreateSession_creates_lobby_with_room_id()
@@ -71,7 +71,7 @@ public class QuizSessionServiceTests
         var open = _sut.BeginQuestion(room);
         Assert.Equal("question", open.Phase);
 
-        var correct = SeedData.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
+        var correct = _sut.GetRequired(room).Quiz!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
         var (answer, counts) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
 
         Assert.True(answer.IsCorrect);
@@ -80,6 +80,7 @@ public class QuizSessionServiceTests
 
         var reveal = _sut.CloseQuestion(room);
         Assert.Equal(correct.Id, reveal.CorrectAnswerOptionId);
+        Assert.Equal(answer.Points, Assert.Single(reveal.Leaderboard).Score);
     }
 
     [Fact]
@@ -110,8 +111,8 @@ public class QuizSessionServiceTests
     [Fact]
     public void NextQuestion_advances_until_end()
     {
-        var quiz = SeedData.GetQuiz(1)!;
         var room = _sut.CreateSession(1, "host").RoomId;
+        var quiz = _sut.GetRequired(room).Quiz!;
         _sut.JoinLobby(room, "Anna", "p1");
         _sut.StartQuiz(room);
 

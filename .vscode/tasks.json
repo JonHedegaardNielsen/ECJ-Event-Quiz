@@ -5,9 +5,35 @@
       "label": "build backend",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "${workspaceFolder}/BackEnd/EventQuiz.Api/EventQuiz.Api.csproj"],
+      "args": [
+        "build",
+        "${workspaceFolder}/BackEnd/EventQuiz.Api/EventQuiz.Api.csproj"
+      ],
       "problemMatcher": "$msCompile",
-      "group": { "kind": "build", "isDefault": true }
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "build serverui",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/ECJ.EventQuiz.ServerUI/ECJ.EventQuiz.ServerUI.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "build all",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/ECJ.EventQuiz.sln"
+      ],
+      "problemMatcher": "$msCompile"
     }
   ]
 }

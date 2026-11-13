@@ -23,15 +23,27 @@ dotnet run
 
 Åbn http://localhost:5218/swagger for at se og teste alle endpoints.
 
-Databasen (`eventquiz.db`) bliver oprettet automatisk første gang API'et starter.
+Databasen (`eventquiz.db`) ligger i roden af repoet og bliver oprettet automatisk. API'et og SignalR-serveren (ServerUI) bruger den samme fil. Slet filen, hvis du vil starte forfra.
+
+Ved start oprettes en demo-bruger med tre testquizzer (Firmafest 2026, Teambuilding og Sommerfest):
+
+- Brugernavn: `demo`
+- Adgangskode: `demo123`
 
 ## Mapper
 
-- Modellerne (`User`, `Quiz`, `Question` …) kommer fra `ECJ.EventQuiz.Core/Models`, så API og SignalR bruger de samme klasser
-- `Data/AppDbContext.cs` – databasen (tabeller og relationer fra ER-diagrammet)
+I API'et (`BackEnd/EventQuiz.Api`):
+
 - `Controllers/` – API-endpoints
-- `Services/` – point (Kahoot-system) og leaderboard
 - `DTOs/` – de objekter API'et modtager og sender
+- `Data/QuizSessionQueries.cs` – hjælpe-queries til sessioner
+
+Delt med SignalR (`ECJ.EventQuiz.Core`):
+
+- `Models/` – klasserne (`User`, `Quiz`, `Question` …)
+- `Data/AppDbContext.cs` – databasen (tabeller og relationer)
+- `Data/SeedData.cs` – demo-bruger og testquizzer
+- `Services/ScoreCalculator.cs` og `LeaderBoardCalculator.cs` – point og leaderboard
 - `Migrations/` – genereres af Entity Framework
 
 ## Endpoints
@@ -54,7 +66,7 @@ Eksempler på requests står i `EventQuiz.Api/EventQuiz.Api.http`. Du kan køre 
 
 ## Point (Kahoot)
 
-`ScoreCalculator` giver op til 1000 point for et rigtigt svar:
+`ScoreCalculator` (i `ECJ.EventQuiz.Core`) giver op til 1000 point for et rigtigt svar:
 
 - Svar under 0,5 sekund giver altid 1000 point.
 - Ellers: `1000 × (1 − (svartid ÷ tidsgrænse) ÷ 2)`, rundet til nærmeste hele tal. Fx 2 sek. på et 30-sek. spørgsmål giver 967 point.
@@ -69,7 +81,7 @@ Modellerne ligger i `ECJ.EventQuiz.Core/Models`. Lav en ny migration bagefter:
 ```bash
 dotnet tool install --global dotnet-ef   # kun første gang
 cd BackEnd/EventQuiz.Api
-dotnet ef migrations add NavnPåÆndring
+dotnet ef migrations add NavnPåÆndring --project ../../ECJ.EventQuiz.Core
 ```
 
 Den nye migration bliver kørt automatisk, næste gang API'et starter.
