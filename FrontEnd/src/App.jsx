@@ -1,6 +1,6 @@
 // ECJ EventQuiz – app-rod: provider + react-router.
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { GameProvider } from './game/GameContext'
+import { GameProvider } from './game/GameContext.jsx'
 import { useGame } from './game/useGame'
 import Login from './pages/Login/Login'
 import Dashboard from './pages/Dashboard/Dashboard'
