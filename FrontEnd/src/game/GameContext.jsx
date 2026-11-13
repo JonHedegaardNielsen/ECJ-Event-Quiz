@@ -52,7 +52,7 @@ function quizToLocal(dto, overrides = {}) {
         text: q.question,
         options: padded,
         correct: correctIdx >= 0 ? correctIdx : 0,
-        time: 20,
+        time: q.timeLimitSeconds ?? 20,
         image: '',
       }
     }),
@@ -104,17 +104,18 @@ export function GameProvider({ children }) {
     hubRef.current = null
   }, [])
 
-  /* ---------------- Mine quizzer (fra API) ---------------- */
+  /* ---------------- Quizzer + spørgsmål (fra API) ---------------- */
 
   const refreshQuizzes = useCallback(
     async () => {
-      if (!user?.id) return
       setQuizzesLoading(true)
       setQuizzesError(null)
       try {
-        const summaries = await listQuizzesFromApi(user.id)
+        // Ikke logget ind = alle quizzer (ingen creatorId-filter); ellers "mine" quizzer.
+        const summaries = await listQuizzesFromApi(user?.id ?? null)
         if (!summaries.length) {
-          setQuizzes([])
+          // API'et er tomt: logget ind vises en tom liste; ellers beholdes seed/demo-data.
+          if (user?.id) setQuizzes([])
           return
         }
         // Fuldt indhold for hver quiz (spørgsmål + svarmuligheder) hentes parallelt
@@ -135,10 +136,10 @@ export function GameProvider({ children }) {
     [user],
   )
 
-  // Hent "mine quizzer" når brugeren logges ind (eller skifter konto)
+  // Hent quizzerne fra API'et ved start, og igen når brugeren logger ind/ud.
   useEffect(() => {
-    if (user?.id) refreshQuizzes()
-  }, [user?.id, refreshQuizzes])
+    refreshQuizzes()
+  }, [refreshQuizzes])
 
   /* ---------------- SignalR-handlers (værten) ---------------- */
 
