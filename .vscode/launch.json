@@ -23,7 +23,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build serverui",
-      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.dll",
+      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.exe",
       "cwd": "${workspaceFolder}/ECJ.EventQuiz.ServerUI"
     },
     {
@@ -56,7 +56,7 @@
       "name": "SignalR (hele systemet)",
       "type": "coreclr",
       "request": "launch",
-      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.dll",
+      "program": "${workspaceFolder}/ECJ.EventQuiz.ServerUI/bin/Debug/net10.0-windows/ECJ.EventQuiz.ServerUI.exe",
       "cwd": "${workspaceFolder}/ECJ.EventQuiz.ServerUI",
       "presentation": {
         "hidden": true

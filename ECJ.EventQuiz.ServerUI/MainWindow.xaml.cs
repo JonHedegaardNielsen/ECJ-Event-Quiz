@@ -47,7 +47,26 @@ public partial class MainWindow : Window
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        await WebView.EnsureCoreWebView2Async();
+        try
+        {
+            await InitializeWebViewAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Kunne ikke starte ServerUI:\n\n{ex.Message}", "ECJ EventQuiz", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async Task InitializeWebViewAsync()
+    {
+        // Fixed, writable WebView2 data folder. The default is next to the host exe,
+        // which is C:\Program Files\dotnet when started with "dotnet ...dll" (VS Code) and not writable.
+        var userDataFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "ECJ.EventQuiz",
+            "WebView2");
+        var environment = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder);
+        await WebView.EnsureCoreWebView2Async(environment);
         WebView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
         WebView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
 
