@@ -3,13 +3,18 @@ import { useRef, useState } from 'react'
 import Logo from '../../components/Logo'
 import { IconCamera, IconQr } from '../../components/icons'
 import { useGame } from '../../game/useGame'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './Join.css'
 
 export default function Join() {
   const { startJoin } = useGame()
   const [tab, setTab] = useState('id') // 'id' | 'qr'
-  const [digits, setDigits] = useState(['', '', '', ''])
+  // ?code=1234 (fra QR-koden i lobbyen) udfylder Room-ID'et
+  const [params] = useSearchParams()
+  const [digits, setDigits] = useState(() => {
+    const code = (params.get('code') ?? '').replace(/\D/g, '').slice(0, 4)
+    return code.padEnd(4).split('').map((ch) => ch.trim())
+  })
   const inputs = useRef([])
 
   const code = digits.join('')

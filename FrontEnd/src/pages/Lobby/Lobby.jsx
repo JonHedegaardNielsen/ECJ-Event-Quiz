@@ -54,6 +54,9 @@ export default function Lobby() {
               <QrCode seed={room.id} />
             </span>
             <span>Scan QR-kode</span>
+            {['localhost', '127.0.0.1'].includes(window.location.hostname) && (
+              <span className="lobby-hint">Åbn siden via netværksadressen (Network: i Vite) for at telefoner kan scanne.</span>
+            )}
           </div>
         </section>
 

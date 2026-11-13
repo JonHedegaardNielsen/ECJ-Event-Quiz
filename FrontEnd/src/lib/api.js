@@ -1,7 +1,8 @@
 // Tynd HTTP-klient til EventQuiz.Api (BackEnd/EventQuiz.Api, default port 5218).
 // Overrives via localStorage ('ecj-api-url') eller VITE_API_URL.
 
-const API_FALLBACK = 'http://localhost:5218'
+// Samme host som siden er åbnet fra, så telefoner på netværket rammer værtens computer.
+const API_FALLBACK = `${window.location.protocol}//${window.location.hostname}:5218`
 
 export function apiBase() {
   try {

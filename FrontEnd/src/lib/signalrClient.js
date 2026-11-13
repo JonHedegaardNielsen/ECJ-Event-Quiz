@@ -19,7 +19,7 @@ function defaultHubUrl() {
   } catch {
     // privado mode m.m. – ignorér
   }
-  return import.meta.env?.VITE_HUB_URL ?? 'http://localhost:5188/hubs/quiz'
+  return import.meta.env?.VITE_HUB_URL ?? `${window.location.protocol}//${window.location.hostname}:5188/hubs/quiz`
 }
 
 export function createQuizHub(hubUrl) {

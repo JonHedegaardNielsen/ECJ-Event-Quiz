@@ -1,9 +1,12 @@
-// Deterministisk "QR-kode" (mock – rigtig QR genereres senere fra API/URL).
+// QR-kode der åbner deltagersiden med Room-ID'et udfyldt.
 import { QRCodeCanvas } from "qrcode.react";
 
+function joinUrl(roomId) {
+  return `${window.location.origin}/#/deltag?code=${encodeURIComponent(roomId)}`
+}
+
 export default function QrCode({ seed = '0000', size = 78 }) {
-  const rootUrl = `${window.location.origin}`;
   return (
-    <QRCodeCanvas value={`${rootUrl}/deltag/${seed}`} size={size} />
+    <QRCodeCanvas value={joinUrl(seed)} size={size} />
   )
 }

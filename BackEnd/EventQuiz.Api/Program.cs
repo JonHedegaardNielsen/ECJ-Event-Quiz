@@ -20,10 +20,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-builder.Services.AddCors(options => options.AddPolicy(FrontEndCorsPolicy, policy => policy
-    .WithOrigins(allowedOrigins)
-    .AllowAnyHeader()
-    .AllowAnyMethod()));
+builder.Services.AddCors(options => options.AddPolicy(FrontEndCorsPolicy, policy =>
+{
+    // I Development må frontenden kalde API'et fra enhver adresse (fx værtens LAN-IP).
+    if (builder.Environment.IsDevelopment()) policy.SetIsOriginAllowed(_ => true);
+    else policy.WithOrigins(allowedOrigins);
+    policy.AllowAnyHeader().AllowAnyMethod();
+}));
 
 var app = builder.Build();
 

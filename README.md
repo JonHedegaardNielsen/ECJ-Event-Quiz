@@ -42,6 +42,12 @@ cd FrontEnd && npm run dev
 3. Deltagere åbner http://localhost:5173/#/deltag (andet browservindue/inkognito), skriver Room-ID og navn
 4. Tryk **Start quiz**
 
+**Deltagere fra telefoner (samme Wi-Fi)**
+
+1. Åbn frontenden på værtens computer via `Network:`-adressen, som Vite viser (fx `http://192.168.1.20:5173`), ikke `localhost`
+2. Tillad Node og ServerUI i Windows Firewall (Private netværk), når den spørger
+3. Deltagerne scanner QR-koden i lobbyen – Room-ID'et er udfyldt, de skriver bare deres navn
+
 Uden server kan frontenden køre i mock-tilstand med `VITE_USE_SIGNALR=false`.
 
 ## Tests

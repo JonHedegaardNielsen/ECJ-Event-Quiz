@@ -10,12 +10,12 @@
       "cwd": "${workspaceFolder}/BackEnd/EventQuiz.Api",
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "http://localhost:5218"
+        "ASPNETCORE_URLS": "http://0.0.0.0:5218"
       },
       "serverReadyAction": {
         "action": "openExternally",
-        "pattern": "Now listening on:\\s+(https?://\\S+)",
-        "uriFormat": "%s/swagger"
+        "pattern": "Now listening on:",
+        "uriFormat": "http://localhost:5218/swagger"
       }
     },
     {
@@ -46,7 +46,7 @@
       "cwd": "${workspaceFolder}/BackEnd/EventQuiz.Api",
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "http://localhost:5218"
+        "ASPNETCORE_URLS": "http://0.0.0.0:5218"
       },
       "presentation": {
         "hidden": true
