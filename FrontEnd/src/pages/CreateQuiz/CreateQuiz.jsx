@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react'
 import Stepper from '../../components/Stepper'
 import Logo from '../../components/Logo'
-import { IconArrowLeft, IconArrowRight, IconCheck, IconX, IconPlusCircle } from '../../components/icons'
+import { IconArrowLeft, IconArrowRight, IconX, IconPlusCircle } from '../../components/icons'
 import { useGame } from '../../game/useGame'
-import { ANSWER_COLORS, LETTERS, PACKAGES, emptyQuestion } from '../../data/mock'
+import { ANSWER_COLORS, LETTERS, emptyQuestion } from '../../data/mock'
 import { clone } from '../../lib/utils'
 import { useNavigate } from 'react-router-dom'
 import './CreateQuiz.css'
@@ -116,33 +116,6 @@ export default function CreateQuiz() {
                 onChange={(e) => update({ description: e.target.value })}
               />
             </label>
-            <div className="u-field">
-              <span className="u-label">Vælg pakke</span>
-              <div className="pkg-grid" role="radiogroup" aria-label="Pakke">
-                {PACKAGES.map((p) => {
-                  const selected = quiz.packageId === p.id
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={selected}
-                      className={`pkg-card${selected ? ' selected' : ''}`}
-                      onClick={() => update({ packageId: p.id })}
-                    >
-                      <b>{p.name}</b>
-                      <span>{p.players}</span>
-                      <span>{p.features}</span>
-                      {selected && (
-                        <span className="pkg-check">
-                          <IconCheck size={12} />
-                        </span>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
           </div>
         )}
 
@@ -226,12 +199,6 @@ export default function CreateQuiz() {
                         <option value={60}>60 sek.</option>
                       </select>
                     </div>
-                    <input
-                      className="u-input"
-                      placeholder="Billede-URL (valgfri)"
-                      value={qq.image ?? ''}
-                      onChange={(e) => updateQuestion(i, { image: e.target.value })}
-                    />
                   </div>
                 )}
               </div>
@@ -253,10 +220,6 @@ export default function CreateQuiz() {
               <div className="summary-row">
                 <dt>Beskrivelse</dt>
                 <dd>{quiz.description || '–'}</dd>
-              </div>
-              <div className="summary-row">
-                <dt>Pakke</dt>
-                <dd>{PACKAGES.find((p) => p.id === quiz.packageId)?.name}</dd>
               </div>
               <div className="summary-row">
                 <dt>Spørgsmål</dt>

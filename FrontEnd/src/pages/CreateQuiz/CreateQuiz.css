@@ -155,59 +155,6 @@
   margin: 14px 0 0;
 }
 
-/* --------- Pakt-kort --------- */
-.pkg-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-
-.pkg-card {
-  position: relative;
-  text-align: left;
-  background: rgba(8, 24, 47, 0.6);
-  border: 1.6px solid var(--line-dark);
-  border-radius: 12px;
-  padding: 14px 14px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-}
-
-.pkg-card b {
-  font-size: 14.5px;
-}
-
-.pkg-card span {
-  color: var(--text-dim);
-  font-size: 13px;
-}
-
-.pkg-card:hover {
-  border-color: rgba(148, 178, 255, 0.35);
-}
-
-.pkg-card.selected {
-  border-color: var(--blue);
-  background: rgba(30, 107, 241, 0.14);
-  box-shadow: 0 0 0 3px rgba(30, 107, 241, 0.18);
-}
-
-.pkg-check {
-  position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* --------- Spørgsmåls-editor --------- */
 .q-item {
   border: 1.4px solid var(--line-dark);

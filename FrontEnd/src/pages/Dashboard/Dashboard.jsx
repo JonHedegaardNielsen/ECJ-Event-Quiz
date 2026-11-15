@@ -70,7 +70,7 @@ export default function Dashboard() {
                 <div className="quiz-info">
                   <h3 className="quiz-title">{quiz.title}</h3>
                   <p className="quiz-meta">
-                    {quiz.questions.length} spørgsmål · {pkg.features}
+                    {quiz.questions.length} spørgsmål
                   </p>
                 </div>
                 <button
