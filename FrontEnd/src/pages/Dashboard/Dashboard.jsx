@@ -4,7 +4,6 @@ import Sidebar from '../../components/Sidebar'
 import Avatar from '../../components/Avatar'
 import { IconDots, IconArrowRight, IconPlusCircle, IconX } from '../../components/icons'
 import { useGame } from '../../game/useGame'
-import { packageInfo } from '../../data/mock'
 import './Dashboard.css'
 
 export default function Dashboard() {
@@ -61,7 +60,6 @@ export default function Dashboard() {
           )}
 
           {list.map((quiz) => {
-            const pkg = packageInfo(quiz.packageId)
             return (
               <article className="quiz-row" key={quiz.id}>
                 <span className="quiz-ico" style={{ background: quiz.tile }} aria-hidden="true">

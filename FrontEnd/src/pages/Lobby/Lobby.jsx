@@ -2,7 +2,7 @@
 // LIVE: deltagere kommer fra serveren via LobbyUpdated. MOCK: simulerede deltagere.
 import { useEffect } from 'react'
 import Logo from '../../components/Logo'
-import QrCode from '../../components/QrCode'
+import QrCode, { joinUrl } from '../../components/QrCode'
 import Avatar from '../../components/Avatar'
 import { IconArrowLeft, IconX } from '../../components/icons'
 import { useGame } from '../../game/useGame'
@@ -54,7 +54,8 @@ export default function Lobby() {
               <QrCode seed={room.id} />
             </span>
             <span>Scan QR-kode</span>
-            {['localhost', '127.0.0.1'].includes(window.location.hostname) && (
+            {/* Advar kun hvis QR-koden stadig peger på localhost (ingen LAN-IP fundet) */}
+            {['localhost', '127.0.0.1'].includes(new URL(joinUrl(room.id)).hostname) && (
               <span className="lobby-hint">Åbn siden via netværksadressen (Network: i Vite) for at telefoner kan scanne.</span>
             )}
           </div>
