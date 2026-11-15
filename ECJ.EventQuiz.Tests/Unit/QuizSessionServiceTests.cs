@@ -1,7 +1,7 @@
-using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Dtos;
 using ECJ.EventQuiz.Core.Models;
 using ECJ.EventQuiz.Core.Services;
+using ECJ.EventQuiz.Tests.Infrastructure;
 
 namespace ECJ.EventQuiz.Tests.Unit;
 
@@ -10,7 +10,7 @@ namespace ECJ.EventQuiz.Tests.Unit;
 /// </summary>
 public class QuizSessionServiceTests
 {
-    private readonly QuizSessionService _sut = new();
+    private readonly QuizSessionService _sut = new(new InMemoryQuizRepository(TestQuizzes.All));
 
     [Fact]
     public void CreateSession_creates_lobby_with_room_id()
@@ -71,8 +71,8 @@ public class QuizSessionServiceTests
         var open = _sut.BeginQuestion(room);
         Assert.Equal("question", open.Phase);
 
-        var correct = SeedData.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
-        var (answer, counts) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
+        var correct = TestQuizzes.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
+        var (answer, counts, _) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
 
         Assert.True(answer.IsCorrect);
         Assert.True(answer.Points > 0);
@@ -94,6 +94,58 @@ public class QuizSessionServiceTests
     }
 
     [Fact]
+    public void SubmitAnswer_auto_closes_when_all_participants_have_answered()
+    {
+        var room = _sut.CreateSession(1, "host").RoomId;
+        _sut.JoinLobby(room, "Anna", "p1");
+        _sut.StartQuiz(room);
+        var open = _sut.BeginQuestion(room);
+        var correct = TestQuizzes.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
+
+        var (_, _, reveal) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
+
+        Assert.NotNull(reveal);
+        Assert.Equal(correct.Id, reveal!.CorrectAnswerOptionId);
+        Assert.Equal(LivePhase.Reveal, _sut.GetRequired(room).Phase);
+    }
+
+    [Fact]
+    public void SubmitAnswer_waits_until_every_participant_has_answered()
+    {
+        var room = _sut.CreateSession(1, "host").RoomId;
+        _sut.JoinLobby(room, "Anna", "p1");
+        _sut.JoinLobby(room, "Bo", "p2");
+        _sut.StartQuiz(room);
+        var open = _sut.BeginQuestion(room);
+        var correct = TestQuizzes.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
+
+        var (_, _, first) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
+        Assert.Null(first);
+        Assert.Equal(LivePhase.Question, _sut.GetRequired(room).Phase);
+
+        var (_, _, second) = _sut.SubmitAnswer(room, "p2", open.Question.Id, correct.Id);
+        Assert.NotNull(second);
+        Assert.Equal(LivePhase.Reveal, _sut.GetRequired(room).Phase);
+    }
+
+    [Fact]
+    public void SubmitAnswer_disconnected_participant_does_not_block_auto_close()
+    {
+        var room = _sut.CreateSession(1, "host").RoomId;
+        _sut.JoinLobby(room, "Anna", "p1");
+        _sut.JoinLobby(room, "Bo", "p2");
+        _sut.StartQuiz(room);
+        _sut.RemoveByConnection("p2"); // Bo mistede forbindelsen under quizzen
+        var open = _sut.BeginQuestion(room);
+        var correct = TestQuizzes.GetQuiz(1)!.Questions[0].AnswerOptions.First(o => o.IsCorrect);
+
+        var (_, _, reveal) = _sut.SubmitAnswer(room, "p1", open.Question.Id, correct.Id);
+
+        Assert.NotNull(reveal);
+        Assert.Equal(LivePhase.Reveal, _sut.GetRequired(room).Phase);
+    }
+
+    [Fact]
     public void SubmitAnswer_rejects_double_answer()
     {
         var room = _sut.CreateSession(1, "host").RoomId;
@@ -110,7 +162,7 @@ public class QuizSessionServiceTests
     [Fact]
     public void NextQuestion_advances_until_end()
     {
-        var quiz = SeedData.GetQuiz(1)!;
+        var quiz = TestQuizzes.GetQuiz(1)!;
         var room = _sut.CreateSession(1, "host").RoomId;
         _sut.JoinLobby(room, "Anna", "p1");
         _sut.StartQuiz(room);

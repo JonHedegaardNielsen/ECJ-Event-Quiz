@@ -8,17 +8,23 @@ namespace ECJ.EventQuiz.Core.Services;
 /// <summary>
 /// In-memory store for live quiz rooms.
 /// The SignalR hub calls this service; React clients never talk to it directly.
-/// Replace seed lookups with EF later without changing the hub method names.
+/// Quiz content comes from <see cref="IQuizRepository"/>, while live rooms stay in memory.
 /// </summary>
 public class QuizSessionService
 {
+    private readonly IQuizRepository _quizzes;
     private readonly ConcurrentDictionary<string, QuizSession> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private int _nextParticipantId = 1;
     private readonly Random _random = new();
 
+    public QuizSessionService(IQuizRepository quizzes)
+    {
+        _quizzes = quizzes ?? throw new ArgumentNullException(nameof(quizzes));
+    }
+
     public SessionCreatedDto CreateSession(int quizId, string? hostConnectionId)
     {
-        var quiz = SeedData.GetQuiz(quizId)
+        var quiz = _quizzes.GetQuiz(quizId)
             ?? throw new InvalidOperationException($"Quiz {quizId} was not found.");
 
         string roomId;
@@ -127,7 +133,12 @@ public class QuizSessionService
         return ToQuestionChanged(session);
     }
 
-    public (ParticipantAnswer Answer, AnswerCountsUpdatedDto Counts) SubmitAnswer(
+    /// <summary>
+    /// Records an answer. When every connected participant has answered the current
+    /// question, the question is closed immediately (reveal) instead of waiting for
+    /// the host or the timer.
+    /// </summary>
+    public (ParticipantAnswer Answer, AnswerCountsUpdatedDto Counts, RevealDto? Reveal) SubmitAnswer(
         string roomId,
         string connectionId,
         int questionId,
@@ -147,6 +158,9 @@ public class QuizSessionService
 
         var question = session.Quiz!.Questions.FirstOrDefault(q => q.Id == questionId)
             ?? throw new InvalidOperationException("Question was not found.");
+
+        if (question.Id != session.CurrentQuestionId)
+            throw new InvalidOperationException("That question is not the current one.");
 
         var option = question.AnswerOptions.FirstOrDefault(o => o.Id == answerOptionId)
             ?? throw new InvalidOperationException("Answer option was not found.");
@@ -169,7 +183,18 @@ public class QuizSessionService
         session.Answers.Add(answer);
         session.Scores[participant.Id] = session.Scores.GetValueOrDefault(participant.Id) + points;
 
-        return (answer, ToAnswerCounts(session, question));
+        var counts = ToAnswerCounts(session, question);
+
+        // Alle tilknyttede deltagere har svaret: afslør straks i stedet for at vente på værten/uret.
+        RevealDto? reveal = null;
+        if (AllConnectedParticipantsAnswered(session, question))
+        {
+            session.Phase = LivePhase.Reveal;
+            var correct = question.AnswerOptions.First(o => o.IsCorrect);
+            reveal = new RevealDto(session.RoomId, question.Id, correct.Id, counts.Counts);
+        }
+
+        return (answer, counts, reveal);
     }
 
     public RevealDto CloseQuestion(string roomId)
@@ -178,7 +203,8 @@ public class QuizSessionService
         EnsureRunning(session);
 
         var question = CurrentQuestion(session);
-        session.Phase = LivePhase.Reveal;
+        if (session.Phase != LivePhase.Reveal)
+            session.Phase = LivePhase.Reveal;
 
         var correct = question.AnswerOptions.First(o => o.IsCorrect);
         return new RevealDto(
@@ -186,6 +212,13 @@ public class QuizSessionService
             question.Id,
             correct.Id,
             CountAnswers(session, question));
+    }
+
+    private static bool AllConnectedParticipantsAnswered(QuizSession session, Question question)
+    {
+        var connected = session.Participants.Where(p => p.ConnectionId is not null).ToList();
+        return connected.Count > 0 && connected.All(p =>
+            session.Answers.Any(a => a.ParticipantId == p.Id && a.QuestionId == question.Id));
     }
 
     public object NextQuestionOrEnd(string roomId)

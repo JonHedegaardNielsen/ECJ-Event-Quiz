@@ -1,19 +1,19 @@
+using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Models;
 
-namespace ECJ.EventQuiz.Core.Data;
+namespace ECJ.EventQuiz.Tests.Infrastructure;
 
 /// <summary>
-/// Temporary in-memory quizzes used until Entity Framework/SQLite is ready.
-/// Call <see cref="GetQuiz"/> with id 1, 2, or 3 from hub/session code.
+/// Fixed quiz content for tests. Production quizzes come from the SQLite database.
 /// </summary>
-public static class SeedData
+public static class TestQuizzes
 {
-    public static IReadOnlyList<Quiz> Quizzes { get; } = BuildQuizzes();
+    public static IReadOnlyList<Quiz> All { get; } = Build();
 
     public static Quiz? GetQuiz(int quizId) =>
-        Quizzes.FirstOrDefault(q => q.Id == quizId);
+        All.FirstOrDefault(q => q.Id == quizId);
 
-    private static List<Quiz> BuildQuizzes()
+    private static List<Quiz> Build()
     {
         var creator = new User { Id = 1, Username = "arrangor", PasswordHash = "demo" };
         var nextQuestionId = 1;
@@ -67,4 +67,14 @@ public static class SeedData
                 ("Hvad hedder Grønlands hovedstad?", ["Nuuk", "Ilulissat", "Qaqortoq", "Tasiilaq"], 0, 15))
         ];
     }
+}
+
+/// <summary>
+/// Simple in-memory <see cref="IQuizRepository"/> used by unit and integration tests.
+/// </summary>
+public sealed class InMemoryQuizRepository(IEnumerable<Quiz> quizzes) : IQuizRepository
+{
+    private readonly Dictionary<int, Quiz> _quizzes = quizzes.ToDictionary(q => q.Id);
+
+    public Quiz? GetQuiz(int quizId) => _quizzes.GetValueOrDefault(quizId);
 }

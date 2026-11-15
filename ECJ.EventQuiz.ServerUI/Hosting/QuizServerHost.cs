@@ -1,3 +1,5 @@
+using System.IO;
+using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Hubs;
 using ECJ.EventQuiz.Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +22,7 @@ public sealed class QuizServerHost : IAsyncDisposable
     private WebApplication? _app;
 
     public bool IsRunning => _app is not null;
+    public string QuizDatabasePath { get; private set; } = string.Empty;
     public int Port { get; private set; } = DefaultPort;
     public bool BindAllInterfaces { get; private set; } = true;
     public string BindUrl { get; private set; } = $"http://0.0.0.0:{DefaultPort}";
@@ -44,6 +47,9 @@ public sealed class QuizServerHost : IAsyncDisposable
         });
 
         builder.WebHost.UseUrls(BindUrl);
+
+        QuizDatabasePath = ResolveQuizDatabasePath();
+        builder.Services.AddSingleton<IQuizRepository>(_ => new SqliteQuizRepository(QuizDatabasePath));
         builder.Services.AddSingleton<QuizSessionService>();
         builder.Services.AddSignalR();
         builder.Services.AddCors(options =>
@@ -65,6 +71,11 @@ public sealed class QuizServerHost : IAsyncDisposable
             status = "running"
         }));
         _app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
+        _app.MapGet("/api/quiz-database", () => Results.Ok(new
+        {
+            path = QuizDatabasePath,
+            exists = File.Exists(QuizDatabasePath)
+        }));
         _app.MapHub<QuizHub>(HubPath);
 
         _ = _app.RunAsync();
@@ -97,6 +108,27 @@ public sealed class QuizServerHost : IAsyncDisposable
         NetworkAddresses.GetClientHosts(BindAllInterfaces)
             .Select(host => $"http://{host}:{Port}")
             .ToList();
+
+    /// <summary>
+    /// Finds the EventQuiz.Api SQLite database.
+    /// Override with the ECJ_QUIZ_DB environment variable; otherwise walk up from the
+    /// executable to locate BackEnd/EventQuiz.Api/eventquiz.db in the repository.
+    /// </summary>
+    private static string ResolveQuizDatabasePath()
+    {
+        var configured = Environment.GetEnvironmentVariable("ECJ_QUIZ_DB");
+        if (!string.IsNullOrWhiteSpace(configured))
+            return Path.GetFullPath(configured);
+
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        {
+            var candidate = Path.Combine(dir.FullName, "BackEnd", "EventQuiz.Api", "eventquiz.db");
+            if (File.Exists(candidate))
+                return candidate;
+        }
+
+        return Path.Combine(AppContext.BaseDirectory, "eventquiz.db");
+    }
 
     public async ValueTask DisposeAsync() => await StopAsync();
 }

@@ -37,7 +37,7 @@ public class LiveQuizAcceptanceTests
         await host.InvokeAsync("StartQuiz", created.RoomId);
         await playerStarted.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
-        const int totalQuestions = 3; // seed quiz 1
+        const int totalQuestions = 3; // test quiz 1
         for (var i = 0; i < totalQuestions; i++)
         {
             var openWait = WaitFor<QuestionChangedDto>(

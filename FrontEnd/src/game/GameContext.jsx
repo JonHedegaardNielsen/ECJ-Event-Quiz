@@ -81,7 +81,7 @@ export function GameProvider({ children }) {
   const [user, setUser] = useState(() => loadLS(LS_USER, null))
   const [quizzes, setQuizzes] = useState(() => {
     const stored = loadLS(LS_QUIZZES, null)
-    return Array.isArray(stored) && stored.length ? stored : SEED_QUIZZES
+    return Array.isArray(stored) && stored.length ? stored : null
   })
   const [room, setRoom] = useState(null)
   const [player, setPlayer] = useState(null)
@@ -573,12 +573,13 @@ export function GameProvider({ children }) {
       if (USE_SIGNALR && hubRef.current && player?.live && player.roomId) {
         try {
           await hubRef.current.joinLobby(player.roomId, clean)
+          // phase 'waiting': spillersiden viser venterummet, til værten starter (QuestionChanged).
           setPlayer((p) =>
             p && p.roomId === player.roomId
-              ? { ...p, name: clean, phase: 'countdown', score: 0, joinError: null }
+              ? { ...p, name: clean, phase: 'waiting', score: 0, joinError: null }
               : p,
           )
-          navigate('/spil')
+          navigate('/deltag/venter')
         } catch (err) {
           // Typisk: navnet er optaget, eller quizzen er allerede startet.
           setPlayer((p) =>

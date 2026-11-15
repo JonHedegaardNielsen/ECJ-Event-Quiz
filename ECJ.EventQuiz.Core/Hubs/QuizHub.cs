@@ -59,8 +59,12 @@ public class QuizHub(QuizSessionService sessions) : Hub
 
     public async Task SubmitAnswer(string roomId, int questionId, int answerOptionId)
     {
-        var (_, counts) = sessions.SubmitAnswer(roomId, Context.ConnectionId, questionId, answerOptionId);
+        var (_, counts, reveal) = sessions.SubmitAnswer(roomId, Context.ConnectionId, questionId, answerOptionId);
         await Clients.Group(Group(roomId)).SendAsync("AnswerCountsUpdated", counts);
+
+        // Alle deltagere havde svaret: spørgsmålet lukkes automatisk (reveal) til hele rummet.
+        if (reveal is not null)
+            await Clients.Group(Group(roomId)).SendAsync("QuestionClosed", reveal);
     }
 
     public async Task CloseQuestion(string roomId)

@@ -105,6 +105,48 @@ public class QuizHubSignalRTests
     }
 
     [Fact]
+    public async Task SubmitAnswer_auto_closes_question_when_all_participants_answered()
+    {
+        await using var server = new TestSignalRHost();
+        await server.StartAsync();
+
+        await using var hostConn = CreateConnection(server.HubUrl);
+        await using var p1 = CreateConnection(server.HubUrl);
+        await using var p2 = CreateConnection(server.HubUrl);
+        await hostConn.StartAsync();
+        await p1.StartAsync();
+        await p2.StartAsync();
+
+        var openTcs = new TaskCompletionSource<QuestionChangedDto>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var revealTcs = new TaskCompletionSource<RevealDto>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        p1.On<JsonElement>("QuestionChanged", payload =>
+        {
+            var dto = Deserialize<QuestionChangedDto>(payload);
+            if (dto.Phase == "question")
+                openTcs.TrySetResult(dto);
+        });
+        hostConn.On<JsonElement>("QuestionClosed", payload =>
+            revealTcs.TrySetResult(Deserialize<RevealDto>(payload)));
+
+        var created = await hostConn.InvokeAsync<SessionCreatedDto>("CreateSession", 1);
+        await p1.InvokeAsync("JoinLobby", created.RoomId, "Anna");
+        await p2.InvokeAsync("JoinLobby", created.RoomId, "Bo");
+        await hostConn.InvokeAsync("StartQuiz", created.RoomId);
+        await hostConn.InvokeAsync("OpenQuestion", created.RoomId);
+
+        var open = await openTcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
+
+        await p1.InvokeAsync("SubmitAnswer", created.RoomId, open.Question.Id, open.Question.Options[0].Id);
+        Assert.False(revealTcs.Task.IsCompleted); // Bo mangler endnu
+
+        await p2.InvokeAsync("SubmitAnswer", created.RoomId, open.Question.Id, open.Question.Options[1].Id);
+
+        var reveal = await revealTcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        Assert.Equal(open.Question.Id, reveal.QuestionId);
+    }
+
+    [Fact]
     public async Task Health_endpoint_returns_ok()
     {
         await using var host = new TestSignalRHost();
