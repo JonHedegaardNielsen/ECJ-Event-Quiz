@@ -10,6 +10,7 @@ import HostLive from './pages/Live/HostLive'
 import Results from './pages/Results/Results'
 import Join from './pages/Join/Join'
 import JoinName from './pages/Join/JoinName'
+import Waiting from './pages/Join/Waiting'
 import PlayerLive from './pages/Live/PlayerLive'
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       {/* deltagerflow (altid tilgængelig) */}
       <Route path="/deltag" element={<Join />} />
       <Route path="/deltag/navn" element={guard(player, '/deltag', <JoinName />)} />
+      <Route path="/deltag/venter" element={guard(player, '/deltag', <Waiting />)} />
       <Route path="/spil" element={guard(player, '/deltag', <PlayerLive />)} />
       <Route path="/resultat" element={guard(room || player, '/', <Results />)} />
 

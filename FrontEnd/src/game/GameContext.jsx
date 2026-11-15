@@ -576,12 +576,13 @@ export function GameProvider({ children }) {
       if (USE_SIGNALR && hubRef.current && player?.live && player.roomId) {
         try {
           await hubRef.current.joinLobby(player.roomId, clean)
+          // phase 'waiting': venterummet vises, til værten starter (QuestionChanged).
           setPlayer((p) =>
             p && p.roomId === player.roomId
-              ? { ...p, name: clean, phase: 'countdown', score: 0, joinError: null }
+              ? { ...p, name: clean, phase: 'waiting', score: 0, joinError: null }
               : p,
           )
-          navigate('/spil')
+          navigate('/deltag/venter')
         } catch (err) {
           // Typisk: navnet er optaget, eller quizzen er allerede startet.
           setPlayer((p) =>
