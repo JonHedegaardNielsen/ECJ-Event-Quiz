@@ -1,5 +1,7 @@
 // 5. Deltagelse (mobil/PC): indtast Room-ID eller scan QR-kode.
-import { useRef, useState } from 'react'
+// ?code=1234 (fra QR-koden i lobbyen) udfylder Room-ID'et og fortsætter direkte
+// til navne-siden, så der kun skal tastes navn efter et scan.
+import { useEffect, useRef, useState } from 'react'
 import Logo from '../../components/Logo'
 import { IconCamera, IconQr } from '../../components/icons'
 import { useGame } from '../../game/useGame'
@@ -9,13 +11,16 @@ import './Join.css'
 export default function Join() {
   const { startJoin } = useGame()
   const [tab, setTab] = useState('id') // 'id' | 'qr'
-  // ?code=1234 (fra QR-koden i lobbyen) udfylder Room-ID'et
   const [params] = useSearchParams()
   const [digits, setDigits] = useState(() => {
     const code = (params.get('code') ?? '').replace(/\D/g, '').slice(0, 4)
     return code.padEnd(4).split('').map((ch) => ch.trim())
   })
   const inputs = useRef([])
+  const [error, setError] = useState(null)
+  const [joining, setJoining] = useState(false)
+  // Auto-join ved ?code må kun køre én gang (React StrictMode kører effects to gange i dev)
+  const autoJoinRef = useRef(false)
 
   const code = digits.join('')
   const ready = code.length === 4
@@ -41,13 +46,32 @@ export default function Join() {
     if (text.length >= 4 && inputs.current[3]) inputs.current[3].focus()
   }
 
-  const [error, setError] = useState(null)
-
-  const submit = async (e) => {
-    e.preventDefault()
+  const doJoin = async () => {
     if (!ready) return
-    setError((await startJoin(code)) ?? null)
+    setJoining(true)
+    setError(await startJoin(code) ?? null)
+    setJoining(false)
   }
+
+  const submit = (e) => {
+    e.preventDefault()
+    doJoin()
+  }
+
+  // QR-/deep-link: med et fuldt Room-ID i ?code forbindes direkte,
+  // så spilleren lander på navne-siden med det samme.
+  useEffect(() => {
+    if (autoJoinRef.current) return
+    const code = (params.get('code') ?? '').replace(/\D/g, '').slice(0, 4)
+    if (code.length === 4) {
+      autoJoinRef.current = true
+      // startJoin navigerer selv til /deltag/navn ved succes
+      startJoin(code).then((err) => {
+        if (err) setError(err)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <main className="page-join">
@@ -78,17 +102,8 @@ export default function Join() {
             </div>
 
             {error && <p className="join-error" role="alert" style={{ color: "var(--danger-soft)", margin: 0 }}>{error}</p>}
-            <button type="submit" className="btn btn-block btn-lg" disabled={!ready}>
-              Fortsæt
-            </button>
-
-            <div className="join-or" aria-hidden="true">
-              eller
-            </div>
-
-            <button type="button" className="btn btn-block btn-scan" onClick={() => setTab('qr')}>
-              <IconQr size={19} />
-              Scan QR-kode
+            <button type="submit" className="btn btn-block btn-lg" disabled={!ready || joining}>
+              {joining ? 'Forbinder…' : 'Fortsæt'}
             </button>
           </form>
         ) : (
