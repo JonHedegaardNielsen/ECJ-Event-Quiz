@@ -21,7 +21,7 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
     {
         using var db = dbFactory.CreateDbContext();
         var quiz = LoadQuiz(db, quizId)
-            ?? throw new InvalidOperationException($"Quiz {quizId} was not found.");
+            ?? throw new InvalidOperationException($"Quizzen {quizId} findes ikke.");
 
         string roomId;
         do
@@ -43,7 +43,7 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
         };
 
         if (!_sessions.TryAdd(roomId, session))
-            throw new InvalidOperationException("Could not create session.");
+            throw new InvalidOperationException("Kunne ikke oprette rummet.");
 
         return new SessionCreatedDto(roomId, quiz.Id, quiz.Name);
     }
@@ -55,7 +55,14 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
 
         // Rooms created via the API (POST /api/quizsession) are loaded from the database.
         return LoadLobbyFromDatabase(roomId)
-            ?? throw new InvalidOperationException($"Room {roomId} was not found.");
+            ?? throw new InvalidOperationException($"Rummet {roomId} findes ikke. Tjek Room ID'et.");
+    }
+
+    /// <summary>True if the room exists and is still open for joining (lobby).</summary>
+    public bool CanJoin(string roomId)
+    {
+        try { return GetRequired(roomId).Status == SessionStatus.Lobby; }
+        catch (InvalidOperationException) { return false; }
     }
 
     public void SetHostConnection(string roomId, string connectionId)
@@ -67,11 +74,11 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
     {
         var session = GetRequired(roomId);
         if (session.Status != SessionStatus.Lobby)
-            throw new InvalidOperationException("The quiz has already started.");
+            throw new InvalidOperationException("Quizzen er allerede startet.");
 
         var clean = string.IsNullOrWhiteSpace(name) ? "Gæst" : name.Trim();
         if (session.Participants.Any(p => p.Name.Equals(clean, StringComparison.OrdinalIgnoreCase)))
-            throw new InvalidOperationException("That name is already used in this lobby.");
+            throw new InvalidOperationException("Navnet er allerede i brug. Vælg et andet.");
 
         var participant = new Participant { Name = clean };
         using (var db = dbFactory.CreateDbContext())
@@ -116,9 +123,9 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
     {
         var session = GetRequired(roomId);
         if (session.Participants.Count == 0)
-            throw new InvalidOperationException("At least one participant is required.");
+            throw new InvalidOperationException("Der skal være mindst én deltager.");
         if (session.Quiz is null || session.Quiz.Questions.Count == 0)
-            throw new InvalidOperationException("The quiz has no questions.");
+            throw new InvalidOperationException("Quizzen har ingen spørgsmål.");
 
         session.Status = SessionStatus.Running;
         session.Phase = LivePhase.Countdown;
@@ -156,19 +163,19 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
         EnsureRunning(session);
 
         if (session.Phase != LivePhase.Question)
-            throw new InvalidOperationException("Answering is not open right now.");
+            throw new InvalidOperationException("Der kan ikke svares lige nu.");
 
         var participant = session.Participants.FirstOrDefault(p => p.ConnectionId == connectionId)
-            ?? throw new InvalidOperationException("Participant was not found.");
+            ?? throw new InvalidOperationException("Deltageren findes ikke.");
 
         if (session.Answers.Any(a => a.ParticipantId == participant.Id && a.QuestionId == questionId))
-            throw new InvalidOperationException("You already answered this question.");
+            throw new InvalidOperationException("Du har allerede svaret på dette spørgsmål.");
 
         var question = session.Quiz!.Questions.FirstOrDefault(q => q.Id == questionId)
-            ?? throw new InvalidOperationException("Question was not found.");
+            ?? throw new InvalidOperationException("Spørgsmålet findes ikke.");
 
         var option = question.AnswerOptions.FirstOrDefault(o => o.Id == answerOptionId)
-            ?? throw new InvalidOperationException("Answer option was not found.");
+            ?? throw new InvalidOperationException("Svarmuligheden findes ikke.");
 
         var elapsed = session.QuestionStartedAtUtc.HasValue
             ? (DateTime.UtcNow - session.QuestionStartedAtUtc.Value).TotalSeconds
@@ -304,13 +311,13 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
     private static void EnsureRunning(QuizSession session)
     {
         if (session.Status != SessionStatus.Running)
-            throw new InvalidOperationException("The quiz is not running.");
+            throw new InvalidOperationException("Quizzen kører ikke.");
     }
 
     private static Question CurrentQuestion(QuizSession session)
     {
         if (session.Quiz is null)
-            throw new InvalidOperationException("Quiz is missing.");
+            throw new InvalidOperationException("Quizzen mangler.");
         return session.Quiz.Questions[session.CurrentQuestionIndex];
     }
 

@@ -1,5 +1,6 @@
 using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using ECJ.EventQuiz.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,7 +53,7 @@ public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisp
         builder.Services.AddDbContextFactory<AppDbContext>(options =>
             options.UseSqlite(connectionString ?? EventQuizDatabase.DefaultConnectionString));
         builder.Services.AddSingleton<QuizSessionService>();
-        builder.Services.AddSignalR();
+        builder.Services.AddSignalR(o => o.AddFilter<QuizHubErrorFilter>());
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy =>

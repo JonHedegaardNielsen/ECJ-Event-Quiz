@@ -21,6 +21,8 @@ public class QuizHub(QuizSessionService sessions) : Hub
         return created;
     }
 
+    public bool RoomExists(string roomId) => sessions.CanJoin(roomId);
+
     public async Task JoinAsHost(string roomId)
     {
         sessions.SetHostConnection(roomId, Context.ConnectionId);

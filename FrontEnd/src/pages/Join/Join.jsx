@@ -41,11 +41,12 @@ export default function Join() {
     if (text.length >= 4 && inputs.current[3]) inputs.current[3].focus()
   }
 
-  const submit = (e) => {
+  const [error, setError] = useState(null)
+
+  const submit = async (e) => {
     e.preventDefault()
     if (!ready) return
-    // Demo: ukendt kode giver en demo-quiz. API'et kobles på senere.
-    startJoin(code)
+    setError((await startJoin(code)) ?? null)
   }
 
   return (
@@ -76,6 +77,7 @@ export default function Join() {
               ))}
             </div>
 
+            {error && <p className="join-error" role="alert" style={{ color: "var(--danger-soft)", margin: 0 }}>{error}</p>}
             <button type="submit" className="btn btn-block btn-lg" disabled={!ready}>
               Fortsæt
             </button>

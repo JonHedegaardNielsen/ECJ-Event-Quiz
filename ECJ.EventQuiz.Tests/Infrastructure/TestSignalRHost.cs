@@ -1,5 +1,6 @@
 using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using ECJ.EventQuiz.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,7 @@ public sealed class TestSignalRHost : IAsyncDisposable
         builder.WebHost.UseUrls("http://127.0.0.1:0");
         builder.Services.AddSingleton(TestDatabase.CreateFactory());
         builder.Services.AddSingleton<QuizSessionService>();
-        builder.Services.AddSignalR();
+        builder.Services.AddSignalR(o => o.AddFilter<QuizHubErrorFilter>());
         builder.Services.AddCors(o =>
             o.AddDefaultPolicy(p => p.SetIsOriginAllowed(_ => true)
                 .AllowAnyHeader()

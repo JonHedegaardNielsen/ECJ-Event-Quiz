@@ -504,10 +504,14 @@ export function GameProvider({ children }) {
 
         try {
           await hub.connect()
+          if (!(await hub.roomExists(code))) {
+            stopHub()
+            return `Rummet ${code} findes ikke eller er allerede startet. Tjek Room ID'et.`
+          }
         } catch (err) {
           console.error('Kunne ikke forbinde til quizserveren', err)
           stopHub()
-          return
+          return 'Kan ikke forbinde til quizserveren – er serveren startet?'
         }
         wirePlayerHandlers(hub, code)
 

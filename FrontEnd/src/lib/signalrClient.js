@@ -71,6 +71,7 @@ export function createQuizHub(hubUrl) {
     },
     // Hub-metoder (matcher QuizHub.cs)
     createSession: (quizId) => invoke('CreateSession', quizId),
+    roomExists: (roomId) => invoke('RoomExists', roomId),
     joinAsHost: (roomId) => invoke('JoinAsHost', roomId),
     joinLobby: (roomId, name) => invoke('JoinLobby', roomId, name),
     startQuiz: (roomId) => invoke('StartQuiz', roomId),
