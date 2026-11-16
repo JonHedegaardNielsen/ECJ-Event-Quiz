@@ -9,6 +9,10 @@ import { clone } from '../../lib/utils'
 import { useNavigate } from 'react-router-dom'
 import './CreateQuiz.css'
 
+// En quiz skal have mellem MIN og MAX spørgsmål (valideres også på API'et).
+const MIN_QUESTIONS = 5
+const MAX_QUESTIONS = 30
+
 export default function CreateQuiz() {
   const navigate = useNavigate()
   const { quizzes, draft, clearDraft, saveQuiz } = useGame()
@@ -38,6 +42,10 @@ export default function CreateQuiz() {
   }
 
   const addQuestion = () => {
+    if (quiz.questions.length >= MAX_QUESTIONS) {
+      setErr(`En quiz må højst have ${MAX_QUESTIONS} spørgsmål.`)
+      return
+    }
     const empty = emptyQuestion()
     setQuiz((q) => ({ ...q, questions: [...q.questions, empty] }))
     setExpanded(quiz.questions.length)
@@ -54,8 +62,8 @@ export default function CreateQuiz() {
       setStep(0)
       return
     }
-    if (quiz.questions.length === 0) {
-      setErr('Tilføj mindst ét spørgsmål.')
+    if (quiz.questions.length < MIN_QUESTIONS) {
+      setErr(`En quiz skal have mindst ${MIN_QUESTIONS} spørgsmål.`)
       setStep(1)
       return
     }
@@ -203,10 +211,19 @@ export default function CreateQuiz() {
                 )}
               </div>
             ))}
-            <button type="button" className="add-q" onClick={addQuestion}>
-              <IconPlusCircle size={18} />
-              Tilføj spørgsmål
-            </button>
+            <div className="add-q-row">
+              <button
+                type="button"
+                className="add-q"
+                onClick={addQuestion}
+                disabled={quiz.questions.length >= MAX_QUESTIONS}
+                title={quiz.questions.length >= MAX_QUESTIONS ? `En quiz må højst have ${MAX_QUESTIONS} spørgsmål` : undefined}
+              >
+                <IconPlusCircle size={18} />
+                Tilføj spørgsmål
+              </button>
+              <span className="q-count">{quiz.questions.length}/{MAX_QUESTIONS}</span>
+            </div>
           </div>
         )}
 

@@ -14,7 +14,9 @@ public record CreateQuestionRequest(
 public record CreateQuizRequest(
     [Required, StringLength(255)] string Name,
     int CreatorId,
-    [Required, MinLength(1)] List<CreateQuestionRequest> Questions);
+    [Required, MinLength(5, ErrorMessage = "En quiz skal have mindst 5 spørgsmål."),
+     MaxLength(30, ErrorMessage = "En quiz må højst have 30 spørgsmål.")]
+    List<CreateQuestionRequest> Questions);
 
 public record AnswerOptionDto(int Id, string Answer, bool IsCorrect);
 

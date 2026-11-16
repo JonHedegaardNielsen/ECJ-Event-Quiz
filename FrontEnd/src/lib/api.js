@@ -33,12 +33,18 @@ async function request(path, options) {
   }
 
   // Fejlbeskeder fra API'et kan være JSON-string eller ProblemDetails.
+  // Ved valideringsfejl (ValidationProblemDetails) vises den første konkrete fejl.
   let msg = ''
   const raw = await res.text().catch(() => '')
   if (raw) {
     try {
       const parsed = JSON.parse(raw)
-      msg = typeof parsed === 'string' ? parsed : (parsed.detail ?? parsed.title ?? raw)
+      if (typeof parsed === 'string') {
+        msg = parsed
+      } else {
+        const firstError = parsed.errors ? Object.values(parsed.errors).flat()[0] : undefined
+        msg = firstError ?? parsed.detail ?? parsed.title ?? raw
+      }
     } catch {
       msg = raw
     }
