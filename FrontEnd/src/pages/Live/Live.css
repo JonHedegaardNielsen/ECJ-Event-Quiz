@@ -2,6 +2,7 @@
 
 .live {
   min-height: 100vh;
+  min-height: 100dvh; /* mobil: følg den synlige højde, ikke URL-barens */
   max-width: 1060px;
   width: 100%;
   margin: 0 auto;
@@ -76,6 +77,7 @@
 /* --------- Nedtælling / "du deltager"-skærm --------- */
 .live-count {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,6 +152,33 @@
 
 /* --------- Mobil (svarende til mockup 8) --------- */
 @media (max-width: 640px) {
+  .live {
+    padding: 12px 14px 14px;
+  }
+
+  .live-main {
+    gap: 10px;
+  }
+
+  .live-progress {
+    margin: 10px 0 12px;
+  }
+
+  .live-foot {
+    padding-top: 10px;
+    font-size: 14px;
+    /* Bliv hængende nederst, hvis indholdet er højere end skærmen.
+       Solid farve = nederste stop i --page-bg gradienten, så fladen smelter sammen
+       med siden (var(--page-bg) her ville gentage hele gradienten i en lille bjælke). */
+    position: sticky;
+    bottom: 0;
+    background: #081d3a;
+  }
+
+  .live-answered {
+    font-size: 13px;
+  }
+
   .answers {
     gap: 10px;
   }
@@ -169,15 +198,15 @@
 
   .qcard {
     font-size: 17px;
-    padding: 14px 16px;
+    padding: 12px 14px;
+  }
+
+  .qmedia {
+    max-height: 110px;
   }
 
   .big-num {
     font-size: 64px;
-  }
-
-  .live-answered {
-    display: none;
   }
 }
 

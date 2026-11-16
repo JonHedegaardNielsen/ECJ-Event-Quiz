@@ -201,7 +201,6 @@ function MockPlayerLive({ player, quizzes, setPlayer }) {
       question={question}
       index={player.index}
       total={total}
-      quizTitle={quiz.title}
       player={player}
       setPlayer={setPlayer}
       finishPlayer={finishPlayer}
@@ -209,7 +208,7 @@ function MockPlayerLive({ player, quizzes, setPlayer }) {
   )
 }
 
-function PlayerQuestionRunner({ question, index, total, quizTitle, player, setPlayer, finishPlayer }) {
+function PlayerQuestionRunner({ question, index, total, player, setPlayer, finishPlayer }) {
   const [chosen, setChosen] = useState(null)
   const [seconds, setSeconds] = useState(question.time)
   const ids = useRef([])
@@ -344,7 +343,7 @@ function PlayerQuestionRunner({ question, index, total, quizTitle, player, setPl
             {Math.max(seconds, 0)} sek.
           </span>
           <span className="live-answered">
-            {player?.name} · {quizTitle}
+            {player?.name} · {Math.round(player?.scores?.[player?.name] ?? 0)} point
           </span>
         </div>
       </div>

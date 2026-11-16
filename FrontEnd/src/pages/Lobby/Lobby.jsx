@@ -2,7 +2,8 @@
 // LIVE: deltagere kommer fra serveren via LobbyUpdated. MOCK: simulerede deltagere.
 import { useEffect } from 'react'
 import Logo from '../../components/Logo'
-import QrCode, { joinUrl } from '../../components/QrCode'
+import QrCode from '../../components/QrCode'
+import { joinUrl } from '../../lib/qr'
 import Avatar from '../../components/Avatar'
 import { IconArrowLeft, IconX } from '../../components/icons'
 import { useGame } from '../../game/useGame'
