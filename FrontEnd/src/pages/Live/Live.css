@@ -167,12 +167,9 @@
   .live-foot {
     padding-top: 10px;
     font-size: 14px;
-    /* Bliv hængende nederst, hvis indholdet er højere end skærmen.
-       Solid farve = nederste stop i --page-bg gradienten, så fladen smelter sammen
-       med siden (var(--page-bg) her ville gentage hele gradienten i en lille bjælke). */
+    /* Bliv hængende nederst, hvis indholdet er højere end skærmen */
     position: sticky;
     bottom: 0;
-    background: #081d3a;
   }
 
   .live-answered {
