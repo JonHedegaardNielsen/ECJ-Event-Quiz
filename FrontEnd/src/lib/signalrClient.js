@@ -10,8 +10,8 @@
  */
 import * as signalR from '@microsoft/signalr'
 
-// Hub-URL: overrives via localStorage ('ecj-hub-url') eller VITE_HUB_URL –
-// nyttigt når deltagere skal bruge hostens LAN-IP i stedet for localhost.
+// Hub-URL: overrives via localStorage ('ecj-hub-url') eller VITE_HUB_URL.
+// Dev: port 5188. Release (ServerUI): same-origin /hubs/quiz.
 function defaultHubUrl() {
   try {
     const stored = window.localStorage.getItem('ecj-hub-url')
@@ -19,7 +19,9 @@ function defaultHubUrl() {
   } catch {
     // privado mode m.m. – ignorér
   }
-  return import.meta.env?.VITE_HUB_URL ?? `${window.location.protocol}//${window.location.hostname}:5188/hubs/quiz`
+  if (import.meta.env.VITE_HUB_URL) return import.meta.env.VITE_HUB_URL
+  if (import.meta.env.PROD) return `${window.location.origin}/hubs/quiz`
+  return `${window.location.protocol}//${window.location.hostname}:5188/hubs/quiz`
 }
 
 export function createQuizHub(hubUrl) {

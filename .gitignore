@@ -48,6 +48,8 @@ publish/
 node_modules/
 dist/
 dist-ssr/
+# Built SPA copied into ServerUI for publish/installer
+ECJ.EventQuiz.ServerUI/wwwroot/app/
 .npm/
 *.local
 npm-debug.log*

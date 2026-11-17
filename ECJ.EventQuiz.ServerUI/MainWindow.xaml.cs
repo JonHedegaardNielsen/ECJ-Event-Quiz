@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -118,6 +119,10 @@ public partial class MainWindow : Window
                     PushSettings();
                     PushStatus();
                     break;
+
+                case "ui.openQuiz":
+                    OpenQuizUrl(root);
+                    break;
             }
         }
         catch (Exception ex)
@@ -186,6 +191,26 @@ public partial class MainWindow : Window
         };
 
         WebView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(payload, JsonOptions));
+    }
+
+    private void OpenQuizUrl(JsonElement root)
+    {
+        var url = root.TryGetProperty("url", out var urlEl) ? urlEl.GetString() : null;
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            var bases = _server.IsRunning ? _server.GetClientBaseUrls() : [];
+            url = bases.FirstOrDefault(b => b.Contains("localhost", StringComparison.OrdinalIgnoreCase))
+                  ?? bases.FirstOrDefault();
+        }
+
+        if (string.IsNullOrWhiteSpace(url))
+            return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = url,
+            UseShellExecute = true
+        });
     }
 
     private void OnSettingsClick(object sender, RoutedEventArgs e)

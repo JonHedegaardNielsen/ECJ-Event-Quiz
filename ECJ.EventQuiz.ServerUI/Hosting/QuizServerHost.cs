@@ -1,21 +1,26 @@
+using System.IO;
+using System.Text.Json.Serialization;
 using ECJ.EventQuiz.Core.Data;
 using ECJ.EventQuiz.Core.Hubs;
-using Microsoft.AspNetCore.SignalR;
+using ECJ.EventQuiz.Core.Models;
 using ECJ.EventQuiz.Core.Services;
+using EventQuiz.Api.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 
 namespace ECJ.EventQuiz.ServerUI.Hosting;
 
 /// <summary>
-/// Starts/stops Kestrel + SignalR inside the WPF process.
+/// Starts/stops Kestrel inside the WPF process with:
+/// REST API (/api), SignalR hub (/hubs/quiz), and the React SPA (wwwroot/app).
 /// Default bind is 0.0.0.0 so localhost, 127.0.0.1, and LAN IP all work.
-/// The WPF UI calls <see cref="StartAsync"/> / <see cref="StopAsync"/>.
-/// Uses the same SQLite database as the API (<see cref="EventQuizDatabase"/>).
 /// </summary>
 public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisposable
 {
@@ -45,15 +50,22 @@ public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisp
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
             Args = [],
-            ContentRootPath = AppContext.BaseDirectory
+            ContentRootPath = AppContext.BaseDirectory,
+            WebRootPath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "app")
         });
 
         builder.WebHost.UseUrls(BindUrl);
         builder.Logging.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
-        builder.Services.AddDbContextFactory<AppDbContext>(options =>
-            options.UseSqlite(connectionString ?? EventQuizDatabase.DefaultConnectionString));
+
+        var sqlite = connectionString ?? EventQuizDatabase.DefaultConnectionString;
+        builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlite(sqlite));
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(sqlite));
+        builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddSingleton<QuizSessionService>();
         builder.Services.AddSignalR(o => o.AddFilter<QuizHubErrorFilter>());
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(AuthController).Assembly)
+            .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy =>
@@ -69,15 +81,31 @@ public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisp
             EventQuizDatabase.Initialize(db);
 
         _app.UseCors();
-        _app.MapGet("/", () => Results.Ok(new
+
+        var spaRoot = Path.Combine(AppContext.BaseDirectory, "wwwroot", "app");
+        if (Directory.Exists(spaRoot) && File.Exists(Path.Combine(spaRoot, "index.html")))
+        {
+            var files = new PhysicalFileProvider(spaRoot);
+            _app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = files });
+            _app.UseStaticFiles(new StaticFileOptions { FileProvider = files });
+        }
+
+        _app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
+        _app.MapGet("/api/server-info", () => Results.Ok(new
         {
             service = "ECJ EventQuiz",
             hub = HubPath,
             bind = BindUrl,
             status = "running"
         }));
-        _app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
+        _app.MapControllers();
         _app.MapHub<QuizHub>(HubPath);
+
+        if (Directory.Exists(spaRoot) && File.Exists(Path.Combine(spaRoot, "index.html")))
+        {
+            var files = new PhysicalFileProvider(spaRoot);
+            _app.MapFallbackToFile("index.html", new StaticFileOptions { FileProvider = files });
+        }
 
         _ = _app.RunAsync();
         await Task.Delay(250);

@@ -1,8 +1,10 @@
-// Tynd HTTP-klient til EventQuiz.Api (BackEnd/EventQuiz.Api, default port 5218).
+// Tynd HTTP-klient til EventQuiz API.
+// Dev (Vite): port 5218. Release (ServerUI): same-origin (tom base).
 // Overrives via localStorage ('ecj-api-url') eller VITE_API_URL.
 
-// Samme host som siden er åbnet fra, så telefoner på netværket rammer værtens computer.
-const API_FALLBACK = `${window.location.protocol}//${window.location.hostname}:5218`
+const API_FALLBACK = import.meta.env.PROD
+  ? ''
+  : `${window.location.protocol}//${window.location.hostname}:5218`
 
 export function apiBase() {
   try {
@@ -11,7 +13,8 @@ export function apiBase() {
   } catch {
     // privado mode m.m. – ignorér
   }
-  return import.meta.env?.VITE_API_URL ?? API_FALLBACK
+  if (import.meta.env.VITE_API_URL !== undefined) return import.meta.env.VITE_API_URL
+  return API_FALLBACK
 }
 
 async function request(path, options) {

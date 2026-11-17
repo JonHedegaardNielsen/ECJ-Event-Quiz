@@ -1,0 +1,245 @@
+<Window x:Class="ECJ.EventQuiz.ServerUI.SplashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ECJ EventQuiz"
+        Width="1000"
+        Height="640"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
+  <Window.Resources>
+    <SolidColorBrush x:Key="AccentBrush" Color="#21B0E6" />
+
+    <Style x:Key="FeatureIconTile" TargetType="Border">
+      <Setter Property="Width" Value="52" />
+      <Setter Property="Height" Value="52" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="#5521B0E6" />
+      <Setter Property="Background" Value="#14233F" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Effect">
+        <Setter.Value>
+          <DropShadowEffect Color="#21B0E6" BlurRadius="12" ShadowDepth="0" Opacity="0.35" />
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="FeatureIcon" TargetType="Path">
+      <Setter Property="Stroke" Value="{StaticResource AccentBrush}" />
+      <Setter Property="StrokeThickness" Value="1.7" />
+      <Setter Property="StrokeLineJoin" Value="Round" />
+      <Setter Property="StrokeStartLineCap" Value="Round" />
+      <Setter Property="StrokeEndLineCap" Value="Round" />
+      <Setter Property="Fill" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="FeatureText" TargetType="StackPanel">
+      <Setter Property="Margin" Value="18,0,0,0" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="FeatureDivider" TargetType="Border">
+      <Setter Property="Width" Value="1" />
+      <Setter Property="Margin" Value="18,6,0,6" />
+      <Setter Property="Background" Value="#3A8691A3" />
+    </Style>
+
+    <Style x:Key="FeatureTitle" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="Segoe UI" />
+      <Setter Property="FontSize" Value="22" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="#F2F4F8" />
+    </Style>
+
+    <Style x:Key="FeatureDescription" TargetType="TextBlock">
+      <Setter Property="Margin" Value="0,4,0,0" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="FontFamily" Value="Segoe UI" />
+      <Setter Property="FontSize" Value="15" />
+      <Setter Property="Foreground" Value="#9AA6B8" />
+    </Style>
+  </Window.Resources>
+
+  <!-- Margin leaves room for the drop shadow outside the rounded chrome. -->
+  <Border Background="Transparent" Margin="18">
+    <Border.Effect>
+      <DropShadowEffect BlurRadius="36" ShadowDepth="12" Direction="270" Opacity="0.55" Color="#000000" />
+    </Border.Effect>
+
+    <Border CornerRadius="14" Background="#0B1220">
+      <Border.OpacityMask>
+        <VisualBrush>
+          <VisualBrush.Visual>
+            <Border Width="964" Height="604" CornerRadius="14" Background="Black" />
+          </VisualBrush.Visual>
+        </VisualBrush>
+      </Border.OpacityMask>
+
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" MinHeight="112" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.RowSpan="2" ClipToBounds="True" IsHitTestVisible="False">
+          <Image Source="Assets/SplashHero.jpg"
+                 Stretch="UniformToFill"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Center"
+                 RenderOptions.BitmapScalingMode="HighQuality" />
+
+          <Viewbox Stretch="Fill">
+            <Canvas Width="100" Height="100">
+              <Path Fill="#0B1220" Data="M 0,0 L 61,0 L 30.5,100 L 0,100 Z" />
+              <Path Stroke="#3D8BFD" StrokeThickness="0.35" Data="M 61,0 L 30.5,100">
+                <Path.Effect>
+                  <BlurEffect Radius="6" />
+                </Path.Effect>
+              </Path>
+            </Canvas>
+          </Viewbox>
+        </Grid>
+
+        <Grid Grid.Row="0" Margin="40,30,0,0" HorizontalAlignment="Left" Width="640">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <Image Source="Assets/BrandLogo.png"
+                   Height="150"
+                   Stretch="Uniform"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+            <Image Source="Assets/BrandTitle.png"
+                   Height="130"
+                   Margin="-6,0,0,0"
+                   Stretch="Uniform"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+          </StackPanel>
+
+          <StackPanel Grid.Row="1" Margin="8,28,40,0" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+              <Border Style="{StaticResource FeatureIconTile}">
+                <Viewbox Width="28" Height="28">
+                  <Canvas Width="24" Height="24">
+                    <Path Style="{StaticResource FeatureIcon}"
+                          Data="M 10.5,12 A 1.5,1.5 0 1 0 13.5,12 A 1.5,1.5 0 1 0 10.5,12 Z
+                                M 8,8 A 5.5,5.5 0 0 0 8,16 M 16,8 A 5.5,5.5 0 0 1 16,16
+                                M 5,5 A 9.5,9.5 0 0 0 5,19 M 19,5 A 9.5,9.5 0 0 1 19,19" />
+                  </Canvas>
+                </Viewbox>
+              </Border>
+              <Border Style="{StaticResource FeatureDivider}" />
+              <StackPanel Style="{StaticResource FeatureText}">
+                <TextBlock Style="{StaticResource FeatureTitle}" Text="Live quiz" />
+                <TextBlock Style="{StaticResource FeatureDescription}" Text="Spørgsmål synkroniseres hos alle deltagere i realtid" />
+              </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+              <Border Style="{StaticResource FeatureIconTile}">
+                <Viewbox Width="28" Height="28">
+                  <Canvas Width="24" Height="24">
+                    <Path Style="{StaticResource FeatureIcon}"
+                          Data="M 4,4 H 10 V 10 H 4 Z M 14,4 H 20 V 10 H 14 Z M 4,14 H 10 V 20 H 4 Z
+                                M 14,14 H 16 V 16 H 14 Z M 18,14 H 20 V 16 H 18 Z
+                                M 14,18 H 16 V 20 H 14 Z M 18,18 H 20 V 20 H 18 Z" />
+                  </Canvas>
+                </Viewbox>
+              </Border>
+              <Border Style="{StaticResource FeatureDivider}" />
+              <StackPanel Style="{StaticResource FeatureText}">
+                <TextBlock Style="{StaticResource FeatureTitle}" Text="Nem join" />
+                <TextBlock Style="{StaticResource FeatureDescription}" Text="Room ID eller QR-kode fra telefon og PC" />
+              </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+              <Border Style="{StaticResource FeatureIconTile}">
+                <Viewbox Width="28" Height="28">
+                  <Canvas Width="24" Height="24">
+                    <Path Style="{StaticResource FeatureIcon}"
+                          Data="M 7,4 H 17 V 9 A 5,5 0 0 1 7,9 Z
+                                M 7,6 H 4 V 8 A 3,3 0 0 0 7,11 M 17,6 H 20 V 8 A 3,3 0 0 1 17,11
+                                M 12,14 V 18 M 8,20 H 16" />
+                  </Canvas>
+                </Viewbox>
+              </Border>
+              <Border Style="{StaticResource FeatureDivider}" />
+              <StackPanel Style="{StaticResource FeatureText}">
+                <TextBlock Style="{StaticResource FeatureTitle}" Text="Point &amp; leaderboard" />
+                <TextBlock Style="{StaticResource FeatureDescription}" Text="Hurtige rigtige svar giver flest point" />
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Background="#B8000000" IsHitTestVisible="False" />
+
+        <Border Grid.Row="1" Padding="40,16,40,16">
+          <StackPanel>
+            <TextBlock x:Name="StatusText"
+                       Text="Starter quiz-server…"
+                       FontFamily="Segoe UI"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Foreground="#F2F4F8" />
+            <Grid Margin="0,12,0,0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <Grid Height="14" VerticalAlignment="Center">
+                <Border Height="6" VerticalAlignment="Center" CornerRadius="3" Background="#3AFFFFFF" />
+                <Grid Height="6" VerticalAlignment="Center">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="ProgressFillColumn" Width="0*" />
+                    <ColumnDefinition x:Name="ProgressRestColumn" Width="100*" />
+                  </Grid.ColumnDefinitions>
+                  <Border CornerRadius="3">
+                    <Border.Background>
+                      <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#3D8BFD" Offset="0" />
+                        <GradientStop Color="#21B0E6" Offset="0.7" />
+                        <GradientStop Color="#7FE3FF" Offset="1" />
+                      </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.Effect>
+                      <DropShadowEffect Color="#21B0E6" BlurRadius="14" ShadowDepth="0" Opacity="0.6" />
+                    </Border.Effect>
+                  </Border>
+                </Grid>
+              </Grid>
+              <TextBlock x:Name="PercentText"
+                         Grid.Column="1"
+                         Margin="16,0,0,0"
+                         VerticalAlignment="Center"
+                         Text="0%"
+                         FontFamily="Segoe UI"
+                         FontSize="13"
+                         FontWeight="SemiBold"
+                         Foreground="#9AA6B8" />
+            </Grid>
+            <TextBlock x:Name="VersionFooter"
+                       Margin="0,12,0,0"
+                       FontFamily="Segoe UI"
+                       FontSize="11"
+                       Foreground="#5D6778" />
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Border>
+  </Border>
+</Window>

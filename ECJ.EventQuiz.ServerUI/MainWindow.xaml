@@ -6,12 +6,12 @@
         Title="ECJ EventQuiz Server"
         WindowStyle="None"
         ResizeMode="CanMinimize"
-        Width="420"
-        Height="460"
-        MinWidth="420"
-        MinHeight="460"
-        MaxWidth="420"
-        MaxHeight="460"
+        Width="560"
+        Height="500"
+        MinWidth="560"
+        MinHeight="500"
+        MaxWidth="560"
+        MaxHeight="500"
         Background="#152033"
         WindowStartupLocation="CenterScreen">
   <shell:WindowChrome.WindowChrome>

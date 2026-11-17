@@ -4,7 +4,7 @@ namespace ECJ.EventQuiz.Core.Data;
 
 /// <summary>
 /// Shared SQLite database used by both the API and the SignalR server (ServerUI).
-/// The file is placed in the repo root next to ECJ.EventQuiz.sln, so both programs use the same file.
+/// Dev: next to ECJ.EventQuiz.sln. Installed app: %LocalAppData%\ECJ.EventQuiz\
 /// </summary>
 public static class EventQuizDatabase
 {
@@ -31,6 +31,10 @@ public static class EventQuizDatabase
                 return Path.Combine(dir.FullName, FileName);
         }
 
-        return Path.Combine(AppContext.BaseDirectory, FileName);
+        var dataDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "ECJ.EventQuiz");
+        Directory.CreateDirectory(dataDir);
+        return Path.Combine(dataDir, FileName);
     }
 }

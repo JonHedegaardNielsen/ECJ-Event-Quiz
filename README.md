@@ -6,47 +6,52 @@ Fælles solution til skoleprojektet (live quiz via SignalR).
 
 | Projekt | Rolle |
 |---------|--------|
-| `ECJ.EventQuiz.Core` | Modeller, database (`AppDbContext` + migrationer), seed-data, session-service, `QuizHub` (.NET 10) |
-| `ECJ.EventQuiz.ServerUI` | WPF + WebView2 – starter/stopper Kestrel + SignalR (.NET 10) |
-| `BackEnd/EventQuiz.Api` | REST API (login, quizzer, sessioner, leaderboard) – se `BackEnd/README.md` |
-| `FrontEnd` | Jons React/Vite-app (solution folder, køres med npm) |
+| `ECJ.EventQuiz.ServerUI` | WPF + WebView2 – hoster API, SignalR og React-SPA på én port (.NET 10) |
+| `ECJ.EventQuiz.Core` | Modeller, database, seed-data, session-service, `QuizHub` |
+| `BackEnd/EventQuiz.Api` | REST API-controllers (bruges af ServerUI; kan også køres separat til Swagger/dev) |
+| `FrontEnd` | Jons React/Vite-app |
+
+## Installer (Windows 11)
+
+Til udlevering på en anden PC **uden** .NET SDK, MSBuild eller Node:
+
+1. På udviklingsmaskinen (kræver .NET 10 SDK, Node og [Inno Setup 6](https://jrsoftware.org/isinfo.php)):
+
+```bat
+Build-Installer.bat
+```
+
+2. Installer-filen lander i `dist\ECJ-EventQuiz-Setup.exe`
+3. Kør setup på mål-PC → Start-menu → **ECJ EventQuiz**
+4. Tryk **Start server** → **Åbn quiz**
+5. Login: `demo` / `demo123`
+
+Databasen ligger i `%LocalAppData%\ECJ.EventQuiz\eventquiz.db` når programmet er installeret.
 
 ## Hurtig start
 
-Programmet består af tre dele, der skal køre samtidig:
+**Anbefalet (som installeret app)**
+
+```bat
+Start-All.bat
+```
+
+Det bygger frontend ind i ServerUI og starter **kun** `ECJ.EventQuiz.ServerUI.exe` (splash + WPF). Ingen ekstra konsolvinduer.
+
+1. Splash vises → ServerUI åbner  
+2. Tryk **Start server** → **Åbn quiz**  
+3. Login: `demo` / `demo123`  
+4. Alt kører på http://localhost:5188 (API + SignalR + React)
+
+**Udvikling med Vite (valgfrit)**
+
+Til frontend-hot-reload kan du stadig køre API + ServerUI + `npm run dev` hver for sig, eller bruge VS Code F5 → **Hele systemet**.
 
 | Del | Adresse |
 |---|---|
-| API (`BackEnd/EventQuiz.Api`) | http://localhost:5218 |
-| SignalR (`ECJ.EventQuiz.ServerUI`, kun Windows) | http://localhost:5188/hubs/quiz |
-| Frontend (`FrontEnd`) | http://localhost:5173 |
-
-**VS Code**
-
-1. Første gang: `cd FrontEnd && npm install`
-2. Tryk **F5** og vælg **Hele systemet (API + SignalR + Frontend)**
-3. Tryk **Start server** i ServerUI-vinduet
-
-**Terminal** (tre vinduer)
-
-```bash
-dotnet run --project BackEnd/EventQuiz.Api
-dotnet run --project ECJ.EventQuiz.ServerUI   # tryk Start server
-cd FrontEnd && npm run dev
-```
-
-**Spil en quiz**
-
-1. Åbn http://localhost:5173 og log ind med `demo` / `demo123`
-2. Tryk **Start** på en quiz – lobbyen viser et 4-cifret Room-ID
-3. Deltagere åbner http://localhost:5173/#/deltag (andet browservindue/inkognito), skriver Room-ID og navn
-4. Tryk **Start quiz**
-
-**Deltagere fra telefoner (samme Wi-Fi)**
-
-1. Åbn frontenden på værtens computer via `Network:`-adressen, som Vite viser (fx `http://192.168.1.20:5173`), ikke `localhost`
-2. Tillad Node og ServerUI i Windows Firewall (Private netværk), når den spørger
-3. Deltagerne scanner QR-koden i lobbyen – Room-ID'et er udfyldt, de skriver bare deres navn
+| Samlet ServerUI (anbefalet) | http://localhost:5188 |
+| API alene (dev/Swagger) | http://localhost:5218 |
+| Frontend alene (Vite) | http://localhost:5173 |
 
 Uden server kan frontenden køre i mock-tilstand med `VITE_USE_SIGNALR=false`.
 
@@ -56,10 +61,6 @@ Uden server kan frontenden køre i mock-tilstand med `VITE_USE_SIGNALR=false`.
 dotnet test ECJ.EventQuiz.Tests\ECJ.EventQuiz.Tests.csproj
 ```
 
-- **Unit** – ScoreCalculator, LeaderBoard, SeedData, QuizSessionService, AppSettings, NetworkAddresses, QuizServerHost
-- **Integration** – SignalR hub-events over rigtig Kestrel-host
-- **Acceptance** – fulde scenarier (arrangør + deltagere gennem live quiz)
-
 ## SignalR (kort)
 
 - Klient → server: `CreateSession`, `JoinLobby`, `StartQuiz`, `OpenQuestion`, `SubmitAnswer`, `CloseQuestion`, `NextQuestion`, `EndQuiz`
@@ -68,8 +69,8 @@ dotnet test ECJ.EventQuiz.Tests\ECJ.EventQuiz.Tests.csproj
 
 ## Database
 
-API og SignalR deler SQLite-databasen `eventquiz.db` i roden af repoet. Quizzer hentes fra databasen, og sessioner, deltagere og svar (med point) gemmes der. Live-tilstand (fase, forbindelser, timer) ligger kun i hukommelsen.
+I udvikling ligger `eventquiz.db` i repo-roden. Ved installeret app bruges `%LocalAppData%\ECJ.EventQuiz\`.
 
-Ved start oprettes demo-brugeren `demo` / `demo123` med tre testquizzer (id 1–3).
+Ved start oprettes demo-brugeren `demo` / `demo123` med tre testquizzer.
 
 Point beregnes efter Kahoot-systemet (`ScoreCalculator`): maks. 1000 point, svar under 0,5 sek. giver altid 1000, og et rigtigt svar giver mindst 500.

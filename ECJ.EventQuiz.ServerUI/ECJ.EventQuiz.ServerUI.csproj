@@ -20,10 +20,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ECJ.EventQuiz.Core\ECJ.EventQuiz.Core.csproj" />
+    <ProjectReference Include="..\BackEnd\EventQuiz.Api\EventQuiz.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="wwwroot\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
