@@ -1,0 +1,98 @@
+.page-open-rooms {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  background: var(--page-bg);
+}
+
+.open-rooms-card {
+  width: min(560px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--line-dark);
+  border-radius: 18px;
+  padding: 28px 26px 22px;
+  box-shadow: var(--panel-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.open-rooms-card h1 {
+  margin: 4px 0 0;
+  font-size: 1.45rem;
+}
+
+.open-rooms-lead,
+.open-rooms-muted,
+.open-rooms-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.open-rooms-error {
+  margin: 0;
+  color: var(--danger-soft);
+  font-size: 0.92rem;
+}
+
+.open-rooms-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.open-room-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(8, 18, 36, 0.55);
+  border: 1px solid var(--line-dark-soft);
+}
+
+.open-room-row strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.open-room-row span {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.open-rooms-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-ghost {
+  background: #243552;
+  color: var(--text);
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+.open-rooms-host {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.open-rooms-host:hover {
+  color: var(--text);
+}

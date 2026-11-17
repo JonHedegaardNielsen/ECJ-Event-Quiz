@@ -74,7 +74,8 @@ export default function Lobby() {
         <section className="lobby-card join-pc-card">
           <span className="room-label">Deltag fra PC</span>
           <p className="join-pc-help">
-            Åbn linket i et andet browservindue eller inkognito. Room ID er allerede udfyldt — skriv bare navn.
+            Åbn linket i et andet browservindue (gerne inkognito) eller på en anden enhed — ikke i samme fane som værten.
+            Room ID er allerede udfyldt; der skal kun tastes et spillernavn.
           </p>
           <div className="join-link-row">
             <code className="join-link">{url}</code>

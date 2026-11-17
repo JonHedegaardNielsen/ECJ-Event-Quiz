@@ -45,6 +45,16 @@ public class QuizSessionServiceTests
     }
 
     [Fact]
+    public void JoinLobby_rejects_host_connection()
+    {
+        var room = _sut.CreateSession(1, "host-conn").RoomId;
+
+        var ex = Assert.Throws<InvalidOperationException>(() => _sut.JoinLobby(room, "Demo", "host-conn"));
+        Assert.Contains("Værten", ex.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Empty(_sut.GetRequired(room).Participants);
+    }
+
+    [Fact]
     public void JoinLobby_blank_name_becomes_Gaest()
     {
         var room = _sut.CreateSession(1, "host").RoomId;

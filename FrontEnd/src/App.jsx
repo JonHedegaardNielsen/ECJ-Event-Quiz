@@ -12,6 +12,7 @@ import Join from './pages/Join/Join'
 import JoinName from './pages/Join/JoinName'
 import Waiting from './pages/Join/Waiting'
 import PlayerLive from './pages/Live/PlayerLive'
+import OpenRooms from './pages/Join/OpenRooms'
 
 function Router() {
   const { user, room, player } = useGame()
@@ -21,7 +22,7 @@ function Router() {
 
   return (
     <Routes>
-      {/* deltagerflow (altid tilgængelig) */}
+      {/* deltagerflow */}
       <Route path="/deltag" element={<Join />} />
       <Route path="/deltag/navn" element={guard(player, '/deltag', <JoinName />)} />
       <Route path="/deltag/venter" element={guard(player, '/deltag', <Waiting />)} />
@@ -35,10 +36,10 @@ function Router() {
       <Route path="/lobby" element={guard(user && room, '/dashboard', <Lobby />)} />
       <Route path="/live" element={guard(user && room, '/dashboard', <HostLive />)} />
 
-      {/* forsiden: login hvis ikke logget ind, ellers dashboard */}
-      <Route path="/" element={user ? <Navigate replace to="/dashboard" /> : <Login />} />
+      {/* forsiden: arrangør → dashboard, ellers åbne rum (ikke login) */}
+      <Route path="/" element={user ? <Navigate replace to="/dashboard" /> : <OpenRooms />} />
 
-      {/* ukendte ruter */}
+      {/* ukendte ruter → forsiden (åbne rum / dashboard) */}
       <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   )

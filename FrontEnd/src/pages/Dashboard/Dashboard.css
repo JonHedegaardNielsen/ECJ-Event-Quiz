@@ -21,7 +21,15 @@
 }
 
 .sidebar-logo {
-  padding: 2px 10px 20px;
+  padding: 2px 6px 22px;
+}
+
+.sidebar-logo .brand-mark {
+  width: 100%;
+}
+
+.sidebar-logo .brand-mark-title {
+  max-width: calc(100% - 48px);
 }
 
 .sidebar-item {
@@ -71,13 +79,28 @@
 
 .dash-top {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
   padding: 18px 30px;
   color: var(--text);
   font-size: 14px;
   font-weight: 600;
+}
+
+.dash-brand {
+  min-width: 0;
+}
+
+.dash-brand .brand-mark-title {
+  max-height: 28px;
+}
+
+.dash-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
 }
 
 .dash-body {

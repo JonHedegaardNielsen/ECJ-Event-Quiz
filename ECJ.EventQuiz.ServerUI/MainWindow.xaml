@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-        Title="ECJ EventQuiz Server"
+        Title="ECJ EventQuiz"
+        Icon="Assets/AppIcon.ico"
         WindowStyle="None"
         ResizeMode="CanMinimize"
         Width="560"
@@ -15,7 +16,7 @@
         Background="#152033"
         WindowStartupLocation="CenterScreen">
   <shell:WindowChrome.WindowChrome>
-    <shell:WindowChrome CaptionHeight="48"
+    <shell:WindowChrome CaptionHeight="56"
                         ResizeBorderThickness="0"
                         CornerRadius="0"
                         GlassFrameThickness="0"
@@ -25,7 +26,7 @@
   <Border BorderBrush="#2A3D5C" BorderThickness="1" Background="#152033" CornerRadius="0">
     <Grid>
       <Grid.RowDefinitions>
-        <RowDefinition Height="48" />
+        <RowDefinition Height="56" />
         <RowDefinition Height="*" />
       </Grid.RowDefinitions>
 
@@ -39,13 +40,24 @@
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="ECJ EventQuiz Server"
-                   Margin="16,0,0,0"
-                   VerticalAlignment="Center"
-                   Foreground="#E8EEF8"
-                   FontSize="13"
-                   FontWeight="SemiBold"
-                   IsHitTestVisible="False" />
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="10,0,8,0"
+                    IsHitTestVisible="False">
+          <Image Source="Assets/BrandLogo.png"
+                 Height="36"
+                 Margin="0,0,8,0"
+                 Stretch="Uniform"
+                 RenderOptions.BitmapScalingMode="HighQuality"
+                 SnapsToDevicePixels="True" />
+          <Image Source="Assets/BrandTitle.png"
+                 Height="48"
+                 MaxWidth="440"
+                 Stretch="Uniform"
+                 VerticalAlignment="Center"
+                 RenderOptions.BitmapScalingMode="HighQuality"
+                 SnapsToDevicePixels="True" />
+        </StackPanel>
 
         <Button x:Name="SettingsButton"
                 Grid.Column="1"

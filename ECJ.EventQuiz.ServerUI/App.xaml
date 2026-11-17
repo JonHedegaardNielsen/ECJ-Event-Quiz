@@ -6,7 +6,7 @@
       <Setter Property="Foreground" Value="#B7C7DE" />
       <Setter Property="Background" Value="Transparent" />
       <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="Height" Value="48" />
+      <Setter Property="Height" Value="56" />
       <Setter Property="Padding" Value="14,0" />
       <Setter Property="FontSize" Value="13" />
       <Setter Property="FontWeight" Value="SemiBold" />

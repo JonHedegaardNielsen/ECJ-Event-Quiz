@@ -211,6 +211,14 @@
 }
 
 /* "Gå til admin"-link, matcher login-sidens dæmpede link-stil */
+.join-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
 .join-admin-link {
   color: var(--text-dim);
   font-size: 13px;

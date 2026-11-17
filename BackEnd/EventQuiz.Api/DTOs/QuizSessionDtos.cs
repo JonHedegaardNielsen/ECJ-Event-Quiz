@@ -4,6 +4,8 @@ namespace EventQuiz.Api.DTOs;
 
 public record StartSessionRequest(int QuizId);
 
+public record OpenRoomDto(string RoomId, string QuizName, int ParticipantCount);
+
 public record ParticipantDto(int Id, string Name);
 
 public record QuizSessionDto(

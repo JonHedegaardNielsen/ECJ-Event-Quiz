@@ -64,9 +64,13 @@ export default function Results() {
       <button type="button" className="btn btn-lg board-restart" onClick={restart}>
         Spil igen
       </button>
-      {isHost && (
+      {isHost ? (
         <Link className="results-back" to="/dashboard">
           Tilbage til dashboard
+        </Link>
+      ) : (
+        <Link className="results-back" to="/" onClick={() => resetPlayer()}>
+          Se åbne rum
         </Link>
       )}
     </main>

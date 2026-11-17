@@ -65,6 +65,16 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
         catch (InvalidOperationException) { return false; }
     }
 
+    /// <summary>Live lobby-rum som deltagere kan tilmelde sig lige nu.</summary>
+    public IReadOnlyList<(string RoomId, string QuizName, int ParticipantCount)> ListOpenLobbies()
+    {
+        return _sessions.Values
+            .Where(s => s.Status == SessionStatus.Lobby)
+            .OrderBy(s => s.RoomId)
+            .Select(s => (s.RoomId, s.Quiz?.Name ?? "Quiz", s.Participants.Count))
+            .ToList();
+    }
+
     public void SetHostConnection(string roomId, string connectionId)
     {
         GetRequired(roomId).HostConnectionId = connectionId;
@@ -75,6 +85,11 @@ public class QuizSessionService(IDbContextFactory<AppDbContext> dbFactory)
         var session = GetRequired(roomId);
         if (session.Status != SessionStatus.Lobby)
             throw new InvalidOperationException("Quizzen er allerede startet.");
+
+        // Værten styrer rummet og skal ikke kunne tilmelde sig som spiller på samme forbindelse.
+        if (!string.IsNullOrEmpty(session.HostConnectionId)
+            && string.Equals(session.HostConnectionId, connectionId, StringComparison.Ordinal))
+            throw new InvalidOperationException("Værten kan ikke deltage som spiller. Åbn quizzen på en anden enhed eller i et andet browservindue.");
 
         var clean = string.IsNullOrWhiteSpace(name) ? "Gæst" : name.Trim();
         if (session.Participants.Any(p => p.Name.Equals(clean, StringComparison.OrdinalIgnoreCase)))

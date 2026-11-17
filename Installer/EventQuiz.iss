@@ -31,6 +31,7 @@ WizardStyle=modern
 PrivilegesRequired=admin
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
+SetupIconFile=..\ECJ.EventQuiz.ServerUI\Assets\AppIcon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 CloseApplications=yes
 RestartApplications=no

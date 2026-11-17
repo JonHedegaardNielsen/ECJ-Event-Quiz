@@ -95,3 +95,7 @@ export function getQuizFromApi(id) {
 export function deleteQuizOnApi(id) {
   return request(`/api/Quiz/${id}`, { method: 'DELETE' })
 }
+
+export function listOpenRooms() {
+  return request('/api/quizsession/open', { method: 'GET' })
+}

@@ -19,7 +19,7 @@ namespace ECJ.EventQuiz.ServerUI;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private const int TitleBarHeight = 48;
+    private const int TitleBarHeight = 56;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

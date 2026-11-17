@@ -12,7 +12,8 @@ namespace EventQuiz.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class QuizSessionController(
-    AppDbContext db) : ControllerBase
+    AppDbContext db,
+    QuizSessionService sessions) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<QuizSessionDto>> StartSession(StartSessionRequest request)
@@ -33,6 +34,16 @@ public class QuizSessionController(
         await db.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetSession), new { roomId = session.RoomId }, session.ToDto());
+    }
+
+    /// <summary>Lobby-rum som deltagere kan tilmelde sig lige nu (live i hukommelsen).</summary>
+    [HttpGet("open")]
+    public ActionResult<List<OpenRoomDto>> ListOpenRooms()
+    {
+        var rooms = sessions.ListOpenLobbies()
+            .Select(r => new OpenRoomDto(r.RoomId, r.QuizName, r.ParticipantCount))
+            .ToList();
+        return rooms;
     }
 
     [HttpGet("{roomId}")]

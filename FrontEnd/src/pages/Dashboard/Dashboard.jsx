@@ -1,6 +1,7 @@
 // 2. Dashboard (arrangør): quizliste med start/menupunkter.
 import { useEffect, useState } from 'react'
 import Sidebar from '../../components/Sidebar'
+import Logo from '../../components/Logo'
 import Avatar from '../../components/Avatar'
 import { IconDots, IconArrowRight, IconPlusCircle, IconX } from '../../components/icons'
 import { useGame } from '../../game/useGame'
@@ -27,8 +28,13 @@ export default function Dashboard() {
       <Sidebar />
       <section className="dash-main">
         <header className="dash-top">
-          <Avatar size={34} />
-          <span>{user?.name ?? 'Arrangør'}</span>
+          <div className="dash-brand">
+            <Logo size="sm" />
+          </div>
+          <div className="dash-user">
+            <Avatar size={34} />
+            <span>{user?.name ?? 'Arrangør'}</span>
+          </div>
         </header>
         <div className="dash-body">
           <div className="dash-head">

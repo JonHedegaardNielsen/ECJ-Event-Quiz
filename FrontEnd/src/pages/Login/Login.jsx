@@ -94,8 +94,8 @@ export default function Login() {
           </button>
         </form>
       </div>
-      <Link className="login-player-link" to="/deltag">
-        Skal du deltage i en quiz? Gå til deltagersiden
+      <Link className="login-player-link" to="/">
+        Skal du deltage i en quiz? Se åbne rum
       </Link>
     </main>
   )

@@ -124,9 +124,14 @@ export default function Join() {
           </div>
         )}
       </div>
-      <Link className="join-admin-link" to="/login">
-        Gå til admin
-      </Link>
+      <div className="join-footer-links">
+        <Link className="join-admin-link" to="/">
+          Se åbne rum
+        </Link>
+        <Link className="join-admin-link" to="/login">
+          Arrangør-login
+        </Link>
+      </div>
     </main>
   )
 }

@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>ECJ.EventQuiz.ServerUI</RootNamespace>
     <AssemblyName>ECJ.EventQuiz.ServerUI</AssemblyName>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

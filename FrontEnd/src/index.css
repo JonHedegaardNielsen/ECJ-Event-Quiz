@@ -84,49 +84,30 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ---------- Logo ---------- */
-.logo {
+/* ---------- Brand mark (logo + produkttitel) ---------- */
+.brand-mark {
   display: inline-flex;
-  gap: 6px;
-  align-items: baseline;
-  line-height: 1;
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-  font-weight: 800;
+  align-items: center;
+  gap: 10px;
+  line-height: 0;
+  max-width: 100%;
 }
 
-.logo .logo-event {
-  font-weight: 500;
+.brand-mark-logo,
+.brand-mark-title {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
-.logo-lg {
-  font-size: 30px;
+.brand-mark-sm {
+  gap: 8px;
 }
 
-.logo-md {
-  font-size: 22px;
-}
-
-.logo-sm {
-  font-size: 17px;
-}
-
-.logo-dark {
-  color: #fff;
-}
-
-.logo-dark .logo-event,
-.logo-dark .logo-quiz {
-  color: var(--accent);
-}
-
-.logo-light {
-  color: var(--ink);
-}
-
-.logo-light .logo-event,
-.logo-light .logo-quiz {
-  color: var(--blue);
+.brand-mark-lg {
+  gap: 12px;
 }
 
 /* ---------- Knapper ---------- */

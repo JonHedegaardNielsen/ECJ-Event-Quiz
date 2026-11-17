@@ -1,14 +1,15 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 
 namespace ECJ.EventQuiz.ServerUI;
 
 /// <summary>
-/// WPF application entry. Shows <see cref="SplashWindow"/> while <see cref="MainWindow"/> is created,
-/// then fades the splash out. WebView2 initialization stays on MainWindow.Loaded.
+/// WPF application entry. Shows <see cref="SplashWindow"/> for at least 4 seconds,
+/// then shows <see cref="MainWindow"/>.
 /// </summary>
 public partial class App : Application
 {
-    private static readonly TimeSpan StepDelay = TimeSpan.FromMilliseconds(350);
+    private static readonly TimeSpan MinSplashDuration = TimeSpan.FromSeconds(4);
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -16,24 +17,31 @@ public partial class App : Application
 
         var splash = new SplashWindow();
         splash.Show();
+        var started = Stopwatch.StartNew();
 
+        MainWindow? mainWindow = null;
         try
         {
             splash.SetProgress("Starter quiz-server…", 8);
-            await Task.Delay(StepDelay);
+            await Task.Delay(400);
 
             splash.SetProgress("Indlæser indstillinger…", 35);
-            await Task.Delay(StepDelay);
-            var mainWindow = new MainWindow();
+            await Task.Delay(400);
+            mainWindow = new MainWindow();
             MainWindow = mainWindow;
 
             splash.SetProgress("Forbereder brugerflade…", 70);
-            await Task.Delay(StepDelay);
-            mainWindow.Show();
+            await Task.Delay(400);
 
             splash.SetProgress("Klar", 100);
-            await Task.Delay(StepDelay);
+
+            var remaining = MinSplashDuration - started.Elapsed;
+            if (remaining > TimeSpan.Zero)
+                await Task.Delay(remaining);
+
             await splash.CloseAnimatedAsync();
+
+            mainWindow.Show();
             mainWindow.Activate();
         }
         catch (Exception ex)

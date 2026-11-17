@@ -255,23 +255,31 @@ export function GameProvider({ children }) {
   const login = useCallback(
     async (username, password) => {
       const user = await loginUser(username, password)
+      // Arrangør-login må ikke genbruge en gammel deltager-session.
+      setPlayer(null)
+      setRoom(null)
+      stopHub()
       setUser({ id: user.id, name: user.username })
       navigate('/dashboard')
       return user
     },
-    [navigate],
+    [navigate, stopHub],
   )
 
   const logout = useCallback(() => {
     setUser(null)
     setRoom(null)
+    setPlayer(null)
     stopHub()
-    navigate('/login')
+    navigate('/')
   }, [navigate, stopHub])
 
   const startSession = useCallback(
     async (quiz) => {
       if (!quiz || !quiz.questions?.length) return
+
+      // Værten er aldri selv spiller i det rum, der startes herfra.
+      setPlayer(null)
 
       if (USE_SIGNALR) {
         // LIVE: Opret rum på serveren og vis lobbyen. Deltagerne JoinLobby'er med Room ID + navn.
@@ -496,6 +504,14 @@ export function GameProvider({ children }) {
 
   const startJoin = useCallback(
     async (code) => {
+      // Samme browser/fane som værten må ikke tilmelde sig eget rum (ødelægger værtsforbindelsen).
+      if (room?.id === code) {
+        return 'Du er vært for dette rum. Åbn deltagelse i et andet browservindue (gerne inkognito) eller på en anden enhed.'
+      }
+
+      // Skift til deltager-rolle: drop evt. værtstilstand helt.
+      setRoom(null)
+
       if (USE_SIGNALR) {
         // LIVE: forbind til hubben; JoinLobby kaldes i setPlayerName når navnet er valgt.
         stopHub()
@@ -575,7 +591,7 @@ export function GameProvider({ children }) {
       })
       navigate('/deltag/navn')
     },
-    [quizzes, navigate, stopHub, wirePlayerHandlers],
+    [quizzes, navigate, stopHub, wirePlayerHandlers, room],
   )
 
   const setPlayerName = useCallback(
@@ -634,7 +650,7 @@ export function GameProvider({ children }) {
   const resetPlayer = useCallback(() => {
     setPlayer(null)
     if (USE_SIGNALR) stopHub()
-    navigate('/deltag')
+    navigate('/')
   }, [navigate, stopHub])
 
   const value = useMemo(
