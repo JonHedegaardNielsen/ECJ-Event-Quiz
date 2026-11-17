@@ -7,7 +7,7 @@
 
 /* --------- Sidebar --------- */
 .sidebar {
-  width: 232px;
+  width: 268px;
   flex: none;
   background: var(--navy-900);
   border-right: 1px solid var(--line-dark-soft);
@@ -21,7 +21,7 @@
 }
 
 .sidebar-logo {
-  padding: 2px 6px 22px;
+  padding: 4px 4px 26px;
 }
 
 .sidebar-logo .brand-mark {
@@ -29,7 +29,7 @@
 }
 
 .sidebar-logo .brand-mark-title {
-  max-width: calc(100% - 48px);
+  max-width: calc(100% - 64px);
 }
 
 .sidebar-item {
@@ -90,10 +90,6 @@
 
 .dash-brand {
   min-width: 0;
-}
-
-.dash-brand .brand-mark-title {
-  max-height: 28px;
 }
 
 .dash-user {

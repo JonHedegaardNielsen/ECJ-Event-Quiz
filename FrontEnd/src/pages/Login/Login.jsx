@@ -46,8 +46,10 @@ export default function Login() {
 
   return (
     <main className="page-login">
+      <div className="login-brand" aria-hidden="false">
+        <Logo size="xl" />
+      </div>
       <div className="login-card">
-        <Logo size="lg" />
         <form className="login-form" onSubmit={onSubmit}>
           <h1>{isRegister ? 'Opret arrangørkonto' : 'Velkommen tilbage'}</h1>
           <p>{isRegister ? 'Opret en konto for at administrere dine quizzer' : 'Log ind for at administrere dine quizzer'}</p>

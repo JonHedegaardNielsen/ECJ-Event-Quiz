@@ -37,7 +37,7 @@ function LiveHostView({ room }) {
       <Countdown
         key={`cd-${room.index}`}
         onDone={() => openQuestion(room.id)}
-        top={<Logo size="md" />}
+        top={<Logo size="lg" />}
         hint={`Spørgsmål ${room.index + 1} af ${room.total || q.total}`}
       />
     )
@@ -103,9 +103,12 @@ function LiveHostQuestion({ room, onClose, onNext }) {
   }, [answered, room.participants.length, isReveal, room.id, onClose])
 
   return (
-    <main className="live">
+    <main className="live live-host">
       <header className="live-head">
-        <Logo size="md" />
+        <div className="live-brand">
+          <Logo size="lg" />
+          <span className="live-role">Vært · præsentationsskærm</span>
+        </div>
         <span className="live-count-num">
           {room.index + 1} / {total}
         </span>
@@ -193,7 +196,7 @@ function MockHostLive({ room, quiz }) {
       <Countdown
         key={`cd-${room.index}`}
         onDone={beginQuestion}
-        top={<Logo size="md" />}
+        top={<Logo size="lg" />}
         hint={`Spørgsmål ${room.index + 1} af ${total}`}
       />
     )
@@ -271,9 +274,12 @@ function HostQuestionRunner({ question, participants, isReveal, answerCounts, in
   const answered = answerCounts.reduce((a, b) => a + b, 0)
 
   return (
-    <main className="live">
+    <main className="live live-host">
       <header className="live-head">
-        <Logo size="md" />
+        <div className="live-brand">
+          <Logo size="lg" />
+          <span className="live-role">Vært · præsentationsskærm</span>
+        </div>
         <span className="live-count-num">
           {index + 1} / {total}
         </span>

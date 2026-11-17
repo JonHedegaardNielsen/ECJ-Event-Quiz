@@ -88,26 +88,53 @@ a:hover {
 .brand-mark {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   line-height: 0;
   max-width: 100%;
+  flex: none;
 }
 
 .brand-mark-logo,
 .brand-mark-title {
   display: block;
   width: auto;
-  max-width: 100%;
+  max-width: min(100%, 420px);
   object-fit: contain;
   object-position: left center;
 }
 
 .brand-mark-sm {
-  gap: 8px;
+  gap: 10px;
 }
 
-.brand-mark-lg {
+.brand-mark-md {
   gap: 12px;
+}
+
+.brand-mark-lg,
+.brand-mark-xl {
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .brand-mark-logo {
+    height: clamp(40px, 12vw, 72px) !important;
+  }
+
+  .brand-mark-title {
+    height: clamp(30px, 9vw, 54px) !important;
+    max-width: min(100%, 240px);
+  }
+
+  .brand-mark-lg .brand-mark-logo,
+  .brand-mark-xl .brand-mark-logo {
+    height: clamp(56px, 16vw, 96px) !important;
+  }
+
+  .brand-mark-lg .brand-mark-title,
+  .brand-mark-xl .brand-mark-title {
+    height: clamp(40px, 12vw, 72px) !important;
+  }
 }
 
 /* ---------- Knapper ---------- */

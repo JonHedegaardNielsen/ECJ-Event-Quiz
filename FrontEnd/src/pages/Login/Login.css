@@ -5,9 +5,36 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 22px;
+  gap: 28px;
   padding: 40px 16px;
   background: var(--page-bg);
+}
+
+/* Brand over kortet, så logo + titel ikke klemmes i den smalle form */
+.login-brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  width: min(560px, 100%);
+  padding: 4px 8px 0;
+}
+
+.login-brand .brand-mark {
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 100%;
+}
+
+.login-brand .brand-mark-logo {
+  height: clamp(96px, 18vw, 140px) !important;
+  max-width: none;
+}
+
+.login-brand .brand-mark-title {
+  height: clamp(52px, 10vw, 72px) !important;
+  max-width: min(100%, 420px);
 }
 
 .login-card {
@@ -17,7 +44,7 @@
   background: var(--panel);
   border: 1px solid var(--line-dark);
   border-radius: 18px;
-  padding: 36px 30px 26px;
+  padding: 32px 30px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;

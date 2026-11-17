@@ -42,7 +42,7 @@ export default function OpenRooms() {
   return (
     <main className="page-open-rooms">
       <div className="open-rooms-card">
-        <Logo size="lg" />
+        <Logo size="xl" />
         <h1>Åbne quizzer</h1>
         <p className="open-rooms-lead">
           Vælg et rum for at deltage, eller indtast et Room ID manuelt.

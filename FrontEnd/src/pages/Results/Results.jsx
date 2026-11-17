@@ -1,6 +1,7 @@
 // 7. Resultatliste (efter quiz) – bruges af både værten og deltageren.
 import { useGame } from '../../game/useGame'
 import { getQuiz } from '../../data/mock'
+import Logo from '../../components/Logo'
 import { Link } from 'react-router-dom'
 import './Results.css'
 
@@ -26,6 +27,9 @@ export default function Results() {
 
   return (
     <main className="page-results">
+      <div className="results-brand">
+        <Logo size="lg" />
+      </div>
       <span className="trophy" aria-hidden="true">
         🏆
       </span>

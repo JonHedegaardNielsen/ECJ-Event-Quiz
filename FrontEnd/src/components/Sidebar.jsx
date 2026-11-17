@@ -13,7 +13,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <Logo size="sm" />
+        <Logo size="md" />
       </div>
       <button type="button" className={`sidebar-item${isDash ? ' active' : ''}`} onClick={() => navigate('/dashboard')}>
         <IconHome size={19} />

@@ -73,9 +73,34 @@
       font-size: .9rem;
       cursor: pointer;
     }
-    button:disabled { opacity: .45; cursor: default; }
-    .start { flex: 1; background: var(--accent); color: #fff; }
-    .stop { flex: 1; background: #243147; color: var(--text); }
+    button:disabled { opacity: .45; cursor: default; filter: grayscale(.15); }
+    .start {
+      flex: 1;
+      color: #fff;
+      background: linear-gradient(180deg, #3dd68c 0%, #21b463 55%, #189a52 100%);
+      box-shadow: 0 6px 16px rgba(33, 180, 99, 0.28);
+    }
+    .start:hover:not(:disabled) {
+      background: linear-gradient(180deg, #4ae09a 0%, #25c56d 55%, #1aa859 100%);
+    }
+    .stop {
+      flex: 1;
+      color: #fff;
+      background: linear-gradient(180deg, #f07184 0%, #e2364c 55%, #c2273d 100%);
+      box-shadow: 0 6px 16px rgba(226, 54, 76, 0.28);
+    }
+    .stop:hover:not(:disabled) {
+      background: linear-gradient(180deg, #f58a9a 0%, #e94a5e 55%, #d12e44 100%);
+    }
+    .open {
+      flex: 1;
+      color: #fff;
+      background: linear-gradient(180deg, #5aa0ff 0%, #3d8bfd 55%, #2f74e0 100%);
+      box-shadow: 0 6px 16px rgba(61, 139, 253, 0.25);
+    }
+    .open:hover:not(:disabled) {
+      background: linear-gradient(180deg, #6eacff 0%, #4b96fe 55%, #3a82ea 100%);
+    }
     .block {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -194,8 +219,8 @@
 
     <div class="row">
       <button id="btnStart" class="start" type="button">Start server</button>
-      <button id="btnStop" class="stop" type="button" disabled>Stop</button>
-      <button id="btnOpen" class="start" type="button" disabled>Åbn quiz</button>
+      <button id="btnStop" class="stop" type="button" disabled>Stop server</button>
+      <button id="btnOpen" class="open" type="button" disabled>Åbn quiz</button>
     </div>
 
     <div class="block">
@@ -300,6 +325,7 @@
       dot.classList.toggle('on', running);
       btnStart.disabled = running;
       btnStop.disabled = !running;
+      btnStop.textContent = 'Stop server';
       btnOpen.disabled = !running;
       bind.textContent = state?.bindUrl || '—';
       renderUrls(state?.baseUrls);
@@ -322,6 +348,8 @@
     });
     btnStop.addEventListener('click', () => {
       err.textContent = '';
+      btnStop.disabled = true;
+      btnStop.textContent = 'Stopper…';
       post('server.stop');
     });
     btnOpen.addEventListener('click', () => {

@@ -103,7 +103,9 @@ public partial class MainWindow : Window
                     break;
 
                 case "server.stop":
-                    await _server.StopAsync();
+                    // Kør stop uden for UI-sync-context, så WebView/UI ikke låser mens Kestrel lukker.
+                    await Task.Run(async () => await _server.StopAsync().ConfigureAwait(false)).ConfigureAwait(true);
+                    PushStatus();
                     break;
 
                 case "server.getStatus":

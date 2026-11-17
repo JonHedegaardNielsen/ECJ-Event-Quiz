@@ -75,7 +75,7 @@ export default function Join() {
 
   return (
     <main className="page-join">
-      <Logo size="lg" />
+      <Logo size="xl" />
       <div className="join-card">
         {tab === 'id' ? (
           <form className="join-form" onSubmit={submit}>

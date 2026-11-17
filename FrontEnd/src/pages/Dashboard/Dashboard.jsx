@@ -29,7 +29,7 @@ export default function Dashboard() {
       <section className="dash-main">
         <header className="dash-top">
           <div className="dash-brand">
-            <Logo size="sm" />
+            <Logo size="md" />
           </div>
           <div className="dash-user">
             <Avatar size={34} />

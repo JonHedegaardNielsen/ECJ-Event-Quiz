@@ -21,7 +21,7 @@ export default function JoinName() {
 
   return (
     <main className="page-join">
-      <Logo size="lg" />
+      <Logo size="xl" />
       <form className="join-card join-form" onSubmit={submit}>
         <h1 className="join-title">Indtast dit navn</h1>
         <input

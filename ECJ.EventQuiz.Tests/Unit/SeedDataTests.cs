@@ -25,9 +25,45 @@ public class SeedDataTests
             {
                 Assert.NotEmpty(q.AnswerOptions);
                 Assert.Contains(q.AnswerOptions, o => o.IsCorrect);
+                Assert.Equal(1, q.AnswerOptions.Count(o => o.IsCorrect));
                 Assert.True(q.TimeLimitSeconds > 0);
             });
         });
+
+        var correctIndexes = quizzes
+            .SelectMany(quiz => quiz.Questions)
+            .Select(q => q.AnswerOptions.FindIndex(o => o.IsCorrect))
+            .ToList();
+        Assert.Contains(correctIndexes, i => i > 0);
+        Assert.True(correctIndexes.Distinct().Count() >= 3);
+    }
+
+    [Fact]
+    public void SyncDemoQuizzes_updates_existing_answer_keys()
+    {
+        using var db = TestDatabase.CreateFactory().CreateDbContext();
+
+        var first = db.Quizzes
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.AnswerOptions)
+            .OrderBy(q => q.Id)
+            .First();
+        var option = first.Questions.OrderBy(q => q.Id).First().AnswerOptions.OrderBy(a => a.Id).First();
+        option.IsCorrect = true;
+        foreach (var other in first.Questions.OrderBy(q => q.Id).First().AnswerOptions.Skip(1))
+            other.IsCorrect = false;
+        db.SaveChanges();
+
+        SeedData.SyncDemoQuizzes(db);
+
+        var refreshed = db.Quizzes
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.AnswerOptions)
+            .Single(q => q.Name == "Firmafest 2026");
+        var q1 = refreshed.Questions.OrderBy(q => q.Id).First();
+        var correct = q1.AnswerOptions.Single(o => o.IsCorrect);
+        Assert.Equal("Møllehøj", correct.Answer);
+        Assert.NotEqual(q1.AnswerOptions.OrderBy(a => a.Id).First().Id, correct.Id);
     }
 
     [Fact]

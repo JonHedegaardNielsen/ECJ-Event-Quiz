@@ -42,7 +42,7 @@ function LivePlayerView({ player }) {
         top={
           first ? (
             <>
-              <Logo size="lg" />
+              <Logo size="xl" />
               <div className="joined">
                 <Avatar size={76} />
               </div>
@@ -94,7 +94,9 @@ function LivePlayerQuestion({ player, onSubmit }) {
   return (
     <main className="live">
       <header className="live-head">
-        <Logo size="md" />
+        <div className="live-brand">
+          <Logo size="lg" />
+        </div>
         <span className="live-count-num">
           {player.index + 1} / {player.total}
         </span>
@@ -176,7 +178,7 @@ function MockPlayerLive({ player, quizzes, setPlayer }) {
         top={
           first ? (
             <>
-              <Logo size="lg" />
+              <Logo size="xl" />
               <div className="joined">
                 <Avatar size={76} />
               </div>
@@ -291,7 +293,9 @@ function PlayerQuestionRunner({ question, index, total, player, setPlayer, finis
   return (
     <main className="live">
       <header className="live-head">
-        <Logo size="md" />
+        <div className="live-brand">
+          <Logo size="lg" />
+        </div>
         <span className="live-count-num">
           {index + 1} / {total}
         </span>

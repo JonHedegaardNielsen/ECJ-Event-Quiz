@@ -27,7 +27,7 @@ export default function Waiting() {
 
   return (
     <main className="page-waiting">
-      <Logo size="lg" />
+      <Logo size="xl" />
       <section className="waiting-card" aria-live="polite">
         <div className="waiting-avatar">
           <Avatar size={76} />

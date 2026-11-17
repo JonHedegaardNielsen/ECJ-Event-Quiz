@@ -16,12 +16,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  min-height: 84px;
+}
+
+.live-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.live-role {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(30, 107, 241, 0.18);
+  border: 1px solid rgba(148, 178, 255, 0.28);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .live-count-num {
   color: var(--text);
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 18px;
+  flex: none;
 }
 
 .live-progress {

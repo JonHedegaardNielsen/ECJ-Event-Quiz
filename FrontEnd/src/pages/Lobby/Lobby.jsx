@@ -46,7 +46,7 @@ export default function Lobby() {
     <main className="page-lobby">
       <div className="lobby-wrap">
         <div className="lobby-top">
-          <Logo size="sm" />
+          <Logo size="md" />
           <button type="button" className="link-ghost" onClick={() => window.history.back()}>
             <IconArrowLeft size={16} />
             Tilbage

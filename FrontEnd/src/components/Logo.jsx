@@ -1,8 +1,10 @@
 // Brand-mark: logo + produkttitel (Assets i /public).
+// Størrelser er sat så brandet er tydeligt på både admin- og deltagersider.
 const SIZES = {
-  sm: { logo: 40, title: 30 },
-  md: { logo: 56, title: 42 },
-  lg: { logo: 88, title: 64 },
+  sm: { logo: 52, title: 40 },
+  md: { logo: 72, title: 54 },
+  lg: { logo: 108, title: 78 },
+  xl: { logo: 128, title: 92 },
 }
 
 export default function Logo({ size = 'md', showTitle = true }) {

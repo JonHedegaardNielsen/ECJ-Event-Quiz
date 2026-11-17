@@ -117,9 +117,20 @@ public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisp
         if (_app is null)
             return;
 
+        // Tag appen lokalt med det samme, så UI'en viser "Stoppet" uden at vente på åbne SignalR-forbindelser.
+        var app = _app;
+        _app = null;
+        StatusChanged?.Invoke();
+
         try
         {
-            await _app.StopAsync();
+            // Hård timeout: ellers kan StopAsync hænge, mens browsere stadig holder /hubs/quiz åben.
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            await app.StopAsync(cts.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            // Timeout – dispose nedenfor lukker resten.
         }
         catch
         {
@@ -127,8 +138,15 @@ public sealed class QuizServerHost(string? connectionString = null) : IAsyncDisp
         }
         finally
         {
-            await _app.DisposeAsync();
-            _app = null;
+            try
+            {
+                await app.DisposeAsync().ConfigureAwait(false);
+            }
+            catch
+            {
+                // Ignore dispose races after forced stop.
+            }
+
             StatusChanged?.Invoke();
         }
     }
